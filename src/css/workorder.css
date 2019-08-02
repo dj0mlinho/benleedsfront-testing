@@ -1,0 +1,21 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.work-order h1 {
+  font-size: 3em;
+  color: #23408e;
+}
+
+/* .work-order {
+  /* font-size: 1.5em; */
+
+
+.text-area {
+  width: 100%;
+  background-color: white;
+  ;
+  color: black;
+  font-weight: bold;
+}

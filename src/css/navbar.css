@@ -1,0 +1,82 @@
+.mainPage {
+  background-color: #eee !important;
+}
+
+.nav-box {
+  background-color: #8d98f2;
+  font-size: 1em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  background-color: #23408e;
+}
+
+.select {
+  background-color: #23408e !important;
+  color: white !important;
+}
+
+.build {
+  background-color: #23408e !important;
+  font-weight: bold;
+}
+
+.logo {
+  background-color: #8d98f2;
+}
+
+.build-input {
+  width: 3em;
+  border: #23408e 3px solid;
+  border-radius: 5px;
+}
+
+/* .card {
+  max-width: 18rem;
+} */
+
+.build-div {
+  border: 2px solid #23408e;
+  padding: 1px;
+  /* background-color: #ffd740; */
+}
+
+@media only screen and (max-width: 450px) {
+  .date {
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap-reverse;
+  }
+
+  .logoBenLeeds img {
+    width: 250px !important;
+  }
+}
+.user-name {
+  height: max-content !important;
+  padding: 0px !important;
+  border-radius: 20%;
+}
+.card .user-info {
+  margin: 0 auto;
+  height: max-content !important;
+  width: max-content;
+
+  padding: 0px !important;
+  /* border-radius: 20%; */
+}
+.card .user-img {
+  width: inherit !important;
+  height: inherit !important ;
+  /* border-radius: 50%; */
+}
+.card-user {
+  background-color: #23408e !important;
+  /* border-radius: 20% !important; */
+  color: white;
+}

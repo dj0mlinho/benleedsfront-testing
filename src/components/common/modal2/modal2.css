@@ -1,0 +1,20 @@
+.showWoBtn {
+  margin-top:  -1.8rem ;
+  margin-bottom:  0.2rem ;
+  width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mHeader {
+  background: #5C6BC0 ;
+  color: white ;
+}
+
+.close {
+  color : white ;
+}
+
+.modal-content {
+  background-color: #EEEEEE ;
+}

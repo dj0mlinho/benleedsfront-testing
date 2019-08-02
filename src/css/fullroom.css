@@ -1,0 +1,73 @@
+.rooms {
+  /* font-size: 1.5em; */
+  /* color: #23408e; */
+  border: 1px solid #8d98f2 !important;
+  box-shadow: 0 0 8px;
+
+}
+
+
+
+.rooms h1 {
+  font-size: 2em;
+  color: #23408e;
+}
+
+.check-box {
+  width: 40px;
+  border-radius: 5px;
+}
+
+.check-box:hover {
+  cursor: pointer;
+}
+
+.quantity {
+  width: 40px;
+  border-radius: 5px;
+  text-align: center
+}
+
+.item-name {
+  width: 10rem
+}
+
+tr .item {
+  width: max-content !important;
+  background-color: #dee2e6;
+  color: black;
+
+  border-bottom: 1px solid #23408e !important;
+  border-top: 1px solid #23408e !important;
+}
+
+/* tr {
+  border-color: #8d98f2 !important;
+} */
+
+tbody {
+  /* border: 1px solid #8d98f2 !important; */
+  border-color: grey !important;
+}
+
+/* .main-page {
+  background-color: #eee !important;
+} */
+.placeholder-input {
+  background-color: white !important;
+
+}
+
+@media only screen and (max-width: 450px) {
+  tr .itemTd {
+    font-size: 12px !important;
+  }
+
+  /* .item {
+    font-size: 12px !important;
+  } */
+
+  .buttons {
+    flex-wrap: wrap;
+  }
+}

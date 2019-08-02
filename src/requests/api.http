@@ -1,0 +1,72 @@
+# POST http://localhost:3500/admin/newUser/ 
+# content-type: application/json
+
+# {
+# "email": "losaSamZatebe@gmail.com",
+# "password": "test5",
+# "emailPasswrd" : "test4" ,
+# "firstName": "Jarni",
+# "lastName": "Brzi",
+# "region": "Denver5"
+# }
+
+# POST http://localhost:3500/admin/users/5cf69001ff8a951fd85f7290
+# content-type: application/json
+
+# GET http://localhost:3500/admin/users/5cee78500d7d35097041b261 
+# content-type: application/json
+
+# GET http://localhost:3500/admin/users/ 
+# content-type: application/json
+
+
+POST http://localhost:3500/admin/assignJob/5cf642677d8e281f20c8be02
+content-type: application/json
+
+{
+  "job" : { 
+"comment": "Comment about Window in Hallway",
+"id": "5cf642677d8e281f20c8be02",
+"assignmentDate" : "Tue Jun 18 2019 00:00:00 GMT+0200 (Central European Summer Time" ,
+"name": "Broken Window" ,
+"price": 12 ,
+"quantity": 1 ,
+"room": "Hallway1" ,
+"status": "sent" ,
+"subCategory": "Windows" ,
+"vendorId": "5ceec265bece271410d4f185" ,
+"workorderId": "5cf642677d8e281f20c8be00"
+  } ,
+
+"vendor": {
+"email": "kobe@gmail.com" ,
+"firstName": "Kobe" ,
+"id": "5ceec265bece271410d4f185",
+"lastName": "Bryant" ,
+"profession": "painter"
+} ,
+"workorder": {
+"apartmentNumber": 111,
+"buildingNumber" : 111,
+"id": "5cf642677d8e281f20c8be00" ,
+"status": "pending"
+}
+
+ }
+
+
+
+
+
+
+
+
+
+# POST http://localhost:3500/admin/assignJob/ 
+# content-type: application/json
+
+# {
+
+# }
+
+
