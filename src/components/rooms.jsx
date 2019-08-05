@@ -125,30 +125,12 @@ class Rooms extends Component {
 
   async handleHomeButton() {
     // const userId = JSON.parse(localStorage.getItem("currentUser"))._id;
-    const userId = "5d42f45141318e15a443b260";
-    const response = await axios.get(
-      process.env.REACT_APP_API_URL + `/avatar/${userId}`,
-      { responseType: "arraybuffer" }
-    );
-
-    console.log(response);
-    // this.setState({ img });
-    // console.log(img);
-    const base64 = btoa(
-      new Uint8Array(response.data).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ""
-      )
-    );
-    console.log(base64);
-    this.setState({ source: "data:;base64," + base64 });
     // localStorage.removeItem("jobs");
     // localStorage.removeItem("startBtn");
     // localStorage.removeItem("building");
     // localStorage.removeItem("chosenOpt");
     // localStorage.removeItem("isLoadingFullRoom");
     // // localStorage.removeItem("allItems");
-
     // let work = JSON.parse(localStorage.getItem("workorder"));
     // work.jobs = {};
     // work.buildingNumber = "";
@@ -156,7 +138,6 @@ class Rooms extends Component {
     // work.adress = "";
     // work.squareFeet = "";
     // delete work._id;
-
     // localStorage.setItem("workorder", JSON.stringify(work));
     // const region = JSON.parse(localStorage.getItem("currentUser")).region;
     // this.setState({ buildingState: false });
@@ -264,19 +245,7 @@ class Rooms extends Component {
       value2: e.target.value
     });
   };
-  handleLevels = e => {
-    let value3 = "";
-    let work = JSON.parse(localStorage.getItem("workorder"));
-    // value = workorder.apartmentNumber;
-    work.level = e.target.value;
-    // const workOrder = JSON.parse(localStorage.getItem("workorder"));
-    // workOrder.workorder.apartmentNumber = e.target.value;
-    localStorage.setItem("workorder", JSON.stringify(work));
 
-    this.setState({
-      value3: e.target.value
-    });
-  };
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
     if (answer) {
@@ -387,7 +356,7 @@ class Rooms extends Component {
 
     return (
       <div className="container main-page">
-        <img className="testImg" src={this.state.source} alt="" />
+        {/* <img className="testImg" src={this.state.source} alt="" /> */}
         <ToastContainer />
 
         <NavBar

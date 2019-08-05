@@ -56,6 +56,12 @@
   .logoBenLeeds img {
     width: 250px !important;
   }
+  .card-user {
+    margin: 1em;
+    background-color: #23408e !important;
+    /* border-radius: 20% !important; */
+    color: white;
+  }
 }
 .user-name {
   height: max-content !important;

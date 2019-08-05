@@ -3,10 +3,7 @@
   /* color: #23408e; */
   border: 1px solid #8d98f2 !important;
   box-shadow: 0 0 8px;
-
 }
-
-
 
 .rooms h1 {
   font-size: 2em;
@@ -21,15 +18,18 @@
 .check-box:hover {
   cursor: pointer;
 }
-
+.check-box {
+  width: 30px;
+  height: 30px;
+}
 .quantity {
   width: 40px;
   border-radius: 5px;
-  text-align: center
+  text-align: center;
 }
 
 .item-name {
-  width: 10rem
+  width: 10rem;
 }
 
 tr .item {
@@ -55,10 +55,9 @@ tbody {
 } */
 .placeholder-input {
   background-color: white !important;
-
 }
 
-@media only screen and (max-width: 450px) {
+@media (max-width: 450px) {
   tr .itemTd {
     font-size: 12px !important;
   }
@@ -66,7 +65,10 @@ tbody {
   /* .item {
     font-size: 12px !important;
   } */
-
+  .check-box {
+    width: 30px;
+    height: 30px;
+  }
   .buttons {
     flex-wrap: wrap;
   }

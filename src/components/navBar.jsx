@@ -13,6 +13,25 @@ class NavBar extends Component {
     showing: true
   };
 
+  async componentDidMount() {
+    const userId = "5d42f45141318e15a443b260";
+    const response = await axios.get(
+      process.env.REACT_APP_API_URL + `/avatar/${userId}`,
+      { responseType: "arraybuffer" }
+    );
+
+    console.log(response);
+    // this.setState({ img });
+    // console.log(img);
+    const base64 = btoa(
+      new Uint8Array(response.data).reduce(
+        (data, byte) => data + String.fromCharCode(byte),
+        ""
+      )
+    );
+    console.log(base64);
+    this.setState({ source: "data:;base64," + base64 });
+  }
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
     if (answer) {
@@ -188,8 +207,12 @@ class NavBar extends Component {
           <div className="logoBenLeeds col-12 p-3">
             <img src={logo} alt="Ben Leeds Logo" />
           </div>
-          <div class="card card-user col-4 offset-4">
-            <img src={user} class="card-img-top user-img" alt="..." />
+          <div class="card card-user col-sm-4 offset-sm-4 ">
+            <img
+              src={this.state.source}
+              class="card-img-top user-img"
+              alt="..."
+            />
             <div class="card-body user-name">
               <h5 class="card-title">{userName}</h5>
             </div>
@@ -301,7 +324,7 @@ class NavBar extends Component {
         <div className="container mainPage">
           {!chosenOptSaved && !chosenOptPending ? (
             <div className="row nav-box">
-              <div className="col-sm-3">
+              <div className="col-sm-4">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
@@ -322,7 +345,7 @@ class NavBar extends Component {
                   ) : null}
                 </div>
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-4">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
@@ -337,7 +360,7 @@ class NavBar extends Component {
                 </div>
                 {/* <label className="btn btn-secondary ">Workorders</label> */}
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-4">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
@@ -353,22 +376,7 @@ class NavBar extends Component {
 
                 {/* <label className="btn btn-secondary ">Workorders</label> */}
               </div>
-              <div className="col-sm-3">
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <div className="build input-group-text  text-white">
-                      Levels:
-                    </div>
-                  </div>
-                  <input
-                    value={this.props.value3}
-                    onChange={this.props.onHandleLevels}
-                    className={`build-input ${this.props.classs}`}
-                  />
-                </div>
 
-                {/* <label className="btn btn-secondary ">Workorders</label> */}
-              </div>
               {this.props.buildingState ? (
                 <div className="col-12">
                   <div class="card text-dark bg-light mb-3">

@@ -43,6 +43,16 @@ class Wo extends Component {
     //   this.saveStateToLocalStorage.bind(this)
     // );
   }
+  handleLevels = e => {
+    console.log("object");
+    let work = JSON.parse(localStorage.getItem("workorder"));
+    // value = workorder.apartmentNumber;
+    // console.log("radi e", e, e.target.value);
+    work.level = e.target.value;
+    // const workOrder = JSON.parse(localStorage.getItem("workorder"));
+    // workOrder.workorder.apartmentNumber = e.target.value;
+    localStorage.setItem("workorder", JSON.stringify(work));
+  };
   handleGeneralNotes = e => {
     // let woComment = this.state.woComment;
     // console.log(e.target.value);
@@ -210,12 +220,12 @@ class Wo extends Component {
             <table className="table text-left">
               <thead>
                 <tr>
-                  <th>Room</th>
-                  <th>Item</th>
-                  <th>SubCategory</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Total Price</th>
+                  <th className="item">Room</th>
+                  <th className="item">Item</th>
+                  <th className="item">SubCategory</th>
+                  <th className="item">Quantity</th>
+                  <th className="item">Price</th>
+                  <th className="item">Total Price</th>
                   {/* <th>Comment</th> */}
                 </tr>
               </thead>
@@ -223,12 +233,12 @@ class Wo extends Component {
                 ? jobs.map(item => (
                     <tbody>
                       <tr>
-                        <td> {item.room}</td>
-                        <td> {item.name}</td>
-                        <td> {item.subCategory}</td>
-                        <td> {item.quantity}</td>
-                        <td> {item.price}</td>
-                        <td>
+                        <td className="itemTd"> {item.room}</td>
+                        <td className="itemTd"> {item.name}</td>
+                        <td className="itemTd"> {item.subCategory}</td>
+                        <td className="itemTd"> {item.quantity}</td>
+                        <td className="itemTd"> {item.price}</td>
+                        <td className="itemTd">
                           $
                           {(item.quantity * item.price).toFixed(2)
                             ? (item.quantity * item.price).toFixed(2)
@@ -252,8 +262,10 @@ class Wo extends Component {
 
               <tr>
                 <td colSpan="3" />
-                <td colSpan="2">Total Price:</td>
-                <td>
+                <td className="itemTd" colSpan="2">
+                  Total Price:
+                </td>
+                <td className="itemTd">
                   <div>${total}</div>
                 </td>
               </tr>
@@ -266,6 +278,20 @@ class Wo extends Component {
               name=""
               id=""
             />
+            <div className="col-sm-12">
+              <label>
+                Pick Level:
+                <select onChange={this.handleLevels}>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </label>
+            </div>
+
+            {/* <label className="btn btn-secondary ">Workorders</label> */}
 
             <div className="buttons">
               <button

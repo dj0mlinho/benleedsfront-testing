@@ -8,7 +8,9 @@
   line-height: 50px; */
 /* padding: 0rem !important; */
 /* */
-
+/* .check-box {
+  height: 40px !important;
+} */
 .main-page {
   padding: 1.5em;
 }
@@ -81,12 +83,13 @@
   }
 
   tr .item {
-    padding: 0px !important;
+    /* padding: 0px !important; */
     font-size: 15px !important;
   }
 
   tr .itemTd {
-    padding: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 0px !important;
     font-size: 15px !important;
   }
 
@@ -98,7 +101,9 @@
     padding: 0px;
   }
 }
-
+/* kod form-control check  width: 30px;
+    height: 30px;
+*/
 .testImg {
   width: 400px;
   height: 400px;
