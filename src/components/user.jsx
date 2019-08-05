@@ -175,12 +175,16 @@ class User extends Component {
   //// validate the whole form before submitng data to database
   validate = () => {
     const userCopy = { ...this.state.user };
+     
 
+    
+    
     delete userCopy._id;
     delete userCopy.__v;
     delete userCopy.status;
     delete userCopy.region;
     delete userCopy.image;
+    delete userCopy.imgPath;
 
     const result = Joi.validate(userCopy, this.schema, { abortEarly: false });
     if (!result.error) return null;
