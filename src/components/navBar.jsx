@@ -213,19 +213,21 @@ class NavBar extends Component {
           <div className="logoBenLeeds col-12 p-3">
             <img src={logo} alt="Ben Leeds Logo" />
           </div>
-          <div class="card card-user col-sm-4 offset-sm-4 ">
-            <img
-              src={this.state.source}
-              class="card-img-top user-img"
-              alt="..."
-            />
-            <div class="card-body user-name">
-              <h5 class="card-title">{userName}</h5>
+          {!start ? (
+            <div class="card card-user col-sm-4 offset-sm-4 ">
+              <img
+                src={this.state.source}
+                class="card-img-top user-img"
+                alt="..."
+              />
+              <div class="card-body user-name">
+                <h5 class="card-title">{userName}</h5>
+              </div>
+              <div class="card-footer user-info">
+                <small class="text-center">{region}</small>
+              </div>
             </div>
-            <div class="card-footer user-info">
-              <small class="text-center">{region}</small>
-            </div>
-          </div>
+          ) : null}
         </div>
         {!start ? (
           <div className="px-3">
@@ -277,39 +279,7 @@ class NavBar extends Component {
             </select>
           </div>
         ) : null}
-        <div className="row m-1 mb-3">
-          {/* <div className="col-sm-4">
-            <div class="card text-white bg-secondary mb-3">
-              <div class="card-header">Regional Info</div>
-              <div class="card-body">
-                <h5 class="card-title">{"Name: " + userName}</h5>
-
-                <p class="card-text">{"Email: " + userEmail}</p>
-              </div>
-            </div>
-
-            {/* <label className="btn btn-secondary ">Workorders</label> */}
-          {/* </div> */}
-
-          {/* <div className="col-sm-4">
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <div className="build input-group-text  text-white">
-                  Manager Info
-                </div>
-              </div>
-              <textarea name="" id="" cols="30" rows="3">
-                {"Name: " + managerName + " " + "Phone: " + managerPhone}
-              </textarea>
-              {/* <input
-                  value={this.props.value2}
-                  onChange={this.props.onHandleSquare}
-                  className={`build-input ${this.props.classs}`}
-                /> */}
-          {/* </div> */}
-
-          {/* <label className="btn btn-secondary ">Workorders</label> */}
-          {/* </div> */}
+        <div className="row m-1">
           <div className="date col-sm-4 offset-sm-4">
             <div className="input-group ">
               <div className="input-group-prepend">
@@ -328,7 +298,7 @@ class NavBar extends Component {
         </div>
 
         <div className="container mainPage">
-          {!chosenOptSaved && !chosenOptPending ? (
+          {!chosenOptSaved && !chosenOptPending && !start ? (
             <div className="row nav-box">
               <div className="col-sm-4">
                 <div className="input-group mb-3">

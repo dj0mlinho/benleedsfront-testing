@@ -21,19 +21,7 @@ class Wo extends Component {
       document.location = "/";
     }
   }
-  handleSquare = e => {
-    let value2 = "";
-    let work = JSON.parse(localStorage.getItem("workorder"));
-    // value = workorder.apartmentNumber;
-    work.squareFeet = e.target.value;
-    // const workOrder = JSON.parse(localStorage.getItem("workorder"));
-    // workOrder.workorder.apartmentNumber = e.target.value;
-    localStorage.setItem("workorder", JSON.stringify(work));
 
-    this.setState({
-      value2: e.target.value
-    });
-  };
   componentDidMount() {
     // this.hydrateStateWithLocalStorage();
     // add event listener to save state to localStorage

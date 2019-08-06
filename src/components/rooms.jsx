@@ -302,7 +302,7 @@ class Rooms extends Component {
     let showing = false;
     let value = "";
     let value2 = "";
-    let value3 = "";
+    // let value3 = "";
     let workorder = JSON.parse(localStorage.getItem("workorder"));
     let isLoading = false;
     let isLoadingFullRoom = true;
@@ -328,7 +328,7 @@ class Rooms extends Component {
       build,
       start,
       value2,
-      value3,
+      // value3,
       buildingState,
       isLoading,
       isLoadingFullRoom
@@ -339,7 +339,7 @@ class Rooms extends Component {
     console.log(this.state.source);
     let adress = [];
     let value2 = this.state.value2;
-    let value3 = this.state.value3;
+    // let value3 = this.state.value3;
     // console.log(typeof this.state.buildingNum);
     let showing = this.state.showing;
     let saved = false;
@@ -403,7 +403,7 @@ class Rooms extends Component {
           // build={build}
           buildingState={this.state.buildingState}
           value2={value2}
-          value3={value3}
+          // value3={value3}
           onHandleInput={this.handleInput}
           adress={adress}
           classs=""
