@@ -19,6 +19,7 @@
   cursor: pointer;
 }
 .check-box {
+  /* background-color:lightblue; */
   width: 30px;
   height: 30px;
 }
