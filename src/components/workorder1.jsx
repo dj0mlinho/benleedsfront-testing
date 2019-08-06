@@ -183,6 +183,8 @@ class Wo extends Component {
 
     // const total = totalprice.map(item => );
     const workorder = JSON.parse(localStorage.getItem("workorder"));
+    const userName = JSON.parse(localStorage.getItem("currentUser")).name;
+    const userEmail = JSON.parse(localStorage.getItem("currentUser")).email;
     const buildingNumber = workorder.buildingNumber;
     const value = workorder.apartmentNumber;
     const value2 = workorder.squareFeet;
@@ -205,15 +207,24 @@ class Wo extends Component {
           />
           <div className="work-order border text-center mt-3">
             <h1 className="m-3">Work Order</h1>
+            <span>
+              <p>
+                Name: {userName} <br />
+                Email: {userEmail} <br />
+                Building Number: {buildingNumber} <br />
+                Apartment Number: {value} <br />
+                Square Footage: {value2}
+              </p>
+            </span>
             <table className="table text-left">
               <thead>
                 <tr>
-                  <th className="item">Room</th>
-                  <th className="item">Item</th>
-                  <th className="item">SubCategory</th>
-                  <th className="item">Quantity</th>
-                  <th className="item">Price</th>
-                  <th className="item">Total Price</th>
+                  <th className="itemWo">Room</th>
+                  <th className="itemWo">Item</th>
+                  <th className="itemWo">SubCategory</th>
+                  <th className="itemWo">#</th>
+                  <th className="itemWo">Price</th>
+                  <th className="itemWo">Total Price</th>
                   {/* <th>Comment</th> */}
                 </tr>
               </thead>
@@ -249,8 +260,8 @@ class Wo extends Component {
                 : null}
 
               <tr>
-                <td colSpan="3" />
-                <td className="itemTd" colSpan="2">
+                <td colSpan="2" />
+                <td className="itemTd text-right" colSpan="3">
                   Total Price:
                 </td>
                 <td className="itemTd">
@@ -268,7 +279,7 @@ class Wo extends Component {
             />
             <div className="col-sm-12">
               <label>
-                Pick Level:
+                Pick Level
                 <select onChange={this.handleLevels}>
                   <option value="1">1</option>
                   <option value="2">2</option>
