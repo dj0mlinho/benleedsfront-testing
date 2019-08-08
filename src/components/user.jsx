@@ -176,9 +176,6 @@ class User extends Component {
   validate = () => {
     const userCopy = { ...this.state.user };
      
-
-    
-    
     delete userCopy._id;
     delete userCopy.__v;
     delete userCopy.status;
@@ -240,9 +237,10 @@ handlePictureUpload = async () => {
       name,
       email,
       password,
-      region,
+      imgPath,
       emailPassword,
       _id: id
+
     } = this.state.user;
 
     return (
@@ -274,6 +272,7 @@ handlePictureUpload = async () => {
           name={name}
           email={email}
           password={password}
+          imgPath={imgPath}
           onRegionChange={this.handleRegionChange}
           onChange={this.handleInputChange}
           onBack={this.handleBack}
@@ -288,3 +287,4 @@ handlePictureUpload = async () => {
 }
 
 export default User;
+

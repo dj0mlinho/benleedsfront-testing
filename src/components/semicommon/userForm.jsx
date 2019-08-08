@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Input from "../common/input";
+import PictureFrame from "./pictureFrame/pictureFrame";
 
 
 class UserForm extends Component {
@@ -17,7 +18,7 @@ class UserForm extends Component {
       error,
       id,
       pictureSelect,
-      pictureUpload
+      imgPath
         
     } = this.props;
 
@@ -27,7 +28,8 @@ class UserForm extends Component {
       
      
         <div className="form-container">
-          <div>
+          {(id!=="") ? <PictureFrame imgPath={imgPath} name={name} />  : null}
+           <div>
          
             <form onSubmit={onSubmit} className="form-css" >
               <Input  
@@ -77,9 +79,13 @@ class UserForm extends Component {
                  </div> 
               </div>
 
-              <div className="row">
+              <div className="row mb-2">
+              <div className="col-sm-6 text-left pl-4">
+                <span className="pictureSpan"> {(id==="") ? "Select user picture :" : "Select new user picture :"  }  </span>
+                </div>
+
                 <div className="col-sm-6">
-                <input type='file' accept="image/*" onChange={pictureSelect} /> 
+                <input className="inputSelectImg"  type='file' accept="image/*" onChange={pictureSelect} /> 
                 </div>
                
               </div>
