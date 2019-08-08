@@ -34,7 +34,7 @@ class LoginForm extends Form {
       password: data.password
     };
 
-    console.log(params);
+    // console.log(params);
     const { data: response } = await axios.post(
       process.env.REACT_APP_API_URL + "/login",
       qs.stringify(params)
@@ -49,7 +49,7 @@ class LoginForm extends Form {
     //   JSON.stringify(response.tempWorkorders)
     // );
 
-    console.log(response);
+    // console.log(response);
 
     if (response.error === "no email" || response.error === "bad password") {
       const errors = { ...this.state.errors };
@@ -66,7 +66,7 @@ class LoginForm extends Form {
         localStorage.setItem("admin", JSON.stringify(data));
         this.props.history.push(`./admin`);
       } else {
-        console.log(response.user);
+        // console.log(response.user);
         const currentUser = {
           name: response.user.name,
           email: response.user.email,
