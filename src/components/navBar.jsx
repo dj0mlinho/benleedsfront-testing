@@ -14,23 +14,25 @@ class NavBar extends Component {
   };
 
   async componentDidMount() {
-    const userId = "5d42f45141318e15a443b260";
-    const response = await axios.get(
-      process.env.REACT_APP_API_URL + `/avatar/${userId}`,
-      { responseType: "arraybuffer" }
-    );
+    let source = JSON.parse(localStorage.getItem("currentUser")).imgPath;
+    this.setState({ source });
+    // const userId = "5d42f45141318e15a443b260";
+    // const response = await axios.get(
+    //   process.env.REACT_APP_API_URL + `/avatar/${userId}`,
+    //   { responseType: "arraybuffer" }
+    // );
 
-    console.log("resonse", response);
-    // this.setState({ img });
-    // console.log(img);
-    const base64 = btoa(
-      new Uint8Array(response.data).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ""
-      )
-    );
-    console.log(base64);
-    this.setState({ source: "data:;base64," + base64 });
+    // console.log("resonse", response);
+    // // this.setState({ img });
+    // // console.log(img);
+    // const base64 = btoa(
+    //   new Uint8Array(response.data).reduce(
+    //     (data, byte) => data + String.fromCharCode(byte),
+    //     ""
+    //   )
+    // );
+    // console.log(base64);
+    // this.setState({ source: "data:;base64," + base64 });
   }
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
@@ -342,7 +344,7 @@ class NavBar extends Component {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Square Footage:
+                      Square Footage
                     </div>
                   </div>
                   <input

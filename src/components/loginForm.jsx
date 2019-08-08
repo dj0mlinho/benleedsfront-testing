@@ -70,6 +70,7 @@ class LoginForm extends Form {
         const currentUser = {
           name: response.user.name,
           email: response.user.email,
+          imgPath: response.user.imgPath,
           password: response.user.password,
           region: response.user.region,
           _id: response.user._id
@@ -104,11 +105,7 @@ class LoginForm extends Form {
       <div className="row">
         <div className="col-sm-5 mx-auto m-5  text-center login">
           <div className="m-5">
-            <img
-              src={logo}
-              className="img-fluid logo-img"
-              alt="Ben Leeds Logo"
-            />
+            <img src={logo} className="img-fluid" alt="Ben Leeds Logo" />
           </div>
           <h1 className="p-3">Log-In</h1>
           <form

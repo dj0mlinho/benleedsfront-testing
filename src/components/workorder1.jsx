@@ -167,9 +167,10 @@ class Wo extends Component {
     if (localStorage.getItem("jobs")) {
       //  jobs = JSON.parse(localStorage.getItem("jobs"));
       // console.log(total);
-      jobs = JSON.parse(localStorage.getItem("jobs")).filter(
-        m => m.checked == true
-      );
+      const allItems = JSON.parse(localStorage.getItem("allItems"));
+      const allItemsi = [...allItems];
+      let checkedAllItems = allItemsi.filter(m => m.checked === true);
+      jobs = checkedAllItems;
     } else {
       jobs = false;
     }

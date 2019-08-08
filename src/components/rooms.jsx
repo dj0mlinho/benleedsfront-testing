@@ -63,6 +63,7 @@ class Rooms extends Component {
     if (this.state.start || this.props.location.state) {
       let allItems = JSON.parse(localStorage.getItem("allItems"));
       if (this.props.location.state) {
+        console.log("radi props jobs aaaaaaaaaaaaaaaaaaaaaa");
         const buildNumber = this.props.location.state.buildingNumber;
 
         let building = buildings.find(m => m.number == buildNumber);
