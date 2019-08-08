@@ -189,7 +189,10 @@ class Rooms extends Component {
   handleFinishedButton = async () => {
     let start = true;
     localStorage.setItem("startBtn", JSON.stringify(start));
-    const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+    const allItemsi = [...allItems];
+    let jobs = allItemsi.filter(m => m.checked === true);
+    localStorage.setItem("jobs", JSON.stringify(jobs));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
