@@ -18,6 +18,7 @@ class User extends Component {
     orders: null ,
     images : [] ,
     user: {
+      imgPath: "",
       _id: "",
       email: "",
       password: "",
@@ -147,10 +148,6 @@ class User extends Component {
       data.append("image", "noImage.jpg");
     }
     
-    
-    
-    
-
     const errors = this.validate();
     this.setState({ errors: errors || {} });
      
