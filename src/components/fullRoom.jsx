@@ -61,7 +61,10 @@ class FullRoom extends Form {
       "isLoadingFullRoom",
       JSON.stringify(isLoadingFullRoom)
     );
-    const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -75,8 +78,8 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log(finalData);
-    console.log(data);
+    console.log("newW", finalData);
+    console.log("newW", data);
     this.props.history.push("/rooms/" + this.props.match.params.m);
   };
   handleExtraItems() {
@@ -103,7 +106,11 @@ class FullRoom extends Form {
   handleFinishedButton = async () => {
     let start = true;
     localStorage.setItem("startBtn", JSON.stringify(start));
-    const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // localStorage.setItem("jobs", JSON.stringify(checkedAllItems));
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -112,12 +119,13 @@ class FullRoom extends Form {
 
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
-    console.log(finalData);
+
     const data = await axios.post(
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-
+    console.log(finalData, "NewWorkorder");
+    console.log(data);
     this.props.history.push(
       "/rooms/" + this.props.match.params.id + "/work-order"
     );
@@ -238,6 +246,7 @@ class FullRoom extends Form {
       JSON.stringify(finalData)
     );
 
+    console.log(finalData, "NewWorkorder");
     console.log(data);
     if (data.statusText === "OK") {
       let work = JSON.parse(localStorage.getItem("workorder"));
@@ -266,7 +275,6 @@ class FullRoom extends Form {
     // console.log(this.state.value);
     let value = this.state.value;
 
-    console.log(checked, value);
     // console.log(this.state.value);
     const rooms = this.state.allItems.find(
       room => room._id === e.currentTarget.id
@@ -314,10 +322,9 @@ class FullRoom extends Form {
 
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const allItemsi = [...allItems];
-    let checkedAllItems = allItemsi.filter(m => m.checked === true);
-    // localStorage.setItem("jobs", JSON.stringify(checkedAllItems));
-    this.setState({ value, checkedAllItems });
-    console.log("CEKIRANOOOOOOO", checkedAllItems);
+    let jobs = allItemsi.filter(m => m.checked === true);
+    localStorage.setItem("jobs", JSON.stringify(jobs));
+    this.setState({ value });
   };
 
   handleWorkOrder = async () => {
@@ -475,15 +482,15 @@ class FullRoom extends Form {
   }
 
   render() {
-    console.log("provera iz rendera", this.state.data);
-    // console.log(this.state.renderedItems);
+    // console.log("provera iz rendera", this.state.data);
+    // // console.log(this.state.renderedItems);
 
-    // console.log(this.state.data);
-    // // let number = 1;
-    // // if (this.state.value==undefined){
-    // //   number=
-    // // }
-    console.log("status", this.state.status);
+    // // console.log(this.state.data);
+    // // // let number = 1;
+    // // // if (this.state.value==undefined){
+    // // //   number=
+    // // // }
+    // console.log("status", this.state.status);
     let checked = this.state.checked;
     let checkedTrue = this.state.checkedTrue;
 
@@ -529,7 +536,7 @@ class FullRoom extends Form {
     let status = this.state.status;
     let statusOfExtraItems = this.state.statusOfExtraItems;
     // let number = this.state.data[0];
-    console.log(this.state);
+
     return (
       <React.Fragment>
         <div className="container main-page ">

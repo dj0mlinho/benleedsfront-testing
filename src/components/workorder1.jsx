@@ -62,8 +62,8 @@ class Wo extends Component {
       "Are you sure you want to send this workorder?"
     );
     if (prompt) {
-      const jobs = JSON.parse(localStorage.getItem("jobs"));
-      const copyItems = [...jobs].filter(item => {
+      const allItems = JSON.parse(localStorage.getItem("allItems"));
+      const copyItems = [...allItems].filter(item => {
         return item.checked;
       });
       const finalItems = copyItems.map(item => {
@@ -168,9 +168,8 @@ class Wo extends Component {
       //  jobs = JSON.parse(localStorage.getItem("jobs"));
       // console.log(total);
       const allItems = JSON.parse(localStorage.getItem("allItems"));
-      const allItemsi = [...allItems];
-      let checkedAllItems = allItemsi.filter(m => m.checked === true);
-      jobs = checkedAllItems;
+
+      jobs = [...allItems].filter(m => m.checked === true);
     } else {
       jobs = false;
     }

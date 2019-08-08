@@ -46,7 +46,8 @@ class Room extends Component {
       process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log(data1);
+    console.log("GET", finalData);
+    console.log("GET", data1);
 
     if (data1.data.workorder) {
       let _id = data1.data.workorder._id;
@@ -60,7 +61,6 @@ class Room extends Component {
   render() {
     let isLoading = this.state.isLoading;
 
-    console.log(isLoading);
     return (
       <div className="col-4 p-3">
         <div className="card mb-3 text-center">

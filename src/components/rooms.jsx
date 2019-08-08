@@ -63,7 +63,6 @@ class Rooms extends Component {
     if (this.state.start || this.props.location.state) {
       let allItems = JSON.parse(localStorage.getItem("allItems"));
       if (this.props.location.state) {
-        console.log("radi props jobs aaaaaaaaaaaaaaaaaaaaaa");
         const buildNumber = this.props.location.state.buildingNumber;
 
         let building = buildings.find(m => m.number == buildNumber);
@@ -139,7 +138,8 @@ class Rooms extends Component {
       JSON.stringify(finalData)
     );
 
-    console.log(data);
+    console.log("newWorkorder", finalData);
+    console.log("newW", data);
     if (data.statusText === "OK") {
       let work = JSON.parse(localStorage.getItem("workorder"));
 
@@ -203,7 +203,8 @@ class Rooms extends Component {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-
+    console.log("newWorkorder", finalData);
+    console.log("newW", data);
     this.props.history.push(
       "/rooms/" + this.props.match.params.id + "/work-order"
     );
@@ -337,7 +338,6 @@ class Rooms extends Component {
   }
 
   render() {
-    console.log(this.state.source);
     let adress = [];
     let value2 = this.state.value2;
     // let value3 = this.state.value3;
