@@ -322,13 +322,13 @@ a:active {
   box-shadow: 0 4px 4px -2px black; 
 } 
 
-.inputSelectImg {
+/* .inputSelectImg {
   float: left ;
-}
+} */
 
-.pictureSpan{
+/* .pictureSpan{
   font-weight: 500 ;
-}
+} */
 
 .line-hight-admin {
   line-height: 3rem ;

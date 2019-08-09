@@ -20,7 +20,7 @@ function UserForm(props) {
 
   return (
     <div className="form-container">
-      {id !== "" ? <PictureFrame imgPath={imgPath} name={name} /> : null}
+      {id !== "" ? <PictureFrame imgPath={imgPath} /> : null}
       <div>
         <form onSubmit={onSubmit} className="form-css">
           <Input
@@ -72,7 +72,7 @@ function UserForm(props) {
             </div>
           </div>
 
-          <div className="row mb-2">
+          {/* <div className="row mb-2">
             <div className="col-sm-6 text-left pl-4">
               <span className="pictureSpan">
                 
@@ -90,7 +90,7 @@ function UserForm(props) {
                 onChange={pictureSelect}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div className="col-6">
