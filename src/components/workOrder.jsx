@@ -69,11 +69,8 @@ export default class WorkOrder extends Component {
   //// prvi puca uvek
   handleDateChange = e => {
     const selDate = e.target.value;
-    
     // console.log("sel date" , selDate);
     
-    
-
     const jobId = this.state.jobIdFromDate;
     const jobsArrey = this.state.workorder.jobs.slice();
     // console.log("arej koji tek treba u filter" , jobsArrey);
@@ -93,6 +90,32 @@ export default class WorkOrder extends Component {
       workorder: workorderCopy
     });
   };
+
+  handleDateChangeTwo = e => {
+
+    const selDate = e.target.value;
+    // console.log("sel date" , selDate);
+    
+    const jobId = this.state.jobIdFromDate;
+    const jobsArrey = this.state.workorder.jobs.slice();
+    // console.log("arej koji tek treba u filter" , jobsArrey);
+
+    const editDate = jobsArrey.filter(job => job._id === jobId);
+    // console.log("filterovan arrey" , editDate);
+
+    editDate[0].endDate = selDate;
+    // console.log("dodat datum", editDate[0]);
+
+    const workorderCopy = { ...this.state.workorder };
+    workorderCopy.jobs = jobsArrey;
+
+    // console.log("workorder koji se vraca" , workorderCopy);
+
+    this.setState({
+      workorder: workorderCopy
+    });
+
+  }
 
   handleId = id => {
     this.setState({
@@ -115,8 +138,6 @@ export default class WorkOrder extends Component {
      })
   
      }
-      
-  
   }
 
   handleVendorChange = e => {
@@ -264,6 +285,7 @@ export default class WorkOrder extends Component {
           users={this.state.users}
           onVendorChange={this.handleVendorChange}
           onDateChange={this.handleDateChange} 
+          onDateChangeTwo={this.handleDateChangeTwo} 
           handleId={this.handleId}
           vendors={this.state.vendors}
           returnVendorId={this.handleVendorId}

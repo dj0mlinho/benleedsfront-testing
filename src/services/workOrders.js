@@ -13,12 +13,12 @@ export function getWorkOrder(workOrderId){
 
 export function endJob(jobId){
   let d = new Date();
-  let endDate = d.toLocaleString();
+  let finishedDate = d.toLocaleString();
   
   return http.post(process.env.REACT_APP_API_URL + `/admin/finishJob/${jobId}`, 
    qs.stringify({
      status : "finished" ,
-     endDate : endDate
+     finishedDate : finishedDate
    })
    );
 } 
@@ -30,8 +30,8 @@ export function assignJob(jobId, job, vendor, workorder){
   console.log( "wo as" , workorder);
   console.log( "job as" , job);
   console.log( "jvendor as" , vendor);
-  console.log("date" , typeof job.assignmentDate);
-  console.log("date" , job.assignmentDate);
+  // console.log("date" , typeof job.assignmentDate);
+  // console.log("date" , job.assignmentDate);
   
 
 
@@ -48,7 +48,8 @@ export function assignJob(jobId, job, vendor, workorder){
          comment : job.comment,
          workorderId : job.workorderId,
          vendorId : job.vendorId,
-         assignmentDate : job.assignmentDate 
+         assignmentDate : job.assignmentDate,
+         endDate : job.endDate 
       },
       vendor : {
          _id : vendor._id ,
@@ -68,6 +69,7 @@ export function assignJob(jobId, job, vendor, workorder){
 
     })
    
-  )}
+  )
 
+}
 
