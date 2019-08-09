@@ -206,15 +206,17 @@ class Rooms extends Component {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log("newWorkorder", finalData);
-    console.log("newW", data);
-    this.props.history.push(
-      "/rooms/" + this.props.match.params.id + "/work-order"
-    );
-    // const work = JSON.parse(localStorage.getItem("workorder"));
-    const date = new Date();
-    work.completedTime = date;
-    localStorage.setItem("workorder", JSON.stringify(work));
+    if (data.statusText === "OK") {
+      console.log("newWorkorder", finalData);
+      console.log("newW", data);
+      this.props.history.push(
+        "/rooms/" + this.props.match.params.id + "/work-order"
+      );
+      // const work = JSON.parse(localStorage.getItem("workorder"));
+      const date = new Date();
+      work.completedTime = date;
+      localStorage.setItem("workorder", JSON.stringify(work));
+    }
   };
   // handleWorkOrder = async () => {
   //   window.alert("In development...");

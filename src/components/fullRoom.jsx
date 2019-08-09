@@ -78,9 +78,11 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log("newW", finalData);
-    console.log("newW", data);
-    this.props.history.push("/rooms/" + this.props.match.params.m);
+    if (data.statusText === "OK") {
+      console.log("newW", finalData);
+      console.log("newW", data);
+      this.props.history.push("/rooms/" + this.props.match.params.m);
+    }
   };
   handleExtraItems() {
     if (this.state.status == "extra") {
@@ -124,15 +126,17 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log(finalData, "NewWorkorder");
-    console.log(data);
-    this.props.history.push(
-      "/rooms/" + this.props.match.params.id + "/work-order"
-    );
-    // const work = JSON.parse(localStorage.getItem("workorder"));
-    const date = new Date();
-    work.completedTime = date;
-    localStorage.setItem("workorder", JSON.stringify(work));
+    if (data.statusText === "OK") {
+      console.log(finalData, "NewWorkorder");
+      console.log(data);
+      this.props.history.push(
+        "/rooms/" + this.props.match.params.id + "/work-order"
+      );
+      // const work = JSON.parse(localStorage.getItem("workorder"));
+      const date = new Date();
+      work.completedTime = date;
+      localStorage.setItem("workorder", JSON.stringify(work));
+    }
   };
 
   handleChangeArea = ({ currentTarget: input }) => {

@@ -149,6 +149,7 @@ class NavBar extends Component {
   }
 
   render() {
+    console.log("location state", this.props.location.state);
     let start = "";
     let klasa = "";
     let building = "";
@@ -215,7 +216,10 @@ class NavBar extends Component {
           <div className="logoBenLeeds col-12 p-3">
             <img src={logo} alt="Ben Leeds Logo" />
           </div>
-          {!start ? (
+          {!chosenOptSaved &&
+          !chosenOptPending &&
+          !start &&
+          !this.props.location.state ? (
             <div class="card card-user col-sm-4 offset-sm-4 ">
               <img
                 src={this.state.source}
@@ -300,7 +304,10 @@ class NavBar extends Component {
         </div>
 
         <div className="container mainPage">
-          {!chosenOptSaved && !chosenOptPending && !start ? (
+          {!chosenOptSaved &&
+          !chosenOptPending &&
+          !start &&
+          !this.props.location.state ? (
             <div className="row nav-box">
               <div className="col-sm-4">
                 <div className="input-group mb-3">
