@@ -387,3 +387,11 @@ a:active {
    }
 }
 
+@media  (min-width: 1051px) {
+  .wo-jobs-table {
+    display: table !important ;
+  }
+}
+
+
+

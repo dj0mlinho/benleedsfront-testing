@@ -33,22 +33,25 @@ export default class workOrderTable extends Component {
     const { users, onDateChange, onDateChangeTwo, onVendorChange , vendors, handleId, returnVendorId, onOk, okTriger , onProfessionChange, professions, vendorsWhitSamePro, allSentJoobs, allWorkOrders } = this.props;
 
     let workorderUser = users.find(x => x._id === workorder.userId);
-    const userName =   workorderUser.name ;
+    const userName =   workorderUser.name ;  
 
-    
-
-    
-
+  
     return (
       <div>
         
         <div className="container container-bg">
           <div className="row">
             <div className="col-sm-3">
-              <span className="lead font-weight-bold">Work Order Of:</span>
+              <span className="lead font-weight-bold">WorkOrder Of:</span>
             </div>
-            <div className="col-sm-9 text-center">
+            <div className="col-sm-3 text-center">
               <h5 className="reset-mb">{userName}</h5>
+            </div>
+            <div className="col-sm-3">
+              <span className="lead font-weight-bold">WorkOrder Level:</span>
+            </div>
+            <div className="col-sm-3 text-center">
+              <h5 className="reset-mb">{workorder.level ? workorder.level : "Not selected" }</h5>
             </div>
           </div>
           <div className="row border-b">
@@ -95,7 +98,7 @@ export default class workOrderTable extends Component {
              handleId={handleId}
              returnVendorId={returnVendorId}
              onOk = {onOk}
-             okTriger ={okTriger}
+            //  okTriger ={okTriger}
              onProfessionChange={onProfessionChange}
              professions={professions}
              vendorsWhitSamePro={vendorsWhitSamePro}
@@ -108,3 +111,4 @@ export default class workOrderTable extends Component {
     );
   }
 }
+

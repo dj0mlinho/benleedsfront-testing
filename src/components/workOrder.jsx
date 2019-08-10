@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default class WorkOrder extends Component {
   state = {
+    jobs : null ,
     allSentJobs : null ,
     workorder: null,
     allWorkOrders : null ,
@@ -54,6 +55,7 @@ export default class WorkOrder extends Component {
     let allSentJoobs = jobs.filter(job=> job.status === "sent")
 
     this.setState(() => ({
+      jobs : jobs ,
       allSentJoobs : allSentJoobs,
       workorder: workorder,
       allWorkOrders : allWorkOrders,
@@ -170,6 +172,31 @@ export default class WorkOrder extends Component {
     });
   };
 
+
+  createJobForSend =(id) => {
+    // console.log("id id" , id);
+
+    const woCopy = {...this.state.workorder};
+
+    // console.log("woCopy" , woCopy);
+    const JobForSent = woCopy.jobs.filter(job => job._id === id) ;
+    
+    if (JobForSent[0].vendorId) {
+      let newJobForSentObj = {} ;
+      newJobForSentObj.selVendorId = JobForSent[0].vendorId ;
+      newJobForSentObj.jobId = id ;
+      let jobForSendArrey = [] ;
+      jobForSendArrey.push(newJobForSentObj) ;
+      
+       console.log("pred state" , jobForSendArrey );
+       
+      return jobForSendArrey ;
+   }  
+
+   return [] ;
+    
+  }
+
   handleOkButton = async (e, id) => {
     let yesNo = window.confirm(
       `Are you sure you assigned/edited the correct date and vendor for this job?`
@@ -180,14 +207,18 @@ export default class WorkOrder extends Component {
     } else {
     }
 
-    this.setState({
-      okTriger: true
-    });
+    // this.setState({
+    //   okTriger: true
+    // });
 
     const clickBtnId = id;
 
-    //// check if vendor and date is selected
-    const checkArrey = this.state.jobForSendArrey;
+    let jobForSendNotFromState =   this.createJobForSend(id) ;
+
+   console.log("test" , jobForSendNotFromState);
+     
+    const checkArrey = ( this.state.jobForSendArrey.length === 0 ) ?  jobForSendNotFromState : this.state.jobForSendArrey ;
+
     let index = checkArrey.findIndex(x => x.jobId === clickBtnId);
 
     let jobsArrey = this.state.workorder.jobs;
@@ -211,6 +242,8 @@ export default class WorkOrder extends Component {
       } else {
     }
     } ;
+
+    
     woStatusCheck(workorder);
     // console.log("oosle funckije wo" , workorder );
     
@@ -218,18 +251,22 @@ export default class WorkOrder extends Component {
     const job = jobsArrey.find(job => job._id === clickBtnId);
 
     let selVendorId = null;
+    
+    
     const vendorObj = checkArrey.find(job => job.jobId === clickBtnId);
 
     if (vendorObj) {
       selVendorId = vendorObj.selVendorId;
     } else {
+      console.log("jebem ti mater!");
       return null;
     }
 
     const vendorArrey = this.state.vendors;
     const vendor = vendorArrey.find(vendor => vendor._id === selVendorId);
-
+    
     if (firstCheck !== -1 && secondCheck !== -1) {
+        
       this.submitDateAndVendor(clickBtnId, job, vendor, workorder);
     } else {
       toast.error("please fill out all fields and date");
@@ -238,12 +275,13 @@ export default class WorkOrder extends Component {
 
   submitDateAndVendor = async (clickBtnId, job, vendor, workorder) => {
 
-    console.log("jobid", clickBtnId);
-    console.log("wo", workorder);
-    console.log("job", job);
-    console.log("jvendor", vendor);
+    // console.log("jobid", clickBtnId);
+    // console.log("wo", workorder);
+    // console.log("job", job);
+    // console.log("jvendor", vendor);
+    let allJobs = [...this.state.jobs] ;
 
-    const { data } = await assignJob(clickBtnId, job, vendor, workorder);
+    const { data } = await assignJob(clickBtnId, job, vendor, workorder, allJobs);
     console.log("posle assigne",data);
     
     if (data.success) {
@@ -290,7 +328,7 @@ export default class WorkOrder extends Component {
           vendors={this.state.vendors}
           returnVendorId={this.handleVendorId}
           onOk={this.handleOkButton}
-          okTriger={this.state.okTriger}
+          // okTriger={this.state.okTriger}
           onProfessionChange={this.handleProfessionChange}
           professions={this.state.professions}
           selProfession={this.state.selProfession}

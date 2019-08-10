@@ -87,8 +87,8 @@ export default class Jobs extends Component {
      let jobsWithoutDeleted = jobs.filter(job => job._id !== id) ;
     //  console.log(jobsWithoutDeleted);
      
-     const response = await endJob(id) ;      
-
+     const response = await endJob(id) ;    
+        
      if (response.data.success) {
        toast.success("Job finished!"); 
        this.setState({

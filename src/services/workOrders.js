@@ -24,17 +24,26 @@ export function endJob(jobId){
 } 
 
 
-export function assignJob(jobId, job, vendor, workorder){
+export function assignJob(jobId, job, vendor, workorder, allJobs){
 
   console.log( "jobid as" , jobId);
   console.log( "wo as" , workorder);
   console.log( "job as" , job);
   console.log( "jvendor as" , vendor);
+  console.log( "all jobs" , allJobs);
   // console.log("date" , typeof job.assignmentDate);
   // console.log("date" , job.assignmentDate);
+
+
+  let woStatusInfo = allJobs.filter(
+    jobS => (jobS.status === "pending") 
+  ) ;
   
+  
+   
 
-
+ 
+  
   return http.post(process.env.REACT_APP_API_URL + `/admin/assignJob/${jobId}` ,
   JSON.stringify({   
       job : {
@@ -60,7 +69,7 @@ export function assignJob(jobId, job, vendor, workorder){
        },
       workorder : {
         _id : workorder._id ,
-        status : workorder.status,
+        status : (woStatusInfo.length === 1 || woStatusInfo.length === 0  ) ? "sent" : workorder.status,
         buildingNumber : workorder.buildingNumber,
         apartmentNumber : workorder.apartmentNumber,
         adress : workorder.adress,

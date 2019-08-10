@@ -59,6 +59,9 @@ export default function JobsTable(props) {
     return d;
   };
 
+  // console.log("paginated" , jobsPaginated);
+  
+
   return (
     <>
       <table className="table table-bordered table-hover table-responsive-sm">
@@ -69,6 +72,7 @@ export default function JobsTable(props) {
             <th>Apartment Number</th>
             <th className="line-hight-jobs">Vendor</th>
             <th>Assignment Date</th>
+            <th>End Date</th>
           </tr>
         </thead>
         <tbody>
@@ -95,9 +99,14 @@ export default function JobsTable(props) {
                     ? formatDate(job.assignmentDate)
                     : "not assigned"}
                 </td>
+                <td>
+                  {job.endDate
+                    ? formatDate(job.endDate)
+                    : "not assigned"}
+                </td>
               </tr>
               <tr className={job.vendor ? "font-resp-admin" : "table-border-bottom font-resp-admin"}>
-                <th colSpan="5">
+                <th colSpan="6">
                   Room:
                   <span className="font-weight-normal mr-5"> {job.room} </span>
                   Name:
@@ -113,19 +122,19 @@ export default function JobsTable(props) {
               </tr>
               { (job.finishedDate ) ? (
                    <tr className= "table-border-bottom" >
-                      <td colSpan="5">
+                      <td colSpan="6">
                     <span className="font-weight-normal ">
-                      <span className="font-weight-bold">Finished Date:</span>{" "}
-                      <span className="endDate">{job.endDate}</span>
+                      <span className="font-weight-bold">Finished Date:</span>
+                      <span className="endDate"> {formatDate(job.finishedDate)}</span>
                     </span>
                     </td>
                     </tr>
                   ) : null}
 
-              {job.vendor && job.endDate === "" ? (
+              {job.vendorId && job.status === "sent" ? (
                 <tr className={job.vendor ? "table-border-bottom" : null}>
                   <th colSpan="3">Finish Job : </th>
-                  <th colSpan="2">
+                  <th colSpan="3">
                     <button
                       className="btn btn-sm mdc-button"
                       onClick={() => onFinish(job._id)}

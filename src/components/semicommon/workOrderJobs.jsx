@@ -72,7 +72,7 @@ export default function WorkOrderJobs(props) {
       {sortJobs.map(job => (
         <table
           key={job._id}
-          className="table table-bordered table-border-bottom table-responsive"
+          className="table table-bordered table-border-bottom table-responsive wo-jobs-table"
         >
          
           <thead>
@@ -138,7 +138,7 @@ export default function WorkOrderJobs(props) {
                 </select>
               </th>
               <th id={job._id}>
-                Select vendor:
+                {(job.status === "finished" || job.status === "sent") ? "Selected vendor:" : "Select vendor:" }
                 <select
                   disabled={job.status === "finished" ? true : false}
                   onChange={onVendorChange}
@@ -147,7 +147,6 @@ export default function WorkOrderJobs(props) {
                   <option>{checkVendorId(job.vendorId)}</option>
                   {sortVendors.map(vendor => (
                     <option value={vendor._id} key={vendor._id}>
-                      {" "}
                       {`Name: ${vendor.name} | `}{" "}
                       {`Profession: ${vendor.profession}`}{" "}
                     </option>
@@ -164,12 +163,12 @@ export default function WorkOrderJobs(props) {
               </th>
 
               <th>
-                Pick Date:
+                
                 <div
                   onClick={() => handleId(job._id)}
                   className="btn-dsp-block"
                 >
-                  <input
+                <span> Start date: </span> <input
                      
                     type="date"
                     disabled={job.status === "finished" ? true : false}
@@ -177,7 +176,7 @@ export default function WorkOrderJobs(props) {
                     onChange={onDateChange}
                     className="form-control form-control-sm input-date-wo-margin"
                   />
-                   <input
+                 <span>End date:</span>  <input
                      
                      type="date"
                      disabled={job.status === "finished" ? true : false}
