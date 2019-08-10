@@ -254,13 +254,15 @@ class Rooms extends Component {
       work.apartmentNumber = "";
       work.adress = "";
       work.squareFeet = "";
+      work.squareFeet = "";
+      work.level = "";
       delete work._id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const region = JSON.parse(localStorage.getItem("currentUser")).region;
       // this.setState({ buildingState: false });
-      // this.props.history.push(`/rooms/${region}`);
-      // document.location.reload();
+      this.props.history.push(`/rooms/${region}`);
+      document.location.reload();
     }
   }
   // async handleHomeButton() {

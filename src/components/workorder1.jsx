@@ -120,6 +120,8 @@ class Wo extends Component {
         work.comment = "";
         work.adress = "";
         work.autosaveTime = "";
+        work.level = "";
+        work.squareFeet = "";
         delete work.jobs;
         delete work._id;
         work.loginTime = new Date();
@@ -130,8 +132,8 @@ class Wo extends Component {
         localStorage.removeItem("building");
         let region = JSON.parse(localStorage.getItem("currentUser")).region;
 
-        // this.props.history.push(`/rooms/${region}`);
-        // document.location.reload();
+        this.props.history.push(`/rooms/${region}`);
+        document.location.reload();
 
         // window.location = "/rooms/" + region;
         // localStorage.removeItem("workorder");

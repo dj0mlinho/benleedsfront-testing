@@ -266,6 +266,8 @@ class FullRoom extends Form {
       work.apartmentNumber = "";
       work.adress = "";
       work.squareFeet = "";
+      work.level = "";
+
       delete work._id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
