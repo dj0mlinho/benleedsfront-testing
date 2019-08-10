@@ -94,6 +94,7 @@ class Wo extends Component {
       work.workorder.completedTime = new Date();
       work.workorder.buildingNumber = finalData.buildingNumber;
       work.workorder.apartmentNumber = finalData.apartmentNumber;
+      work.workorder.squareFeet = finalData.squareFeet;
       work.workorder.adress = finalData.adress;
       work.workorder.userId = finalData.userId;
       work.workorder.totalPrice = total;
@@ -130,16 +131,14 @@ class Wo extends Component {
         localStorage.removeItem("jobs");
         localStorage.removeItem("startBtn");
         localStorage.removeItem("building");
-        let region = JSON.parse(localStorage.getItem("currentUser")).region;
-
-        this.props.history.push(`/rooms/${region}`);
-        document.location.reload();
 
         // window.location = "/rooms/" + region;
         // localStorage.removeItem("workorder");
       }
-    } else {
-      return;
+      let region = JSON.parse(localStorage.getItem("currentUser")).region;
+
+      this.props.history.push(`/rooms/${region}`);
+      document.location.reload();
     }
   };
   constructor(props) {

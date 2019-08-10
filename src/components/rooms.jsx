@@ -20,57 +20,78 @@ class Rooms extends Component {
       JSON.stringify(isLoadingFullRoom)
     );
     this.setState({ isLoadingFullRoom: false, isLoading: true });
+
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
-    let finalData = {};
-    finalData.buildingNumber = work.buildingNumber;
-    finalData.apartmentNumber = work.apartmentNumber;
-    finalData.userId = work.userId;
-    finalData.room = this.props.name;
-    // finalData.getItems = false;
-    console.log(this.props.name);
-    // work.autosaveTime = new Date();
-    // work.jobs = jobs;
-    // localStorage.setItem("workorder", JSON.stringify(work));
-    // const finalData = JSON.parse(localStorage.getItem("workorder"));
-    console.log(finalData);
-    const data1 = await axios.post(
-      process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
+    work.autosaveTime = new Date();
+    if (jobs != null) {
+      work.jobs = jobs;
+    }
+
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+    const data = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
 
-    console.log("GET", finalData);
-    console.log("GET", data1);
+    if (data.statusText === "OK") {
+      const work = JSON.parse(localStorage.getItem("workorder"));
 
-    if (data1.data) {
-      let _id = data1.data._id;
-      work._id = _id;
-      localStorage.setItem("workorder", JSON.stringify(work));
-      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
-    }
+      let finalData = {};
+      finalData.buildingNumber = work.buildingNumber;
+      finalData.apartmentNumber = work.apartmentNumber;
+      finalData.userId = work.userId;
 
-    if (data1.statusText === "OK") {
-      let allItems = JSON.parse(localStorage.getItem("allItems"));
-      let jobsi = [];
-      if (data1.data.jobs != undefined) {
-        jobsi = data1.data.jobs;
+      // finalData.getItems = false;
+
+      // work.autosaveTime = new Date();
+      // work.jobs = jobs;
+      // localStorage.setItem("workorder", JSON.stringify(work));
+      // const finalData = JSON.parse(localStorage.getItem("workorder"));
+      console.log(finalData);
+      const data1 = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
+        JSON.stringify(finalData)
+      );
+
+      console.log("GET", finalData);
+      console.log("GET", data1);
+
+      if (data1.data) {
+        let _id = data1.data._id;
+        work._id = _id;
+        console.log("Radi", _id);
+        localStorage.setItem("workorder", JSON.stringify(work));
+        // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
       }
 
-      let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
-      // console.log(kurac);
-      let checkedArr = jobsi.map(j => j).map(m => m._id);
-      let unchecked = allItems.filter(
-        d => d._id != checkedArr.find(m => m == d._id)
-      );
-      allItems = checked.concat(unchecked);
-      localStorage.setItem("allItems", JSON.stringify(allItems));
-      console.log("newW", finalData);
-      console.log("newW", data1);
-      // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
-      this.props.history.push(
-        "/rooms/" + id + "/" + this.props.match.params.id
-      );
-    }
+      if (data1.statusText === "OK") {
+        let allItems = JSON.parse(localStorage.getItem("allItems"));
+        let jobsi = [];
+        if (data1.data.jobs != undefined) {
+          jobsi = data1.data.jobs;
+        }
 
+        let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
+        // console.log(kurac);
+        let checkedArr = jobsi.map(j => j).map(m => m._id);
+        let unchecked = allItems.filter(
+          d => d._id != checkedArr.find(m => m == d._id)
+        );
+        allItems = checked.concat(unchecked);
+        localStorage.setItem("allItems", JSON.stringify(allItems));
+        console.log("get", finalData);
+        console.log("get", data1);
+        // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+        this.props.history.push(
+          "/rooms/" + id + "/" + this.props.match.params.id
+        );
+      }
+    }
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
   };
 
@@ -107,7 +128,7 @@ class Rooms extends Component {
         if (data2.statusText === "OK") {
           let allItems = JSON.parse(localStorage.getItem("allItems"));
           let jobsi = [];
-          if (data2.data != undefined) {
+          if (data2.data.jobs != undefined) {
             jobsi = data2.data.jobs;
           }
 
@@ -120,14 +141,13 @@ class Rooms extends Component {
           allItems = checked.concat(unchecked);
           localStorage.setItem("allItems", JSON.stringify(allItems));
           console.log("finalni", finalData, data2);
-          if (data2.data) {
-            console.log("radi get id");
-            if (data2.data._id) {
-              let _id = data2.data._id;
-              work._id = _id;
-              console.log("workorder u getu", work);
-              localStorage.setItem("workorder", JSON.stringify(work));
-            }
+
+          console.log("radi get id");
+          if (data2.data._id) {
+            let _id = data2.data._id;
+            work._id = _id;
+            console.log("workorder u getu", work);
+            localStorage.setItem("workorder", JSON.stringify(work));
           }
         }
         // localStorage.setItem(
@@ -254,8 +274,8 @@ class Rooms extends Component {
       work.apartmentNumber = "";
       work.adress = "";
       work.squareFeet = "";
-      work.squareFeet = "";
-      work.level = "";
+      work.levels = "";
+
       delete work._id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
