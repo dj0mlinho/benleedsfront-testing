@@ -235,7 +235,9 @@ class FullRoom extends Form {
     this.setState({ adress });
   };
   async handleHomeButton() {
-    const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -267,11 +269,11 @@ class FullRoom extends Form {
       delete work._id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
+      const region = JSON.parse(localStorage.getItem("currentUser")).region;
+      // this.setState({ buildingState: false });
+      this.props.history.push(`/rooms/${region}`);
+      document.location.reload();
     }
-    const region = JSON.parse(localStorage.getItem("currentUser")).region;
-    // this.setState({ buildingState: false });
-    this.props.history.push(`/rooms/${region}`);
-    document.location.reload();
   }
   handleCheckboxChange = e => {
     const checked = { ...this.state.checked };

@@ -52,8 +52,8 @@ class Room extends Component {
     console.log("GET", finalData);
     console.log("GET", data1);
 
-    if (data1.data.workorder) {
-      let _id = data1.data.workorder._id;
+    if (data1.data) {
+      let _id = data1.data._id;
       work._id = _id;
       localStorage.setItem("workorder", JSON.stringify(work));
       // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
@@ -62,8 +62,8 @@ class Room extends Component {
     if (data1.statusText === "OK") {
       let allItems = JSON.parse(localStorage.getItem("allItems"));
       let jobsi = [];
-      if (data1.data.workorder != undefined) {
-        jobsi = data1.data.workorder.jobs;
+      if (data1.data != undefined) {
+        jobsi = data1.data.jobs;
       }
 
       let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
