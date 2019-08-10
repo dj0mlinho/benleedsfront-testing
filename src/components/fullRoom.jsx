@@ -326,8 +326,8 @@ class FullRoom extends Form {
 
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const allItemsi = [...allItems];
-    let jobs = allItemsi.filter(m => m.checked === true);
-    localStorage.setItem("jobs", JSON.stringify(jobs));
+    // let jobs = allItemsi.filter(m => m.checked === true);
+    // localStorage.setItem("jobs", JSON.stringify(jobs));
     this.setState({ value });
   };
 
@@ -386,11 +386,13 @@ class FullRoom extends Form {
     let room = "";
     let target = "_blank";
     this.textInput = null;
-    let allItems = [];
-    if (JSON.parse(localStorage.getItem("jobs"))) {
-      const jobs = JSON.parse(localStorage.getItem("jobs"));
-      const jobsi = [...jobs];
+    let allItems = JSON.parse(localStorage.getItem("allItems"));
+    let jobs = [...allItems].filter(m => m.checked === true);
+    if (jobs != undefined) {
+      // const jobs = JSON.parse(localStorage.getItem("jobs"));
+      // const jobsi = [...jobs];
 
+      console.log("da vidimo sad", jobs);
       allItems = JSON.parse(localStorage.getItem("allItems"));
       data = { ...this.state.data };
       let newArr = [...jobs];

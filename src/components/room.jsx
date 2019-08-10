@@ -37,6 +37,7 @@ class Room extends Component {
     finalData.apartmentNumber = work.apartmentNumber;
     finalData.userId = work.userId;
     finalData.room = this.props.name;
+    // finalData.getItems = false;
     console.log(this.props.name);
     // work.autosaveTime = new Date();
     // work.jobs = jobs;
@@ -55,15 +56,16 @@ class Room extends Component {
       let _id = data1.data.workorder._id;
       work._id = _id;
       localStorage.setItem("workorder", JSON.stringify(work));
-      localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
     }
 
     if (data1.statusText === "OK") {
-      console.log("newW", finalData);
-      console.log("newW", data1);
-      this.props.history.push(
-        "/rooms/" + this.props.id + "/" + this.props.region
-      );
+      // console.log("newW", finalData);
+      // console.log("newW", data1);
+      // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+      // this.props.history.push(
+      //   "/rooms/" + this.props.id + "/" + this.props.region
+      // );
     }
 
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
@@ -77,7 +79,7 @@ class Room extends Component {
           <Link
             className="links"
             onClick={this.handleLinks}
-            // to={"/rooms/" + this.props.id + "/" + this.props.region}
+            to={"/rooms/" + this.props.id + "/" + this.props.region}
           >
             <img
               className="card-img-top img-fluid"

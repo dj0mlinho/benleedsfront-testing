@@ -144,11 +144,9 @@ class Wo extends Component {
     super(props);
     let total = 0;
     let woComment = "";
-    // let allItems = JSON.parse(localStorage.getItem("allItems"));
-    if (localStorage.getItem("jobs")) {
-      let jobs = JSON.parse(localStorage.getItem("jobs")).filter(
-        m => m.checked == true
-      );
+    let allItems = JSON.parse(localStorage.getItem("allItems"));
+    let jobs = [...allItems].filter(m => m.checked === true);
+    if (jobs != undefined) {
       for (let i = 0; i < jobs.length; i++) {
         total += jobs[i].quantity * jobs[i].price;
       }
@@ -165,15 +163,15 @@ class Wo extends Component {
     let jobs = "";
     // console.log(this.state.woComment);
     let total = this.state.total;
-    if (localStorage.getItem("jobs")) {
-      //  jobs = JSON.parse(localStorage.getItem("jobs"));
-      // console.log(total);
-      const allItems = JSON.parse(localStorage.getItem("allItems"));
+    // if (localStorage.getItem("jobs")) {
+    //  jobs = JSON.parse(localStorage.getItem("jobs"));
+    // console.log(total);
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
 
-      jobs = [...allItems].filter(m => m.checked === true);
-    } else {
-      jobs = false;
-    }
+    jobs = [...allItems].filter(m => m.checked === true);
+    // } else {
+    //   jobs = false;
+    // }
     console.log(jobs);
     const showing = true;
     const adress = JSON.parse(localStorage.getItem("workorder")).adress;
@@ -282,6 +280,7 @@ class Wo extends Component {
               <label>
                 Pick Level
                 <select onChange={this.handleLevels}>
+                  <option value="1" />
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>

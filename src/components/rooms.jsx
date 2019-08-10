@@ -23,15 +23,18 @@ class Rooms extends Component {
       finalData.buildingNumber = work.buildingNumber;
       finalData.apartmentNumber = work.apartmentNumber;
       finalData.userId = work.userId;
-
+      finalData.getItems = true;
+      // finalData.getItems = false;
+      console.log(finalData);
       const data1 = await axios.post(
         process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
         JSON.stringify(finalData)
       );
       this.setState({ isLoading: false });
-
+      console.log(data1);
       localStorage.setItem("allItems", JSON.stringify(data1.data.items));
       if (data1.data.workorder) {
+        console.log(data1);
         let _id = data1.data.workorder._id;
         work._id = _id;
         localStorage.setItem("workorder", JSON.stringify(work));
@@ -85,7 +88,7 @@ class Rooms extends Component {
           allItems = k.concat(p);
 
           localStorage.setItem("allItems", JSON.stringify(allItems));
-          localStorage.setItem("jobs", JSON.stringify(allItems));
+          // localStorage.setItem("jobs", JSON.stringify(allItems));
         }
 
         localStorage.removeItem("chosenOpt");
@@ -192,7 +195,7 @@ class Rooms extends Component {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const allItemsi = [...allItems];
     let jobs = allItemsi.filter(m => m.checked === true);
-    localStorage.setItem("jobs", JSON.stringify(jobs));
+    // localStorage.setItem("jobs", JSON.stringify(jobs));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
