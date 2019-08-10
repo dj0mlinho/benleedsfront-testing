@@ -7,6 +7,7 @@ export default function WorkOrderJobs(props) {
   const {
     jobs,
     onDateChange,
+    onDateChangeTwo,
     onVendorChange,
     vendors,
     handleId,
@@ -97,8 +98,7 @@ export default function WorkOrderJobs(props) {
               <th className="wo-line-hight">
                 Price:
                 <span className="font-weight-normal dsp-block">
-                  
-                  &#36; {job.price}{" "}
+                   &#36; {job.price}
                 </span>
               </th>
               <th className="wo-line-hight">
@@ -164,7 +164,7 @@ export default function WorkOrderJobs(props) {
               </th>
 
               <th>
-                Pick Start Date:
+                Pick Date:
                 <div
                   onClick={() => handleId(job._id)}
                   className="btn-dsp-block"
@@ -177,6 +177,14 @@ export default function WorkOrderJobs(props) {
                     onChange={onDateChange}
                     className="form-control form-control-sm input-date-wo-margin"
                   />
+                   <input
+                     
+                     type="date"
+                     disabled={job.status === "finished" ? true : false}
+                     value={formatDate(job.endDate)}
+                     onChange={onDateChangeTwo}
+                     className="form-control form-control-sm input-date-wo-margin"
+                   />
                 </div>
               </th>
               <th>

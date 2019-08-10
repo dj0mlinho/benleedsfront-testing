@@ -73,7 +73,7 @@ export default function JobsTable(props) {
         </thead>
         <tbody>
           {jobsPaginated.map(job => (
-            <>
+            <React.Fragment key={job._id}>
               <tr className="font-resp-admin" >
                 <td>
                      <textarea
@@ -111,11 +111,11 @@ export default function JobsTable(props) {
                   
                 </th>
               </tr>
-              {job.endDate !== "" ? (
+              { (job.finishedDate ) ? (
                    <tr className= "table-border-bottom" >
                       <td colSpan="5">
                     <span className="font-weight-normal ">
-                      <span className="font-weight-bold">End Date:</span>{" "}
+                      <span className="font-weight-bold">Finished Date:</span>{" "}
                       <span className="endDate">{job.endDate}</span>
                     </span>
                     </td>
@@ -135,7 +135,7 @@ export default function JobsTable(props) {
                   </th>
                 </tr>
               ) : null}
-            </>
+             </React.Fragment>
           ))}
 
           <tr>

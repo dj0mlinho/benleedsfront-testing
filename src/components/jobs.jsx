@@ -164,9 +164,7 @@ export default class Jobs extends Component {
              onFinish ={this.handleFinish}
           /> }
            
-          
-
-        </div>
+         </div>
         
       </>
     );

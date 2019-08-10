@@ -36,7 +36,9 @@ class Room extends Component {
     finalData.buildingNumber = work.buildingNumber;
     finalData.apartmentNumber = work.apartmentNumber;
     finalData.userId = work.userId;
-
+    finalData.room = this.props.name;
+    // finalData.getItems = false;
+    console.log(this.props.name);
     // work.autosaveTime = new Date();
     // work.jobs = jobs;
     // localStorage.setItem("workorder", JSON.stringify(work));
@@ -46,6 +48,7 @@ class Room extends Component {
       process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
       JSON.stringify(finalData)
     );
+
     console.log("GET", finalData);
     console.log("GET", data1);
 
@@ -53,7 +56,16 @@ class Room extends Component {
       let _id = data1.data.workorder._id;
       work._id = _id;
       localStorage.setItem("workorder", JSON.stringify(work));
-      localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+    }
+
+    if (data1.statusText === "OK") {
+      // console.log("newW", finalData);
+      // console.log("newW", data1);
+      // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+      // this.props.history.push(
+      //   "/rooms/" + this.props.id + "/" + this.props.region
+      // );
     }
 
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
