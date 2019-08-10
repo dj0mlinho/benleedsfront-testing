@@ -60,9 +60,23 @@ class Room extends Component {
     }
 
     if (data1.statusText === "OK") {
-      // console.log("newW", finalData);
-      // console.log("newW", data1);
-      // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+      let allItems = JSON.parse(localStorage.getItem("allItems"));
+      let jobsi = [];
+      if (data1.data.workorder != undefined) {
+        jobsi = data1.data.workorder.jobs;
+      }
+
+      let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
+      // console.log(kurac);
+      let checkedArr = jobsi.map(j => j).map(m => m._id);
+      let unchecked = allItems.filter(
+        d => d._id != checkedArr.find(m => m == d._id)
+      );
+      allItems = checked.concat(unchecked);
+      localStorage.setItem("allItems", JSON.stringify(allItems));
+      console.log("newW", finalData);
+      console.log("newW", data1);
+      document.location = "/rooms/" + this.props.id + "/" + this.props.region;
       // this.props.history.push(
       //   "/rooms/" + this.props.id + "/" + this.props.region
       // );
@@ -79,7 +93,7 @@ class Room extends Component {
           <Link
             className="links"
             onClick={this.handleLinks}
-            to={"/rooms/" + this.props.id + "/" + this.props.region}
+            // to={"/rooms/" + this.props.id + "/" + this.props.region}
           >
             <img
               className="card-img-top img-fluid"

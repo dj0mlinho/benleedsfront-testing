@@ -25,11 +25,14 @@ class Rooms extends Component {
       finalData.userId = work.userId;
       finalData.getItems = true;
       // finalData.getItems = false;
-      console.log(finalData);
-      const data1 = await axios.post(
-        process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
-        JSON.stringify(finalData)
+
+      const data1 = await axios.get(
+        process.env.REACT_APP_API_URL + "/user/allItems"
       );
+      // const data1 = await axios.get(
+      //   process.env.REACT_APP_API_URL + "/user/allItems",
+      //   JSON.stringify(finalData)
+      // );
       this.setState({ isLoading: false });
       console.log(data1);
       localStorage.setItem("allItems", JSON.stringify(data1.data.items));

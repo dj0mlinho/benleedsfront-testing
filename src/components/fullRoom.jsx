@@ -404,15 +404,6 @@ class FullRoom extends Form {
 
       data = datas;
 
-      // let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
-      // // console.log(kurac);
-      // let checkedArr = jobsi.map(j => j).map(m => m._id);
-      // let unchecked = allItems.filter(
-      //   d => d._id != checkedArr.find(m => m == d._id)
-      // );
-
-      // allItems = checked.concat(unchecked);
-      // // localStorage.setItem("allItems", JSON.stringify(allItems));
       // console.log(jobs);
       // localStorage.setItem("jobs", JSON.stringify(checked));
 
