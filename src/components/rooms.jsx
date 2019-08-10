@@ -77,7 +77,7 @@ class Rooms extends Component {
         }
 
         let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
-        // console.log(kurac);
+
         let checkedArr = jobsi.map(j => j).map(m => m._id);
         let unchecked = allItems.filter(
           d => d._id != checkedArr.find(m => m == d._id)
@@ -133,7 +133,7 @@ class Rooms extends Component {
           }
 
           let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
-          // console.log(kurac);
+
           let checkedArr = jobsi.map(j => j).map(m => m._id);
           let unchecked = allItems.filter(
             d => d._id != checkedArr.find(m => m == d._id)
@@ -274,7 +274,7 @@ class Rooms extends Component {
       work.apartmentNumber = "";
       work.adress = "";
       work.squareFeet = "";
-      work.levels = "";
+      work.level = "";
 
       delete work._id;
 

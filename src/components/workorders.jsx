@@ -20,17 +20,6 @@ class Workorders extends Form {
     build: []
   };
 
-  // handleBackButton = () => {
-  //   this.props.history.push("/rooms/" + this.props.match.params.m);
-  // };
-  // // async componentDidMount() {}
-  // // getCurrentRoom = () => {
-  // //   return this.props.match.params.id;
-  // // };
-  // handleBackButton = () => {
-  //   const region = JSON.parse(localStorage.getItem("currentUser")).region;
-  //   this.props.history.push("/rooms/" + region);
-  // };
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
     if (answer) {
@@ -38,221 +27,17 @@ class Workorders extends Form {
       document.location = "/";
     }
   }
-  // handleFinishedButton = () => {
-  //   // console.log(this.props.match);
-  //   this.props.history.push(
-  //     "/rooms/" + this.props.match.params.id + "/work-order"
-  //   );
-  //   const work = JSON.parse(localStorage.getItem("workorder"));
-  //   const date = new Date();
-  //   work.workorder.completedTime = date;
-  //   localStorage.setItem("workorder", JSON.stringify(work));
-  // };
 
-  // handleChangeArea = ({ currentTarget: input }) => {
-  //   const value = this.state.value;
-
-  //   value[input.name] = input.value;
-
-  //   this.setState({ value });
-
-  //   const rooms = this.state.allItems.find(room => room._id === input.id);
-
-  //   rooms.comment = this.state.value[input.name];
-
-  //   localStorage.setItem("allItems", JSON.stringify(this.state.allItems));
-  // };
   handleSearch = query => {
     this.setState({ searchQuery: query });
   };
-  // validate = () => {
-  //   const options = { abortEarly: false };
-  //   const { error } = Joi.validate(this.state.data, this.state.schema, options);
-  //   if (!error) return null;
-
-  //   const errors = {};
-  //   for (let item of error.details) errors[item.path[0]] = item.message;
-  //   return errors;
-  // };
-
-  // validateProperty = ({ name, value }) => {
-  //   const obj = { [name]: value };
-  //   const schema = { [name]: this.state.schema[name] };
-  //   const { error } = Joi.validate(obj, schema);
-  //   return error ? error.details[0].message : null;
-  // };
-
-  // handleChange = e => {
-  //   const input = e.currentTarget;
-
-  //   const errors = { ...this.state.errors };
-  //   const schema = { ...this.state.schema };
-  //   const errorMessage = this.validateProperty(input);
-  //   if (errorMessage) errors[input.name] = errorMessage;
-  //   else delete errors[input.name];
-  //   const data = { ...this.state.data };
-
-  //   data[input.name] = input.value;
-
-  //   this.setState({ data, errors });
-
-  //   const rooms = this.state.allItems.find(room => room._id === input.id);
-
-  //   rooms.quantity = data[input.name];
-
-  //   localStorage.setItem("allItems", JSON.stringify(this.state.allItems));
-
-  //   // schema = {
-  //   //   [input.name]: Joi.number().label("quantity")
-  //   // };
-  //   // this.setState({ schema });
-
-  //   // const data = { ...this.state.data };
-  //   // console.log(input.value);
-  //   // console.log(e.target.value);
-  //   // data[input.name] = input.value;
-  //   // this.setState({ data });
-
-  //   // this.setState({ value: e.target.value });
-  // };
-  // // changeBuild(value) {
-  //   // console.log(value);
-  // }
-  // handleSearch = query => {
-  //   this.setState({ searchQuery: query });
-  //   // console.log(query);
-  // };
-  // handleInput = e => {
-  //   const { showing } = this.state;
-  //   const buildNumber = JSON.parse(localStorage.getItem("workorder")).workorder
-  //     .buildingNumber;
-
-  //   const buildings = JSON.parse(localStorage.getItem("buildings")).find(
-  //     m => m.number == buildNumber
-  //   );
-
-  //   // element.value = element.number + " (" + element.zip + ")";
-  //   const adress = buildings.adress + " (" + buildings.zip + ")";
-  //   // console.log(buildings);
-  //   this.setState({ adress });
-  // };
-  // handleCheckboxChange = e => {
-  //   const checked = { ...this.state.checked };
-
-  //   const rooms = this.state.allItems.find(
-  //     room => room._id === e.currentTarget.id
-  //   );
-  //   if (e.target.checked === false) {
-  //     checked[e.currentTarget.name] = e.target.checked;
-  //     rooms.checked = false;
-
-  //     localStorage.setItem("allItems", JSON.stringify(this.state.allItems));
-  //   } else {
-  //     checked[e.currentTarget.name] = e.target.checked;
-  //     rooms.checked = true;
-  //     localStorage.setItem("allItems", JSON.stringify(this.state.allItems));
-  //   }
-  //   this.setState({ checked });
-  // };
-
-  // handleChange1(e) {
-  //   const building1 = e.target.value;
-  //   const build = building1.split(":");
-  //   const building = build[0];
-  //   // console.log(building);
-  //   const work = JSON.parse(localStorage.getItem("workorder"));
-  //   work.workorder.buildingNumber = building;
-  //   localStorage.setItem("workorder", JSON.stringify(work));
-  // }
-  // handleWorkOrder = async () => {
-  //   // const workOrder = JSON.parse(localStorage.getItem("workorder"));
-
-  //   const allItems = JSON.parse(localStorage.getItem("allItems"));
-  //   const copyItems = [...allItems].filter(item => {
-  //     return item.checked;
-  //   });
-  //   const finalItems = copyItems.map(item => {
-  //     return {
-  //       name: item.name,
-  //       price: item.price,
-  //       room: item.room,
-  //       subCategory: item.subCategory,
-  //       quantity: item.quantity,
-  //       comment: item.comment
-  //     };
-  //   });
-  //   const work = JSON.parse(localStorage.getItem("workorder"));
-  //   work.jobs = finalItems;
-  //   work.workorder.status = "saved";
-  //   work.workorder.sendTime = new Date();
-  //   work.workorder.completedTime = new Date();
-  //   localStorage.setItem("workorder", JSON.stringify(work));
-  //   const finalData = JSON.parse(localStorage.getItem("workorder"));
-  //   console.log(finalData);
-  //   const data = await axios.post(
-  //     process.env.REACT_APP_API_URL + "/user/newWorkorder",
-  //     JSON.stringify(finalData)
-  //   );
-  //   console.log(data);
-  // };
 
   constructor(props) {
     super(props);
     this.firstInput = React.createRef();
-    // const data = {};
-    // const errors = {};
-    // const value = {};
-    // const checked = {};
-    // const rooms = getRooms();
-    // localStorage.setItem("workorder", JSON.stringify(work));
-
-    // console.log(response.workorders);
 
     const allItems = JSON.parse(localStorage.getItem("workorders"));
-    // console.log(allItems);
-    // const room = this.props.match.params.m;
 
-    // const renderedItems = allItems;
-    // {
-    //   renderedItems.map(item => (checked[item.name] = false));
-    // }
-
-    // let schema = this.state.schema;
-
-    // let items = renderedItems;
-
-    // {
-    //   items.map(item => (schema[item.name] = Joi.number().label("quantity")));
-    // }
-
-    // const buildings = JSON.parse(localStorage.getItem("buildings")).filter(
-    //   m => m.region === this.props.match.params.m
-    // );
-
-    // const build = [...this.state.build];
-
-    // // const d = buildings.map(
-    //   element =>
-    //     (element.value =
-    //       element.number +
-    //       ":" +
-    //       " " +
-    //       element.adress +
-    //       " (" +
-    //       element.zip +
-    //       ")")
-    // );
-
-    // build.push(d);
-    // this.state = { data };
-
-    // const workorder = JSON.parse(localStorage.getItem("workorder"));
-    // const build1 = [];
-    // build1.push(workorder.workorder.buildingNumber);
-    // build.push(build1);
-    // const adress = [];
-    // const searchQuery = "";
-    // console.log(build);
     const searchQuery = "";
     this.state = {
       allItems,
