@@ -212,6 +212,9 @@ class Rooms extends Component {
         work.adress = adress;
         work.jobs = this.props.location.state.jobs;
         value = this.props.location.state.apartmentNumber;
+        work.squareFeet = this.props.location.state.squareFeet;
+        work.level = this.props.location.state.level;
+        value = this.props.location.state.apartmentNumber;
         work.apartmentNumber = value;
         work.buildingNumber = buildNumber;
         localStorage.setItem("workorder", JSON.stringify(work));
@@ -251,7 +254,7 @@ class Rooms extends Component {
     if (jobs != null) {
       work.jobs = jobs;
     }
-
+    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 

@@ -239,6 +239,8 @@ class FullRoom extends Form {
     let jobs = [...allItems].filter(m => m.checked === true);
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
+
+    console.log(work);
     work.autosaveTime = new Date();
     if (jobs != null) {
       work.jobs = jobs;

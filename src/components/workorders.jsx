@@ -199,7 +199,9 @@ class Workorders extends Form {
                               buildingNumber: item.buildingNumber,
                               apartmentNumber: item.apartmentNumber,
                               jobs: item.jobs,
-                              id: item._id
+                              id: item._id,
+                              level: item.level,
+                              squareFeet: item.squareFeet
                             }
                           }}
                         >
