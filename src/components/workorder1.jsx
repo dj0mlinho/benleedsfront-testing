@@ -186,6 +186,7 @@ class Wo extends Component {
     const userName = JSON.parse(localStorage.getItem("currentUser")).name;
     const userEmail = JSON.parse(localStorage.getItem("currentUser")).email;
     const buildingNumber = workorder.buildingNumber;
+    const address = workorder.adress;
     const value = workorder.apartmentNumber;
     const value2 = workorder.squareFeet;
     return (
@@ -211,6 +212,7 @@ class Wo extends Component {
               <p>
                 Name: {userName} <br />
                 Email: {userEmail} <br />
+                Address: {address} <br />
                 Building Number: {buildingNumber} <br />
                 Apartment Number: {value} <br />
                 Square Footage: {value2}
