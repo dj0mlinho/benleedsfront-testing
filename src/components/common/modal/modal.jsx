@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import Pagination from "../../common/pagination";
@@ -6,7 +6,7 @@ import _ from "lodash";
 
 import "./modal.css";
 
-class ModalMy extends Component {
+class ModalMy extends PureComponent {
   state = {
     currentPage: 1,
     itemsPerPage: 8

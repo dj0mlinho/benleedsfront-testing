@@ -314,6 +314,10 @@ a:active {
     font-size: 0.9rem ;
   }
 
+  .finBtn {
+    float: left ;
+  }
+
   .vendorTh-adj {
     line-height:  3rem ;
   }
@@ -329,6 +333,10 @@ a:active {
 /* .pictureSpan{
   font-weight: 500 ;
 } */
+
+.textArea {
+  font-size: inherit ;
+}
 
 .line-hight-admin {
   line-height: 3rem ;

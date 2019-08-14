@@ -40,7 +40,7 @@ export default class workOrderTable extends Component {
       <div>
         
         <div className="container container-bg">
-          <div className="row">
+          <div className="row border-b">
             <div className="col-sm-3">
               <span className="lead font-weight-bold">WorkOrder Of:</span>
             </div>

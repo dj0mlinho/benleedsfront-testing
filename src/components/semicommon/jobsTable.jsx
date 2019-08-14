@@ -72,7 +72,7 @@ export default function JobsTable(props) {
             <th>Apartment Number</th>
             <th className="line-hight-jobs">Vendor</th>
             <th>Assignment Date</th>
-            <th>End Date</th>
+            <th className="line-hight-jobs">End Date</th>
           </tr>
         </thead>
         <tbody>
@@ -84,9 +84,10 @@ export default function JobsTable(props) {
                         rows="2"
                         cols="40"
                         value={job.comment}
+                        readOnly
                         name="name"
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm textArea"
                       /> 
                 </td>
                 <td>{job.workorder.buildingNumber}</td>
@@ -105,14 +106,18 @@ export default function JobsTable(props) {
                     : "not assigned"}
                 </td>
               </tr>
-              <tr className={job.vendor ? "font-resp-admin" : "table-border-bottom font-resp-admin"}>
+              <tr className={"font-resp-admin"}>
                 <th colSpan="6">
                   Room:
                   <span className="font-weight-normal mr-5"> {job.room} </span>
                   Name:
                   <span className="font-weight-normal mr-5"> {job.name} </span>
+                </th> 
+              </tr>
+              <tr className={job.vendor ? "font-resp-admin" : "table-border-bottom font-resp-admin"}>
+                  <th colSpan="6">
                   Price: <span className="font-weight-normal" />
-                  <span className="font-weight-normal mr-5"> {job.price} </span>
+                  <span className="font-weight-normal mr-5"> {job.price}&#36;</span>
                   Quantity:
                   <span className="font-weight-normal mr-5">
                     {job.quantity}
@@ -136,7 +141,7 @@ export default function JobsTable(props) {
                   <th colSpan="3">Finish Job : </th>
                   <th colSpan="3">
                     <button
-                      className="btn btn-sm mdc-button"
+                      className="btn btn-sm mdc-button finBtn"
                       onClick={() => onFinish(job._id)}
                     >
                       Finish
