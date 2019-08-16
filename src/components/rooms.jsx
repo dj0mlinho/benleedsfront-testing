@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import NavBar from "./navBar.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import Room from "./room.jsx";
+import ReactModal from "react-modal";
 import { getRooms } from "../services/fakeRoomService";
 
 class Rooms extends Component {
@@ -170,6 +171,7 @@ class Rooms extends Component {
   }
 
   componentDidMount() {
+    ReactModal.setAppElement("body");
     const adress = "";
     let showing = false;
     let value = "";
@@ -245,6 +247,19 @@ class Rooms extends Component {
   //   this.props.history.push(`/user/workorders/saved`);
   //   document.location.reload();
   // }
+
+  handleOpenModal(tittle) {
+    let button = this.state.button;
+    let showModal = this.state.showModal;
+    this.setState({ showModal: true, button: tittle });
+  }
+
+  handleCloseModal() {
+    let showModal = this.state.showModal;
+
+    this.setState({ showModal: false });
+  }
+
   async handleHomeButton() {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
@@ -436,6 +451,8 @@ class Rooms extends Component {
     let showing = false;
     let value = "";
     let value2 = "";
+    let showModal = false;
+    let button = "";
     // let value3 = "";
     let workorder = JSON.parse(localStorage.getItem("workorder"));
     let isLoading = false;
@@ -456,6 +473,7 @@ class Rooms extends Component {
     // let allItems;
     let rooms = getRooms();
     this.state = {
+      button,
       rooms: rooms,
       value,
       showing: false,
@@ -465,13 +483,15 @@ class Rooms extends Component {
       // value3,
       buildingState,
       isLoading,
-      isLoadingFullRoom
+      isLoadingFullRoom,
+      showModal
     };
   }
 
   render() {
     // let isLoading = this.state.isLoading;
     let adress = [];
+    let button = this.state.button;
     let value2 = this.state.value2;
     // let value3 = this.state.value3;
     // console.log(typeof this.state.buildingNum);
@@ -529,7 +549,6 @@ class Rooms extends Component {
       <div className="container main-page">
         {/* <img className="testImg" src={this.state.source} alt="" /> */}
         <ToastContainer />
-
         <NavBar
           {...this.props}
           showing={showing}
@@ -608,7 +627,111 @@ class Rooms extends Component {
             </button>
           </div>
         </div>
-        {this.state.start && value ? (
+
+        <div className="row m-2">
+          <div className="col-3">
+            <button className="btn btn-outline-primary btn-lg m-1">
+              Make Ready
+            </button>
+          </div>
+          <div className="col-9">
+            <button
+              className=" btn  btn-primary btn-sm m-1"
+              onClick={() => this.handleOpenModal("Floor")}
+            >
+              Floor
+            </button>
+            <button
+              className=" btn  btn-primary btn-sm m-1"
+              onClick={() => this.handleOpenModal("Paint")}
+            >
+              Paint
+            </button>
+            <button
+              className=" btn btn-primary  btn-sm  m-1"
+              onClick={() => this.handleOpenModal("Appliances")}
+            >
+              Appliances
+            </button>
+            <button
+              className="btn btn-primary   btn-sm m-1"
+              onClick={() => this.handleOpenModal("Windows")}
+            >
+              Windows
+            </button>
+            <button
+              className=" btn btn-primary  btn-sm  m-1"
+              onClick={() => this.handleOpenModal("Blinds")}
+            >
+              Blinds
+            </button>
+            <button
+              className=" btn btn-primary  btn-sm  m-1"
+              onClick={() => this.handleOpenModal("Cleaning")}
+            >
+              Cleaning
+            </button>
+            <button
+              className="btn btn-primary  btn-sm  m-1"
+              onClick={() => this.handleOpenModal("Re-glazed")}
+            >
+              Re-glazed
+            </button>
+            <button
+              className="btn btn-primary   btn-sm m-1"
+              onClick={() => this.handleOpenModal("Pest Cont")}
+            >
+              Pest Cont
+            </button>
+            <ReactModal
+              isOpen={this.state.showModal}
+              contentLabel="Minimal Modal Example"
+            >
+              <div className="row">
+                <div className="col-11 m-3">
+                  <h3 className="">{button}</h3>
+                  <br />
+                  <input
+                    className="m-3"
+                    type="radio"
+                    name="gender"
+                    value="male"
+                  />{" "}
+                  Yes <br />
+                  <input
+                    className="m-3"
+                    type="radio"
+                    name="gender"
+                    value="female"
+                  />{" "}
+                  No <br />
+                  <input
+                    className="m-3"
+                    type="radio"
+                    name="gender"
+                    value="other"
+                  />{" "}
+                  Other <br />
+                </div>
+                <div className="col-12 text-center">
+                  <button onClick={() => this.handleCloseModal()}>
+                    Close Modal
+                  </button>
+                </div>
+              </div>
+            </ReactModal>
+          </div>
+        </div>
+        {/* <div className="row"> */}
+        {/* <p>Please select your gender:</p>
+          <input type="radio" name="gender" value="male" /> Male
+          <br />
+          <input type="radio" name="gender" value="female" /> Female
+          <br />
+          <input type="radio" name="gender" value="other" /> Other
+          <br />
+        </div> */}
+        {/* {this.state.start && value ? (
           <div className="row">
             {this.state.rooms.map(room => (
               <div className="col-4 p-3">
@@ -629,7 +752,7 @@ class Rooms extends Component {
               </div>
             ))}
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     );
   }

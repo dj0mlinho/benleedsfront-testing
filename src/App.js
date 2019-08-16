@@ -27,15 +27,6 @@ import Jobs from "./components/jobs";
 
 class App extends Component {
   state = {};
-  async componentDidMount() {
-    console.log(window.location);
-    if (window.location.pathname === "/login") {
-      const response = await axios.get(process.env.REACT_APP_API_URL);
-      const buildings = response.data.buildings;
-      localStorage.setItem("buildings", JSON.stringify(buildings));
-      console.log(response);
-    }
-  }
 
   render() {
     return (

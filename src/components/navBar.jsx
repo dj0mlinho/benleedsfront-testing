@@ -382,6 +382,10 @@ class NavBar extends Component {
             </div>
           ) : null}
         </div>
+        {/* <div>
+
+
+        </div> */}
       </nav>
     );
   }
