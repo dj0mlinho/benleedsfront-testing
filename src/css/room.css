@@ -3,6 +3,9 @@
   height: 100px !important;
 }
 
+#modal-styling-title {
+  margin: 0 auto;
+}
 /* .card-footer {
   /* height: 120px;
   line-height: 50px; */

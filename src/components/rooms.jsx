@@ -7,7 +7,9 @@ import { toast, ToastContainer } from "react-toastify";
 import Room from "./room.jsx";
 import ReactModal from "react-modal";
 import { getRooms } from "../services/fakeRoomService";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { useState } from "react";
 class Rooms extends Component {
   state = {
     value: [],
@@ -248,17 +250,17 @@ class Rooms extends Component {
   //   document.location.reload();
   // }
 
-  handleOpenModal(tittle) {
-    let button = this.state.button;
-    let showModal = this.state.showModal;
-    this.setState({ showModal: true, button: tittle });
-  }
+  // handleOpenModal(tittle) {
+  //   let button = this.state.button;
+  //   let showModal = this.state.showModal;
+  //   this.setState({ showModal: true, button: tittle });
+  // }
 
-  handleCloseModal() {
-    let showModal = this.state.showModal;
+  // handleCloseModal() {
+  //   let showModal = this.state.showModal;
 
-    this.setState({ showModal: false });
-  }
+  //   this.setState({ showModal: false });
+  // }
 
   async handleHomeButton() {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
@@ -439,9 +441,66 @@ class Rooms extends Component {
       document.location = "/";
     }
   }
+  handleClose = () => {
+    const setShow = this.state.setShow;
+    this.setState({ setShow: false });
+  };
+  handleOptionOtherComment = e => {
+    const value = e.target.value;
+    const name = e.currentTarget.name;
+    const showModalInputOther = this.state.showModalInputOther;
+    const work = JSON.parse(localStorage.getItem("workorder"));
+
+    work[name] = value;
+    localStorage.setItem("workorder", JSON.stringify(work));
+    console.log("value", value);
+    this.setState({ optionOther: value });
+  };
+  handleShow = tittle => {
+    const button = this.state.button;
+    const setShow = this.state.setShow;
+    const showModalInputOther = false;
+    this.setState({ setShow: true, button: tittle, showModalInputOther });
+  };
+  handleMakeReady() {
+    this.setState({ makeReady: true });
+  }
+  handleOptionOther = e => {
+    const value = e.target.value;
+    const optionOther = this.state.optionOther;
+    const name = e.currentTarget.name;
+    const showModalInputOther = this.state.showModalInputOther;
+    // const work = JSON.parse(localStorage.getItem("workorder"));
+    // console.log("radi gde treba", optionOther);
+    // work[name] = optionOther;
+    // localStorage.setItem("workorder", JSON.stringify(work));
+    this.setState({ showModalInputOther: true });
+  };
+
+  handleOptionYes = e => {
+    // console.log("eee", e.target.value, e.currentTarget.name);
+    const value = e.target.value;
+    const name = e.currentTarget.name;
+    const showModalInputOther = this.state.showModalInputOther;
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    work[name] = value;
+    localStorage.setItem("workorder", JSON.stringify(work));
+    this.setState({ showModalInputOther: false });
+  };
+  handleOptionNo = e => {
+    const value = e.target.value;
+    const name = e.currentTarget.name;
+    const showModalInputOther = this.state.showModalInputOther;
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    work[name] = value;
+    localStorage.setItem("workorder", JSON.stringify(work));
+    this.setState({ showModalInputOther: false });
+  };
   constructor(props) {
     super(props);
-
+    // const [show, seSt
+    const setShow = false;
+    const showModalInputOther = false;
     // toast.error("Please enter Building and Apartment number");
     // const build = [...this.state.build];
     let start = "";
@@ -457,6 +516,7 @@ class Rooms extends Component {
     let workorder = JSON.parse(localStorage.getItem("workorder"));
     let isLoading = false;
     let isLoadingFullRoom = true;
+
     // let jobs = JSON.parse(localStorage.getItem("jobs"));
 
     // if (localStorage.getItem("isLoadingFullRoom") == false) {
@@ -484,11 +544,40 @@ class Rooms extends Component {
       buildingState,
       isLoading,
       isLoadingFullRoom,
-      showModal
+      showModal,
+      setShow,
+      showModalInputOther
     };
   }
 
   render() {
+    console.log("render", this.state.optionOther);
+    // const customStyles = {
+    //   content: {
+    //     // textAlign: "center",
+    //     top: "50%",
+    //     left: "50%",
+    //     right: "auto",
+    //     bottom: "auto",
+    //     marginRight: "-50%",
+    //     transform: "translate(-50%, -50%)"
+    //   }
+    // };
+    // const customStyles = {
+    //   content: {
+    //     position: "absolute",
+    //     top: "100px",
+    //     left: "100px",
+    //     right: "100px",
+    //     bottom: "100px",
+    //     border: "1px solid rgb(204, 204, 204)",
+    //     background: "rgb(255, 255, 255)",
+    //     overflow: "auto",
+    //     borderRadius: "4px",
+    //     outline: "none",
+    //     padding: "20px"
+    //   }
+    // };
     // let isLoading = this.state.isLoading;
     let adress = [];
     let button = this.state.button;
@@ -544,7 +633,12 @@ class Rooms extends Component {
         />
       );
     });
+    const showModalInputOther = this.state.showModalInputOther;
+    const makeReady = this.state.makeReady;
+    //  const [show, setShow] = useState(false);
 
+    //     const handleClose = () => setShow(false);
+    //     const handleShow = () => setShow(true);
     return (
       <div className="container main-page">
         {/* <img className="testImg" src={this.state.source} alt="" /> */}
@@ -627,101 +721,172 @@ class Rooms extends Component {
             </button>
           </div>
         </div>
+        {this.state.start && value ? (
+          <div className="row m-2">
+            <div className="col-3">
+              <button
+                onClick={() => this.handleMakeReady()}
+                className="btn btn-outline-primary btn-lg m-1"
+              >
+                Make Ready
+              </button>
+            </div>
+            <div className="col-9">
+              <button
+                className=" btn  btn-primary  m-1"
+                onClick={() => this.handleShow("Floor")}
+              >
+                Floor
+              </button>
+              <button
+                className=" btn  btn-primary  m-1"
+                onClick={() => this.handleShow("Paint")}
+              >
+                Paint
+              </button>
+              <button
+                className=" btn btn-primary   m-1"
+                onClick={() => this.handleShow("Appliances")}
+              >
+                Appliances
+              </button>
+              <button
+                className="btn btn-primary   m-1"
+                onClick={() => this.handleShow("Windows")}
+              >
+                Windows
+              </button>
+              <button
+                className=" btn btn-primary   m-1"
+                onClick={() => this.handleShow("Blinds")}
+              >
+                Blinds
+              </button>
+              <button
+                className=" btn btn-primary    m-1"
+                onClick={() => this.handleShow("Cleaning")}
+              >
+                Cleaning
+              </button>
+              <button
+                className="btn btn-primary   m-1"
+                onClick={() => this.handleShow("Re-glazed")}
+              >
+                Re-glazed
+              </button>
+              <button
+                className="btn btn-primary   m-1"
+                onClick={() => this.handleShow("Pest Cont")}
+              >
+                Pest Cont
+              </button>
 
-        <div className="row m-2">
-          <div className="col-3">
-            <button className="btn btn-outline-primary btn-lg m-1">
-              Make Ready
-            </button>
-          </div>
-          <div className="col-9">
-            <button
-              className=" btn  btn-primary btn-sm m-1"
-              onClick={() => this.handleOpenModal("Floor")}
-            >
-              Floor
-            </button>
-            <button
-              className=" btn  btn-primary btn-sm m-1"
-              onClick={() => this.handleOpenModal("Paint")}
-            >
-              Paint
-            </button>
-            <button
-              className=" btn btn-primary  btn-sm  m-1"
-              onClick={() => this.handleOpenModal("Appliances")}
-            >
-              Appliances
-            </button>
-            <button
-              className="btn btn-primary   btn-sm m-1"
-              onClick={() => this.handleOpenModal("Windows")}
-            >
-              Windows
-            </button>
-            <button
-              className=" btn btn-primary  btn-sm  m-1"
-              onClick={() => this.handleOpenModal("Blinds")}
-            >
-              Blinds
-            </button>
-            <button
-              className=" btn btn-primary  btn-sm  m-1"
-              onClick={() => this.handleOpenModal("Cleaning")}
-            >
-              Cleaning
-            </button>
-            <button
-              className="btn btn-primary  btn-sm  m-1"
-              onClick={() => this.handleOpenModal("Re-glazed")}
-            >
-              Re-glazed
-            </button>
-            <button
-              className="btn btn-primary   btn-sm m-1"
-              onClick={() => this.handleOpenModal("Pest Cont")}
-            >
-              Pest Cont
-            </button>
-            <ReactModal
+              {/* <Button variant="primary" onClick={this.handleShow}>
+              Launch demo modal
+            </Button> */}
+
+              <Modal show={this.state.setShow} onHide={this.handleClose}>
+                <Modal.Header id="modal-styling-title" closeButton>
+                  <Modal.Title> {button}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div className="row">
+                    <div className="col-11 m-3">
+                      {/* <h3 className="text-center">{button}</h3> */}
+                      <br />
+                      <input
+                        className="m-3"
+                        type="radio"
+                        name={button}
+                        value="yes"
+                        onClick={e => this.handleOptionYes(e)}
+                      />
+                      Yes
+                      <br />
+                      <input
+                        className="m-3"
+                        type="radio"
+                        name={button}
+                        value="no"
+                        onClick={e => this.handleOptionNo(e)}
+                      />
+                      No
+                      <br />
+                      <input
+                        className="m-3"
+                        type="radio"
+                        name={button}
+                        value="other"
+                        onClick={e => this.handleOptionOther(e)}
+                      />
+                      Other
+                      <br />
+                      {showModalInputOther ? (
+                        <textarea
+                          onChange={e => this.handleOptionOtherComment(e)}
+                          placeholder="Comment"
+                          name={button}
+                          id=""
+                          cols="50"
+                          rows="5"
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  {/* <Button variant="secondary" onClick={this.handleClose}>
+                  Close
+                </Button> */}
+                  <Button variant="primary" onClick={this.handleClose}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+              {/* <ReactModal
+              style={customStyles}
               isOpen={this.state.showModal}
               contentLabel="Minimal Modal Example"
             >
               <div className="row">
                 <div className="col-11 m-3">
-                  <h3 className="">{button}</h3>
+                  <h3 className="text-center">{button}</h3>
                   <br />
                   <input
                     className="m-3"
                     type="radio"
                     name="gender"
                     value="male"
-                  />{" "}
-                  Yes <br />
+                  />
+                  Yes
+                  <br />
                   <input
                     className="m-3"
                     type="radio"
                     name="gender"
                     value="female"
-                  />{" "}
-                  No <br />
+                  />
+                  No
+                  <br />
                   <input
                     className="m-3"
                     type="radio"
                     name="gender"
                     value="other"
-                  />{" "}
-                  Other <br />
+                  />
+                  Other
+                  <br />
                 </div>
-                <div className="col-12 text-center">
+                <div className="col-12 text-right ">
                   <button onClick={() => this.handleCloseModal()}>
                     Close Modal
                   </button>
                 </div>
               </div>
-            </ReactModal>
+            </ReactModal> */}
+            </div>
           </div>
-        </div>
+        ) : null}
         {/* <div className="row"> */}
         {/* <p>Please select your gender:</p>
           <input type="radio" name="gender" value="male" /> Male
@@ -731,7 +896,7 @@ class Rooms extends Component {
           <input type="radio" name="gender" value="other" /> Other
           <br />
         </div> */}
-        {/* {this.state.start && value ? (
+        {this.state.start && value && makeReady ? (
           <div className="row">
             {this.state.rooms.map(room => (
               <div className="col-4 p-3">
@@ -752,7 +917,7 @@ class Rooms extends Component {
               </div>
             ))}
           </div>
-        ) : null} */}
+        ) : null}
       </div>
     );
   }
