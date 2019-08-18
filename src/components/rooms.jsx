@@ -443,7 +443,12 @@ class Rooms extends Component {
   }
   handleClose = () => {
     const setShow = this.state.setShow;
-    this.setState({ setShow: false });
+    this.setState({
+      setShow: false,
+      appliancesName: false,
+      stove: false,
+      ac: false
+    });
   };
   handleOptionOtherComment = e => {
     const value = e.target.value;
@@ -451,7 +456,7 @@ class Rooms extends Component {
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
 
-    work[name] = value;
+    work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
     console.log("value", value);
     this.setState({ optionOther: value });
@@ -483,7 +488,7 @@ class Rooms extends Component {
     const name = e.currentTarget.name;
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
-    work[name] = value;
+    work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
     this.setState({ showModalInputOther: false });
   };
@@ -492,10 +497,25 @@ class Rooms extends Component {
     const name = e.currentTarget.name;
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
-    work[name] = value;
+    work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
     this.setState({ showModalInputOther: false });
   };
+
+  handleAppliances(name) {
+    this.setState({
+      appliancesName: false,
+      stove: false,
+      ac: false
+    });
+    if (name == "Stove" || name == "AC") {
+      this.setState({ [name.toLowerCase()]: true });
+      console.log("uslo u stove");
+    } else {
+      this.setState({ appliancesName: name });
+      console.log("uslo u sove");
+    }
+  }
   constructor(props) {
     super(props);
     // const [show, seSt
@@ -551,7 +571,9 @@ class Rooms extends Component {
   }
 
   render() {
-    console.log("render", this.state.optionOther);
+    console.log("render", this.state.stove);
+    const stove = this.state.stove;
+    const ac = this.state.ac;
     // const customStyles = {
     //   content: {
     //     // textAlign: "center",
@@ -635,6 +657,7 @@ class Rooms extends Component {
     });
     const showModalInputOther = this.state.showModalInputOther;
     const makeReady = this.state.makeReady;
+    const appliancesName = this.state.appliancesName;
     //  const [show, setShow] = useState(false);
 
     //     const handleClose = () => setShow(false);
@@ -787,51 +810,253 @@ class Rooms extends Component {
 
               <Modal show={this.state.setShow} onHide={this.handleClose}>
                 <Modal.Header id="modal-styling-title" closeButton>
-                  <Modal.Title> {button}</Modal.Title>
+                  <div className="row">
+                    <div className="col-12 text-center">
+                      <Modal.Title> {button}</Modal.Title>
+                    </div>
+                    {button == "Appliances" ? (
+                      <div className="col-12">
+                        <button
+                          onClick={() => this.handleAppliances("Refrige rator")}
+                          className="btn btn-sm btn-warning mr-1"
+                        >
+                          {" "}
+                          Refrige rator
+                        </button>
+                        <button
+                          onClick={() => this.handleAppliances("Dishwasher")}
+                          className="btn btn-sm btn-warning m-1"
+                        >
+                          Dishwasher
+                        </button>{" "}
+                        <button
+                          onClick={() => this.handleAppliances("Microwave")}
+                          className="btn btn-sm btn-warning m-1"
+                        >
+                          Microwave
+                        </button>
+                        <button
+                          onClick={() => this.handleAppliances("Stove")}
+                          className="btn btn-sm btn-warning m-1"
+                        >
+                          Stove
+                        </button>{" "}
+                        <button
+                          onClick={() => this.handleAppliances("AC")}
+                          className="btn btn-sm btn-warning m-1"
+                        >
+                          A/C
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 </Modal.Header>
                 <Modal.Body>
                   <div className="row">
-                    <div className="col-11 m-3">
-                      {/* <h3 className="text-center">{button}</h3> */}
-                      <br />
-                      <input
-                        className="m-3"
-                        type="radio"
-                        name={button}
-                        value="yes"
-                        onClick={e => this.handleOptionYes(e)}
-                      />
-                      Yes
-                      <br />
-                      <input
-                        className="m-3"
-                        type="radio"
-                        name={button}
-                        value="no"
-                        onClick={e => this.handleOptionNo(e)}
-                      />
-                      No
-                      <br />
-                      <input
-                        className="m-3"
-                        type="radio"
-                        name={button}
-                        value="other"
-                        onClick={e => this.handleOptionOther(e)}
-                      />
-                      Other
-                      <br />
-                      {showModalInputOther ? (
-                        <textarea
-                          onChange={e => this.handleOptionOtherComment(e)}
-                          placeholder="Comment"
+                    {button !== "Appliances" ? (
+                      <div className="col-12 m-3">
+                        {/* <h3 className="text-center">{button}</h3> */}
+                        <input
+                          className="m-3"
+                          type="radio"
                           name={button}
-                          id=""
-                          cols="50"
-                          rows="5"
+                          value="yes"
+                          onClick={e => this.handleOptionYes(e)}
                         />
-                      ) : null}
-                    </div>
+                        Yes
+                        <br />
+                        <input
+                          className="m-3"
+                          type="radio"
+                          name={button}
+                          value="no"
+                          onClick={e => this.handleOptionNo(e)}
+                        />
+                        No
+                        <br />
+                        <input
+                          className="m-3"
+                          type="radio"
+                          name={button}
+                          value="other"
+                          onClick={e => this.handleOptionOther(e)}
+                        />
+                        Other
+                        <br />
+                        {showModalInputOther ? (
+                          <textarea
+                            onChange={e => this.handleOptionOtherComment(e)}
+                            placeholder="Comment"
+                            name={button}
+                            id=""
+                            cols="50"
+                            rows="5"
+                          />
+                        ) : null}
+                      </div>
+                    ) : (
+                      <div className="col-12">
+                        {appliancesName ? (
+                          <div>
+                            {" "}
+                            <div>
+                              <input
+                                className="m-3"
+                                type="radio"
+                                name={button}
+                                value="other"
+                                onClick={e => this.handleOptionOther(e)}
+                              />
+                              White
+                              <input
+                                className="m-3"
+                                type="radio"
+                                name={button}
+                                value="other"
+                                onClick={e => this.handleOptionOther(e)}
+                              />
+                              Stainless
+                              <br />
+                            </div>
+                            {appliancesName !== "Microwave" ? (
+                              <div>
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  name={button}
+                                  value="other"
+                                  onClick={e => this.handleOptionOther(e)}
+                                />
+                                Standard
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  name={button}
+                                  value="other"
+                                  onClick={e => this.handleOptionOther(e)}
+                                />
+                                Small
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : null}
+                        {stove ? (
+                          <div>
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name="stove1"
+                              value="gas"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            Gas
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name="stove1"
+                              value="electric"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            Electric
+                            <br />
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name="stove2"
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            30"
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name="stove2"
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            24"
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name="stove2"
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            20" <br />
+                            <input
+                              className="m-3 p-3"
+                              type="radio"
+                              name="stove3"
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            White
+                            <input
+                              className="m-3 p-3"
+                              type="radio"
+                              name="stove3"
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            Stainless <br />
+                          </div>
+                        ) : null}
+                        {ac ? (
+                          <div>
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            Rear Vent
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            Standard
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            A/C Heater
+                            <br />
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            12,000
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            10,000
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              onClick={e => this.handleOptionOther(e)}
+                            />
+                            8,000
+                            <br />
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
