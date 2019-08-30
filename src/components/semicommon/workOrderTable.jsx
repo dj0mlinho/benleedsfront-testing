@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import WorkOrderJobs from "./workOrderJobs" ;
-import SearchBox from "../common/search"
+import SearchBox from "../common/search" ;
+import WorkOrderInfo from "../semicommon/workOrderInfo/workOrderInfo"
 
 export default class workOrderTable extends Component {
 
@@ -38,8 +39,10 @@ export default class workOrderTable extends Component {
   
     return (
       <div>
-        
+       
         <div className="container container-bg">
+        
+
           <div className="row border-b">
             <div className="col-sm-3">
               <span className="lead font-weight-bold">WorkOrder Of:</span>
@@ -73,8 +76,12 @@ export default class workOrderTable extends Component {
               <span style={{display: "block"}} > {this.formateDate(workorder.sendTime)} </span>
             </div>
           </div>
+              <WorkOrderInfo
+                workorder ={workorder}
+              />
           <div className="row">
             <div className="col-sm text-center"> <pre className="lead font-weight-bold mt-2"> J O B S    L I S T</pre> 
+           
             <SearchBox 
             // resetPadding={true}
             options ={this.state.options}
