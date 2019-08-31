@@ -108,8 +108,12 @@ class NavBar extends Component {
       work.apartmentNumber = "";
       work.adress = "";
       work.squareFeet = "";
+      work.questions = "";
+
       work.level = "";
       delete work._id;
+      delete work.checkedQuestions;
+      localStorage.removeItem("checkedQuestions");
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const region = JSON.parse(localStorage.getItem("currentUser")).region;

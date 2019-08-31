@@ -89,8 +89,50 @@ class Wo extends Component {
       if (finalData._id) {
         work.tempWorkorderId = finalData._id;
       }
+      work.workorder.questions = { ...finalData.questions };
+
+      work.workorder.questions.appliances = {
+        stove: [],
+        dishwasher: [],
+        microwave: [],
+        ac: [],
+        refrigeRator: []
+      };
+      if (finalData.questions.appliances.stove1) {
+        work.workorder.questions.appliances.stove.push(
+          finalData.questions.appliances.stove1[0],
+          finalData.questions.appliances.stove2[0],
+          finalData.questions.appliances.stove3[0]
+        );
+      }
+      if (finalData.questions.appliances.microwave) {
+        work.workorder.questions.appliances.microwave.push(
+          finalData.questions.appliances.microwave[0]
+        );
+      }
+      if (finalData.questions.appliances.dishwasher) {
+        work.workorder.questions.appliances.dishwasher.push(
+          finalData.questions.appliances.dishwasher[0],
+
+          finalData.questions.appliances.dishwasher1[0]
+        );
+      }
+      if (finalData.questions.appliances.refrigeRator) {
+        work.workorder.questions.appliances.refrigeRator.push(
+          finalData.questions.appliances.refrigeRator[0],
+          finalData.questions.appliances.refrigeRator1[0]
+        );
+      }
+      if (finalData.questions.appliances.ac) {
+        work.workorder.questions.appliances.ac.push(
+          finalData.questions.appliances.ac[0],
+          finalData.questions.appliances.ac1[0]
+        );
+      }
+      console.log(finalData);
       work.workorder.loginTime = new Date(finalData.loginTime);
       work.workorder.level = finalData.level;
+
       work.workorder.completedTime = new Date();
       work.workorder.buildingNumber = finalData.buildingNumber;
       work.workorder.apartmentNumber = finalData.apartmentNumber;
@@ -123,6 +165,7 @@ class Wo extends Component {
         work.autosaveTime = "";
         work.level = "";
         work.squareFeet = "";
+        work.questions = "";
         delete work.jobs;
         delete work._id;
         work.loginTime = new Date();

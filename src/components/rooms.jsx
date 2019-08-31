@@ -33,6 +33,7 @@ class Rooms extends Component {
       work.jobs = jobs;
     }
 
+    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -149,6 +150,7 @@ class Rooms extends Component {
           if (data2.data._id) {
             let _id = data2.data._id;
             work._id = _id;
+
             console.log("workorder u getu", work);
             localStorage.setItem("workorder", JSON.stringify(work));
           }
@@ -221,7 +223,20 @@ class Rooms extends Component {
         value = this.props.location.state.apartmentNumber;
         work.apartmentNumber = value;
         work.buildingNumber = buildNumber;
+        let questions = this.props.location.state.questions;
+
+        if (!JSON.parse(localStorage.getItem("checkedQuestions"))) {
+          let checkedQuestions = this.props.location.state.checkedQuestions;
+          localStorage.setItem(
+            "checkedQuestions",
+            JSON.stringify(checkedQuestions)
+          );
+          work.questions = questions;
+        }
+
+        // work.checkedQuestions = checkedQuestions;
         localStorage.setItem("workorder", JSON.stringify(work));
+
         showing = true;
         this.state = { showing: showing, adress };
       }
@@ -271,6 +286,10 @@ class Rooms extends Component {
     if (jobs != null) {
       work.jobs = jobs;
     }
+    work.checkedQuestions = JSON.parse(
+      localStorage.getItem("checkedQuestions")
+    );
+
     console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
@@ -286,6 +305,7 @@ class Rooms extends Component {
       let work = JSON.parse(localStorage.getItem("workorder"));
 
       localStorage.removeItem("jobs");
+
       localStorage.removeItem("startBtn");
       localStorage.removeItem("building");
       localStorage.removeItem("chosenOpt");
@@ -295,8 +315,11 @@ class Rooms extends Component {
       work.adress = "";
       work.squareFeet = "";
       work.level = "";
+      work.checkedQuestions = "";
 
+      localStorage.removeItem("checkedQuestions");
       delete work._id;
+      delete work.questions;
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const region = JSON.parse(localStorage.getItem("currentUser")).region;
@@ -444,11 +467,111 @@ class Rooms extends Component {
   handleClose = () => {
     const setShow = this.state.setShow;
     this.setState({
+      active: "",
       setShow: false,
-      appliancesName: false,
-      stove: false,
-      ac: false
+      appliancesName: [],
+      appliancesName1: []
     });
+  };
+
+  handleShow = tittle => {
+    const button = this.state.button;
+    const setShow = this.state.setShow;
+    const showModalInputOther = false;
+    this.setState({ setShow: true, button: tittle, showModalInputOther });
+  };
+  async handleMakeReady() {
+    this.setState({ makeReady: true });
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    work.autosaveTime = new Date();
+    if (jobs != null) {
+      work.jobs = jobs;
+    }
+
+    console.log(work);
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+    const data = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+      JSON.stringify(finalData)
+    );
+
+    if (data.statusText === "OK") {
+      const work = JSON.parse(localStorage.getItem("workorder"));
+
+      let finalData = {};
+      finalData.buildingNumber = work.buildingNumber;
+      finalData.apartmentNumber = work.apartmentNumber;
+      finalData.userId = work.userId;
+
+      // finalData.getItems = false;
+
+      // work.autosaveTime = new Date();
+      // work.jobs = jobs;
+      // localStorage.setItem("workorder", JSON.stringify(work));
+      // const finalData = JSON.parse(localStorage.getItem("workorder"));
+      console.log(finalData);
+      const data1 = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
+        JSON.stringify(finalData)
+      );
+
+      console.log("GET", finalData);
+      console.log("GET", data1);
+
+      if (data1.data) {
+        let _id = data1.data._id;
+        work._id = _id;
+        console.log("Radi", _id);
+        localStorage.setItem("workorder", JSON.stringify(work));
+        // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+      }
+
+      if (data1.statusText === "OK") {
+        let allItems = JSON.parse(localStorage.getItem("allItems"));
+        let jobsi = [];
+        if (data1.data.jobs != undefined) {
+          jobsi = data1.data.jobs;
+        }
+
+        let checked = jobsi.filter(j => allItems.filter(m => m._id == j._id));
+
+        let checkedArr = jobsi.map(j => j).map(m => m._id);
+        let unchecked = allItems.filter(
+          d => d._id != checkedArr.find(m => m == d._id)
+        );
+        allItems = checked.concat(unchecked);
+        localStorage.setItem("allItems", JSON.stringify(allItems));
+        console.log("get", finalData);
+        console.log("get", data1);
+        // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+      }
+    }
+  }
+  handleOptionOther = e => {
+    const value = e.target.value;
+    const optionOther = this.state.optionOther;
+    const name = e.currentTarget.name.toLowerCase();
+    const showModalInputOther = this.state.showModalInputOther;
+
+    const checkedQuestions = JSON.parse(
+      localStorage.getItem("checkedQuestions")
+    );
+    if (checkedQuestions) {
+      // console.log("radi gde treba", optionOther);
+      // work[name] = optionOther;
+
+      checkedQuestions[name + "1"] = true;
+      localStorage.setItem(
+        "checkedQuestions",
+        JSON.stringify(checkedQuestions)
+      );
+    }
+    this.setState({ showModalInputOther: true });
   };
   handleOptionOtherComment = e => {
     const value = e.target.value;
@@ -459,63 +582,192 @@ class Rooms extends Component {
     work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
     console.log("value", value);
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
+
+    let checked = work.questions;
+    let novo = checked[name];
+    let checked2 = { other: [novo] };
+    let checked3 = { other: true };
+    let checkedQuestions = {
+      ...checked1,
+      [name]: checked2,
+      [name + "1"]: checked3
+    };
+
+    localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
+
+    //
+    // let checked = work.questions;
+    // let novo = checked[name];
+    // let checked1 = { other: [novo] };
+
+    // localStorage.setItem(name, JSON.stringify(checked1));
     this.setState({ optionOther: value });
   };
-  handleShow = tittle => {
-    const button = this.state.button;
-    const setShow = this.state.setShow;
-    const showModalInputOther = false;
-    this.setState({ setShow: true, button: tittle, showModalInputOther });
-  };
-  handleMakeReady() {
-    this.setState({ makeReady: true });
-  }
-  handleOptionOther = e => {
-    const value = e.target.value;
-    const optionOther = this.state.optionOther;
-    const name = e.currentTarget.name;
-    const showModalInputOther = this.state.showModalInputOther;
-    // const work = JSON.parse(localStorage.getItem("workorder"));
-    // console.log("radi gde treba", optionOther);
-    // work[name] = optionOther;
-    // localStorage.setItem("workorder", JSON.stringify(work));
-    this.setState({ showModalInputOther: true });
-  };
-
   handleOptionYes = e => {
     // console.log("eee", e.target.value, e.currentTarget.name);
     const value = e.target.value;
-    const name = e.currentTarget.name;
+    const name = e.currentTarget.name.toLowerCase();
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.questions = { ...work.questions, [name]: value };
+
     localStorage.setItem("workorder", JSON.stringify(work));
-    this.setState({ showModalInputOther: false });
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
+
+    let checked = work.questions;
+    let novo = checked[name];
+    let checked2 = { [novo]: true };
+    let checkedQuestions = { ...checked1, [name]: checked2 };
+
+    localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
+
+    this.setState({ showModalInputOther: false, checkedQuestions });
   };
   handleOptionNo = e => {
     const value = e.target.value;
-    const name = e.currentTarget.name;
+    const name = e.currentTarget.name.toLowerCase();
+
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
-    this.setState({ showModalInputOther: false });
-  };
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
 
-  handleAppliances(name) {
+    let checked = work.questions;
+    let novo = checked[name];
+    let checked2 = { [novo]: true };
+    let checkedQuestions = { ...checked1, [name]: checked2 };
+    checkedQuestions[name + "1"] = "";
+    localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
+
+    this.setState({ showModalInputOther: false, checkedQuestions });
+  };
+  handleAppliancesOptions(e) {
+    // let checked = this.state.checked;
+    // checked[e.currentTarget.name] = e.target.checked;
+    // let microwave = this.state.microwave;
+    // microwave[0].checked = true;
+    // this.setState({
+    //   checked
+    //   // appliancesName: false,
+    //   // stove: false,
+    //   // ac: false
+    // });
+
+    const value = e.target.value;
+    let name = e.target.attributes.getNamedItem("name").value;
+    // console.log(e.currentTarget.data - name);
+
+    const showModalInputOther = this.state.showModalInputOther;
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    // if (work.questions.appliances[name]) {
+    //   work.questions.appliances[name].push(value);
+    // } else {
+    let name1 = name;
+
+    work.questions.appliances = {
+      ...work.questions.appliances,
+      [name]: [value]
+      //   };
+      //   // console.log(work.questions.appliances[name].push(value));
+    };
+    // work.questions.appliances[name].push(value);
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
+    if (checked1) {
+      let checked = work.questions.appliances;
+      let novo = checked[name];
+      let checked2 = { [novo]: true };
+      let checkedQuestions = { ...checked1, [name]: checked2 };
+
+      localStorage.setItem(
+        "checkedQuestions",
+        JSON.stringify(checkedQuestions)
+      );
+      this.setState({ checkedQuestions });
+    } else {
+      // const checked = e.target.checked;
+
+      let checked = work.questions.appliances;
+      let novo = checked[name];
+      let checked2 = { [novo]: true };
+      let checkedQuestions = {};
+      checkedQuestions[name] = checked2;
+
+      localStorage.setItem(
+        "checkedQuestions",
+        JSON.stringify(checkedQuestions)
+      );
+      this.setState({ checkedQuestions });
+    }
+    // }
+  }
+
+  handleAppliances(e, name) {
+    // const value = e.target.value;
+    // const idName = e.currentTarget.idName;
+    // const showModalInputOther = this.state.showModalInputOther;
+
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    const checked = JSON.parse(localStorage.getItem("checkedQuestions"));
+    console.log("nameeee", name);
+    if (!work.questions.appliances) {
+      const appliances = {};
+      work.questions = { ...work.questions, appliances };
+    } else {
+      work.questions.appliances = { ...work.questions.appliances };
+    }
+    localStorage.setItem("workorder", JSON.stringify(work));
+    if (!checked) {
+      let checkedQuestions = {};
+      localStorage.setItem(
+        "checkedQuestions",
+        JSON.stringify(checkedQuestions)
+      );
+    }
     this.setState({
-      appliancesName: false,
-      stove: false,
-      ac: false
+      appliancesName: false
     });
     if (name == "Stove" || name == "AC") {
-      this.setState({ [name.toLowerCase()]: true });
+      const stove = this.state.stove;
+      const stove1 = this.state.stove1;
+      const stove2 = this.state.stove2;
+      console.log("stove eee", name, stove);
+      // this.setState({ [name.toLowerCase()]: true });
       console.log("uslo u stove");
-    } else {
-      this.setState({ appliancesName: name });
+      this.setState({
+        active: name,
+        stove,
+        stove1,
+        stove2,
+        appliancesName: name.toLowerCase()
+      });
+    } else if (name.toLowerCase() == "microwave") {
+      console.log("microwave", name);
+      this.setState({
+        active: name,
+        appliancesName: this.state.microwave,
+        appliancesName1: false
+      });
       console.log("uslo u sove");
+    } else if (name.toLowerCase() == "dishwasher") {
+      console.log("dishwasher", name);
+      this.setState({
+        active: name,
+        appliancesName: this.state.dishwasher,
+        appliancesName1: this.state.dishwasher1
+      });
+    } else {
+      console.log("refrige", name);
+      this.setState({
+        active: name,
+        appliancesName: this.state.refrigeRator,
+        appliancesName1: this.state.refrigeRator1
+      });
     }
   }
+
   constructor(props) {
     super(props);
     // const [show, seSt
@@ -536,7 +788,66 @@ class Rooms extends Component {
     let workorder = JSON.parse(localStorage.getItem("workorder"));
     let isLoading = false;
     let isLoadingFullRoom = true;
+    let buttons = [
+      "Floor",
+      "Paint",
+      "Appliances",
+      "Windows",
+      "Blinds",
+      "Re-glazed",
+      "Cleaning"
+    ];
+    let microwave = [
+      { name: "microwave", value: "white", checked: "" },
+      { name: "microwave", value: "stainless", checked: "" }
+    ];
 
+    let dishwasher = [
+      { name: "dishwasher", value: "white", checked: "" },
+      { name: "dishwasher", value: "stainless", checked: "" }
+    ];
+    let dishwasher1 = [
+      { name1: "dishwasher1", value1: "standard", checked1: "" },
+      { name1: "dishwasher1", value1: "small", checked1: "" }
+    ];
+    let refrigeRator = [
+      { name: "refrigeRator1", value: "white", checked: "" },
+      { name: "refrigeRator1", value: "stainless", checked: "" }
+    ];
+    let refrigeRator1 = [
+      { name1: "refrigeRator", value1: "standard", checked1: "" },
+      { name1: "refrigeRator", value1: "small", checked1: "" }
+    ];
+    let stove = [
+      { name: "stove1", value: "gas", dataName: "Stove1" },
+      { name: "stove1", value: "electric", dataName: "Stove1" }
+    ];
+    let stove1 = [
+      { name: "stove2", value: "30", dataName: "Stove2" },
+      { name: "stove2", value: "24", dataName: "Stove2" },
+      { name: "stove2", value: "20", dataName: "Stove2" }
+    ];
+    let stove2 = [
+      { name: "stove3", value: "white", dataName: "Stove3" },
+      { name: "stove3", value: "stainless", dataName: "Stove3" }
+    ];
+    let ac = [
+      { name: "ac", value: "Rear Vent", dataName: "AC" },
+      { name: "ac", value: "Standard", dataName: "AC" },
+      { name: "ac", value: "A/C Heater", dataName: "AC" }
+    ];
+    let ac1 = [
+      { name: "ac1", value: "12,000", dataName: "AC1" },
+      { name: "ac1", value: "10,000", dataName: "AC1" },
+      { name: "ac1", value: "8,000", dataName: "AC1" }
+    ];
+    let appliances = [
+      { type: "refrigeRator", name: "Refrige rator" },
+      { type: "Microwave", name: "Microwave" },
+      { type: "Dishwasher", name: "Dishwasher" },
+      { type: "AC", name: "A/C" },
+      { type: "Stove", name: "Stove" }
+    ];
     // let jobs = JSON.parse(localStorage.getItem("jobs"));
 
     // if (localStorage.getItem("isLoadingFullRoom") == false) {
@@ -549,10 +860,14 @@ class Rooms extends Component {
     if (localStorage.getItem("building")) {
       buildingState = true;
     }
-
-    // let allItems;
+    let appliancesName = [];
+    let appliancesName1 = [];
+    let allApp = ["Refrige Rator", "Microwave", "Dishwasher"];
     let rooms = getRooms();
     this.state = {
+      stove,
+      stove1,
+      stove2,
       button,
       rooms: rooms,
       value,
@@ -566,14 +881,45 @@ class Rooms extends Component {
       isLoadingFullRoom,
       showModal,
       setShow,
-      showModalInputOther
+      showModalInputOther,
+      buttons,
+      microwave,
+      appliances,
+      dishwasher1,
+      dishwasher,
+      refrigeRator1,
+      refrigeRator,
+      appliancesName,
+      appliancesName1,
+      ac,
+      ac1
     };
   }
 
   render() {
-    console.log("render", this.state.stove);
+    const bla = JSON.parse(localStorage.getItem("workorder"))[
+      JSON.parse(localStorage.getItem("questions"))
+    ];
+
+    const checked = JSON.parse(localStorage.getItem("Refrige rator1"));
+    let checkedQuestions = [];
+    if (JSON.parse(localStorage.getItem("checkedQuestions"))) {
+      checkedQuestions = JSON.parse(localStorage.getItem("checkedQuestions"));
+    } else {
+      checkedQuestions = [];
+    }
+    let isLoading = false;
     const stove = this.state.stove;
+    const stove1 = this.state.stove1;
+    const stove2 = this.state.stove2;
+
     const ac = this.state.ac;
+    const ac1 = this.state.ac1;
+    const appliancesName = this.state.appliancesName;
+    const appliancesName1 = this.state.appliancesName1;
+    const active = this.state.active;
+    const appliances = this.state.appliances;
+    console.log("act", active === "refrigeRator");
     // const customStyles = {
     //   content: {
     //     // textAlign: "center",
@@ -602,15 +948,15 @@ class Rooms extends Component {
     // };
     // let isLoading = this.state.isLoading;
     let adress = [];
-    let button = this.state.button;
+    let button = this.state.button.toLowerCase();
     let value2 = this.state.value2;
     // let value3 = this.state.value3;
     // console.log(typeof this.state.buildingNum);
     let showing = this.state.showing;
     let saved = false;
-    let isLoading = this.state.isLoading;
+    // let isLoading = this.state.isLoading;
     let isLoadingFullRoom = this.state.isLoadingFullRoom;
-
+    console.log("APPLIANCES NAME", appliancesName);
     if (JSON.parse(localStorage.getItem("chosenOpt")) == "saved") {
       saved = true;
     }
@@ -657,11 +1003,7 @@ class Rooms extends Component {
     });
     const showModalInputOther = this.state.showModalInputOther;
     const makeReady = this.state.makeReady;
-    const appliancesName = this.state.appliancesName;
-    //  const [show, setShow] = useState(false);
 
-    //     const handleClose = () => setShow(false);
-    //     const handleShow = () => setShow(true);
     return (
       <div className="container main-page">
         {/* <img className="testImg" src={this.state.source} alt="" /> */}
@@ -755,13 +1097,16 @@ class Rooms extends Component {
               </button>
             </div>
             <div className="col-9">
-              <button
-                className=" btn  btn-primary  m-1"
-                onClick={() => this.handleShow("Floor")}
-              >
-                Floor
-              </button>
-              <button
+              {this.state.buttons.map(button => (
+                <button
+                  className=" btn  btn-primary  m-1"
+                  onClick={() => this.handleShow(button)}
+                >
+                  {button}
+                </button>
+              ))}
+
+              {/* <button
                 className=" btn  btn-primary  m-1"
                 onClick={() => this.handleShow("Paint")}
               >
@@ -802,7 +1147,7 @@ class Rooms extends Component {
                 onClick={() => this.handleShow("Pest Cont")}
               >
                 Pest Cont
-              </button>
+              </button> */}
 
               {/* <Button variant="primary" onClick={this.handleShow}>
               Launch demo modal
@@ -812,54 +1157,74 @@ class Rooms extends Component {
                 <Modal.Header id="modal-styling-title" closeButton>
                   <div className="row">
                     <div className="col-12 text-center">
-                      <Modal.Title> {button}</Modal.Title>
+                      <Modal.Title className="btn btn-outline-info">
+                        {" "}
+                        {button.toUpperCase()}
+                      </Modal.Title>
                     </div>
-                    {button == "Appliances" ? (
-                      <div className="col-12">
-                        <button
-                          onClick={() => this.handleAppliances("Refrige rator")}
-                          className="btn btn-sm btn-warning mr-1"
-                        >
-                          {" "}
-                          Refrige rator
-                        </button>
-                        <button
-                          onClick={() => this.handleAppliances("Dishwasher")}
-                          className="btn btn-sm btn-warning m-1"
-                        >
-                          Dishwasher
-                        </button>{" "}
-                        <button
-                          onClick={() => this.handleAppliances("Microwave")}
-                          className="btn btn-sm btn-warning m-1"
-                        >
-                          Microwave
-                        </button>
-                        <button
-                          onClick={() => this.handleAppliances("Stove")}
-                          className="btn btn-sm btn-warning m-1"
-                        >
-                          Stove
-                        </button>{" "}
-                        <button
-                          onClick={() => this.handleAppliances("AC")}
-                          className="btn btn-sm btn-warning m-1"
-                        >
-                          A/C
-                        </button>
-                      </div>
-                    ) : null}
                   </div>
                 </Modal.Header>
                 <Modal.Body>
                   <div className="row">
-                    {button !== "Appliances" ? (
+                    {button == "appliances" ? (
+                      <div className="row">
+                        {appliances.map(app => (
+                          <div className="m-3">
+                            <button
+                              onClick={e => this.handleAppliances(e, app.type)}
+                              className={
+                                active === app.type
+                                  ? "btn btn-sm btn-success p-1 active"
+                                  : "btn btn-sm btn-warning p-1"
+                              }
+                              // className={`btn btn-sm btn-warning mr-1 ${active}`}
+                            >
+                              {app.name}
+                            </button>
+                            {/* <button
+                              onClick={e =>
+                                this.handleAppliances(e, "Microwave")
+                              }
+                              className="btn btn-sm btn-warning m-1"
+                            >
+                              Microwave
+                            </button>
+                            <button
+                              onClick={e =>
+                                this.handleAppliances(e, "Dishwasher")
+                              }
+                              className="btn btn-sm btn-warning m-1"
+                            >
+                              Dishwasher
+                            </button>{" "}
+                            <button
+                              onClick={e => this.handleAppliances(e, "Stove")}
+                              className="btn btn-sm btn-warning m-1"
+                            >
+                              Stove
+                            </button>{" "}
+                            <button
+                              onClick={e => this.handleAppliances(e, "AC")}
+                              className="btn btn-sm btn-warning m-1"
+                            >
+                              A/C
+                            </button> */}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                    {button !== "appliances" ? (
                       <div className="col-12 m-3">
                         {/* <h3 className="text-center">{button}</h3> */}
                         <input
                           className="m-3"
                           type="radio"
                           name={button}
+                          checked={
+                            checkedQuestions[button]
+                              ? checkedQuestions[button]["yes"]
+                              : null
+                          }
                           value="yes"
                           onClick={e => this.handleOptionYes(e)}
                         />
@@ -870,6 +1235,11 @@ class Rooms extends Component {
                           type="radio"
                           name={button}
                           value="no"
+                          checked={
+                            checkedQuestions[button]
+                              ? checkedQuestions[button]["no"]
+                              : null
+                          }
                           onClick={e => this.handleOptionNo(e)}
                         />
                         No
@@ -879,6 +1249,11 @@ class Rooms extends Component {
                           type="radio"
                           name={button}
                           value="other"
+                          checked={
+                            checkedQuestions[button + "1"]
+                              ? checkedQuestions[button + "1"]
+                              : null
+                          }
                           onClick={e => this.handleOptionOther(e)}
                         />
                         Other
@@ -891,168 +1266,412 @@ class Rooms extends Component {
                             id=""
                             cols="50"
                             rows="5"
+                            value={
+                              checkedQuestions[button]
+                                ? checkedQuestions[button]["other"]
+                                : null
+                            }
                           />
                         ) : null}
                       </div>
                     ) : (
+                      //           showModalInputOther?(
+                      //           <textarea
+                      //             onChange = { e => this.handleOptionOtherComment(e)}
+                      //     placeholder="Comment"
+                      //             name={button}
+                      //             id=""
+                      //     cols="50"
+                      //     rows="5"
+                      //   />
+                      // ) : null
+                      // <div className="col-12">
+                      //   <div className="col-12">
+                      //     <button
+                      //       onClick={e =>
+                      //         this.handleAppliances(e, "refrigeRator")
+                      //       }
+                      //       className="btn btn-sm btn-warning mr-1"
+                      //     >
+                      //       {" "}
+                      //       Refrige rator
+                      //     </button>
+                      //     <button
+                      //       onClick={e => this.handleAppliances(e, "Microwave")}
+                      //       className="btn btn-sm btn-warning m-1"
+                      //     >
+                      //       Microwave
+                      //     </button>
+                      //     <button
+                      //       onClick={e =>
+                      //         this.handleAppliances(e, "Dishwasher")
+                      //       }
+                      //       className="btn btn-sm btn-warning m-1"
+                      //     >
+                      //       Dishwasher
+                      //     </button>{" "}
+                      //     <button
+                      //       onClick={e => this.handleAppliances(e, "Stove")}
+                      //       className="btn btn-sm btn-warning m-1"
+                      //     >
+                      //       Stove
+                      //     </button>{" "}
+                      //     <button
+                      //       onClick={e => this.handleAppliances(e, "AC")}
+                      //       className="btn btn-sm btn-warning m-1"
+                      //     >
+                      //       A/C
+                      //     </button>
+                      //   </div>
+
                       <div className="col-12">
-                        {appliancesName ? (
-                          <div>
-                            {" "}
-                            <div>
-                              <input
+                        {appliancesName != "stove" && appliancesName != "ac" ? (
+                          <div className="col-12">
+                            {appliancesName.map(app => (
+                              <div className="col-6">
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name={app.name}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : app.checked
+                                  }
+                                  onChange={e =>
+                                    this.handleAppliancesOptions(e)
+                                  }
+                                />
+                                {app.value}
+                              </div>
+                            ))}
+                            <br />
+                            <br />
+                          </div>
+                        ) : null}
+
+                        {appliancesName != "stove" &&
+                        appliancesName != "ac" &&
+                        appliancesName1 ? (
+                          <div className="col-12">
+                            {appliancesName1.map(app1 => (
+                              <div className="col-6">
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name={app1.name1}
+                                  name={app1.name1}
+                                  value={app1.value1}
+                                  checked={
+                                    checkedQuestions[app1.name1]
+                                      ? checkedQuestions[app1.name1][
+                                          app1.value1
+                                        ]
+                                      : app1.checked1
+                                  }
+                                  onChange={e =>
+                                    this.handleAppliancesOptions(e)
+                                  }
+                                />
+                                {app1.value1}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                        {/* <input
                                 className="m-3"
                                 type="radio"
-                                name={button}
-                                value="other"
-                                onClick={e => this.handleOptionOther(e)}
-                              />
-                              White
-                              <input
-                                className="m-3"
-                                type="radio"
-                                name={button}
-                                value="other"
-                                onClick={e => this.handleOptionOther(e)}
+                                data-name={appliancesName}
+                                name={appliancesName}
+                                value="Stainless"
+                                onClick={e => this.handleAppliancesOptions(e)}
                               />
                               Stainless
                               <br />
                             </div>
-                            {appliancesName !== "Microwave" ? (
+                            <div>
+                              <input
+                                className="m-3"
+                                type="radio"
+                                data-name={appliancesName + "1"}
+                                name={appliancesName + "1"}
+                                value="Standard"
+                                onClick={e => this.handleAppliancesOptions(e)}
+                              />
+                              Standard
+                              <input
+                                className="m-3"
+                                type="radio"
+                                data-name={appliancesName + "1"}
+                                name={appliancesName + "1"}
+                                value="Small"
+                                onClick={e => this.handleAppliancesOptions(e)}
+                              />
+                              Small
+                            </div> */}
+                        {appliancesName == "stove" ? (
+                          <div>
+                            {stove.map(app => (
                               <div>
                                 <input
                                   className="m-3"
                                   type="radio"
-                                  name={button}
-                                  value="other"
-                                  onClick={e => this.handleOptionOther(e)}
+                                  data-name={app.dataName}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
                                 />
-                                Standard
+                                {app.value}
+                              </div>
+                            ))}
+
+                            <br />
+                            {stove1.map(app => (
+                              <div>
                                 <input
                                   className="m-3"
                                   type="radio"
-                                  name={button}
-                                  value="other"
-                                  onClick={e => this.handleOptionOther(e)}
+                                  data-name={app.dataName}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
                                 />
-                                Small
+                                {app.value}
                               </div>
-                            ) : null}
-                          </div>
-                        ) : null}
-                        {stove ? (
-                          <div>
-                            <input
-                              className="m-3"
-                              type="radio"
-                              name="stove1"
-                              value="gas"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            Gas
-                            <input
-                              className="m-3"
-                              type="radio"
-                              name="stove1"
-                              value="electric"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            Electric
+                            ))}
                             <br />
-                            <input
-                              className="m-3"
-                              type="radio"
-                              name="stove2"
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            30"
-                            <input
-                              className="m-3"
-                              type="radio"
-                              name="stove2"
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            24"
-                            <input
-                              className="m-3"
-                              type="radio"
-                              name="stove2"
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            20" <br />
-                            <input
-                              className="m-3 p-3"
-                              type="radio"
-                              name="stove3"
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            White
-                            <input
-                              className="m-3 p-3"
-                              type="radio"
-                              name="stove3"
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
-                            />
-                            Stainless <br />
+                            {stove2.map(app => (
+                              <div>
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name={app.dataName}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                {app.value}
+                              </div>
+                            ))}
+                            {/* <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name="Stove"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  name="stove1"
+                                  value="electric"
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                Electric
+                                <br />
+                                <input
+                                  className="m-3"
+                                  data-name="Stove1"
+                                  type="radio"
+                                  name="stove2"
+                                  value="30"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                30"
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name="Stove1"
+                                  name="stove2"
+                                  value="24"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                24"
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name="Stove1"
+                                  name="stove2"
+                                  value="20"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                20" <br /> */}
+                            {/* <input
+                                  className="m-3 p-3"
+                                  type="radio"
+                                  data-name="Stove2"
+                                  name="stove3"
+                                  value="White"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                White
+                                <input
+                                  className="m-3 p-3"
+                                  type="radio"
+                                  data-name="Stove2"
+                                  name="stove3"
+                                  value="Stainless"
+                                  checked={
+                                    JSON.parse(localStorage.getItem(app.name))
+                                      ? JSON.parse(
+                                          localStorage.getItem(app.name)
+                                        )[app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                Stainless <br /> */}
                           </div>
                         ) : null}
-                        {ac ? (
+                        {appliancesName == "ac" ? (
                           <div>
-                            <input
+                            {ac.map(app => (
+                              <div>
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name={app.dataName}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                {app.value}
+                              </div>
+                            ))}
+                            <br />
+
+                            {ac1.map(app => (
+                              <div>
+                                <input
+                                  className="m-3"
+                                  type="radio"
+                                  data-name={app.dataName}
+                                  name={app.name}
+                                  value={app.value}
+                                  checked={
+                                    checkedQuestions[app.name]
+                                      ? checkedQuestions[app.name][app.value]
+                                      : null
+                                  }
+                                  onClick={e => this.handleAppliancesOptions(e)}
+                                />
+                                {app.value}
+                              </div>
+                            ))}
+                            {/* <input
                               className="m-3"
                               type="radio"
+                              data-name="AC"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="Rear Vent"
+                              // checked={
+                              //   JSON.parse(localStorage.getItem(app.name))
+                              //     ? JSON.parse(localStorage.getItem(app.name))[
+                              //         app.value
+                              //       ]
+                              //     : null
+                              // }
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             Rear Vent
                             <input
                               className="m-3"
                               type="radio"
+                              data-name="AC"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="Standard"
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             Standard
                             <input
                               className="m-3"
                               type="radio"
+                              data-name="AC"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="A/C Heater"
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             A/C Heater
-                            <br />
-                            <input
-                              className="m-3"
+                             className="m-3"
                               type="radio"
+                              data-name="AC1"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="12,000"
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             12,000
                             <input
                               className="m-3"
                               type="radio"
+                              data-name="AC1"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="10,000"
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             10,000
                             <input
                               className="m-3"
                               type="radio"
+                              data-name="AC1"
                               name={button}
-                              value="other"
-                              onClick={e => this.handleOptionOther(e)}
+                              value="8,000"
+                              onClick={e => this.handleAppliancesOptions(e)}
                             />
                             8,000
                             <br />
+                          </div>
+                        ) : null}               <br /> */}
                           </div>
                         ) : null}
                       </div>

@@ -269,7 +269,9 @@ class FullRoom extends Form {
       work.adress = "";
       work.squareFeet = "";
       work.level = "";
+      work.questions = [];
 
+      localStorage.removeItem("checkedQuestions");
       delete work._id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
@@ -648,7 +650,6 @@ class FullRoom extends Form {
                           min="1"
                           id={item._id}
                         />
-                        {/* ) : null} */}
                       </td>
 
                       <td className="itemTd">
