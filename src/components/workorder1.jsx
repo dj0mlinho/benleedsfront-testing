@@ -192,6 +192,8 @@ class Wo extends Component {
         localStorage.setItem("workorder", JSON.stringify(work));
 
         localStorage.removeItem("jobs");
+        localStorage.removeItem("makeReady");
+        localStorage.removeItem("checkedQuestions");
         localStorage.removeItem("startBtn");
         localStorage.removeItem("building");
 

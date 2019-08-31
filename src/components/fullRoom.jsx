@@ -246,6 +246,11 @@ class FullRoom extends Form {
       work.jobs = jobs;
     }
 
+    work.checkedQuestions = JSON.parse(
+      localStorage.getItem("checkedQuestions")
+    );
+
+    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -254,12 +259,13 @@ class FullRoom extends Form {
       JSON.stringify(finalData)
     );
 
-    console.log(finalData, "NewWorkorder");
-    console.log(data);
+    console.log("newWorkorder", finalData);
+    console.log("newW", data);
     if (data.statusText === "OK") {
       let work = JSON.parse(localStorage.getItem("workorder"));
 
       localStorage.removeItem("jobs");
+
       localStorage.removeItem("startBtn");
       localStorage.removeItem("building");
       localStorage.removeItem("chosenOpt");
@@ -269,10 +275,12 @@ class FullRoom extends Form {
       work.adress = "";
       work.squareFeet = "";
       work.level = "";
-      work.questions = [];
+      work.checkedQuestions = "";
 
       localStorage.removeItem("checkedQuestions");
+      localStorage.removeItem("makeReady");
       delete work._id;
+      delete work.questions;
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const region = JSON.parse(localStorage.getItem("currentUser")).region;

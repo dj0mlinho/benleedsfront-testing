@@ -99,6 +99,8 @@ class NavBar extends Component {
       // window.location = `/user/workorders/${e.target.value}`;
     } else if (e.target.value == "new") {
       localStorage.removeItem("jobs");
+      localStorage.removeItem("makeReady");
+      localStorage.removeItem("checkedQuestions");
       localStorage.removeItem("startBtn");
       localStorage.removeItem("building");
       localStorage.setItem("chosenOpt", JSON.stringify("new"));
@@ -113,7 +115,6 @@ class NavBar extends Component {
       work.level = "";
       delete work._id;
       delete work.checkedQuestions;
-      localStorage.removeItem("checkedQuestions");
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const region = JSON.parse(localStorage.getItem("currentUser")).region;
