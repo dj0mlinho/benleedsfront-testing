@@ -225,7 +225,7 @@ class NavBar extends Component {
           !chosenOptPending &&
           !start &&
           !this.props.location.state ? (
-            <div class="card card-user col-sm-4 offset-sm-4 ">
+            <div className="card card-user col-sm-4 offset-sm-4 ">
               <img
                 src={this.state.source}
                 class="card-img-top user-img"

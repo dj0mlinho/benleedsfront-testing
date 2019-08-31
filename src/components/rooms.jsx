@@ -481,11 +481,14 @@ class Rooms extends Component {
     this.setState({ setShow: true, button: tittle, showModalInputOther });
   };
   async handleMakeReady() {
+    let makeReady = true;
+    localStorage.setItem("makeReady", JSON.stringify(makeReady));
     this.setState({ makeReady: true });
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
+
     work.autosaveTime = new Date();
     if (jobs != null) {
       work.jobs = jobs;
@@ -557,21 +560,33 @@ class Rooms extends Component {
     const optionOther = this.state.optionOther;
     const name = e.currentTarget.name.toLowerCase();
     const showModalInputOther = this.state.showModalInputOther;
+    // const checked = JSON.parse(localStorage.getItem("checkedQuestions"));
 
-    const checkedQuestions = JSON.parse(
-      localStorage.getItem("checkedQuestions")
-    );
-    if (checkedQuestions) {
-      // console.log("radi gde treba", optionOther);
-      // work[name] = optionOther;
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
+    const work = JSON.parse(localStorage.getItem("workorder"));
 
-      checkedQuestions[name + "1"] = true;
-      localStorage.setItem(
-        "checkedQuestions",
-        JSON.stringify(checkedQuestions)
-      );
-    }
-    this.setState({ showModalInputOther: true });
+    let checked = work.questions;
+    let novo = checked[name];
+    let checked2 = { other: [novo] };
+    let checked3 = { other: true };
+    let checkedQuestions = {
+      ...checked1,
+      [name]: checked2,
+      [name + "1"]: checked3
+    };
+
+    localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
+    // if (checkedQuestions) {
+    //   // console.log("radi gde treba", optionOther);
+    //   // work[name] = optionOther;
+
+    // [name][value] = true;
+    // localStorage.setItem(
+    //   "checkedQuestions",
+    //   JSON.stringify(checkedQuestions)
+    // );
+
+    this.setState({ showModalInputOther: true, checkedQuestions });
   };
   handleOptionOtherComment = e => {
     const value = e.target.value;
@@ -618,8 +633,9 @@ class Rooms extends Component {
     let checked = work.questions;
     let novo = checked[name];
     let checked2 = { [novo]: true };
-    let checkedQuestions = { ...checked1, [name]: checked2 };
 
+    let checkedQuestions = { ...checked1, [name]: checked2 };
+    checkedQuestions[name + "1"] = "";
     localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
 
     this.setState({ showModalInputOther: false, checkedQuestions });
@@ -908,6 +924,7 @@ class Rooms extends Component {
     } else {
       checkedQuestions = [];
     }
+
     let isLoading = false;
     const stove = this.state.stove;
     const stove1 = this.state.stove1;
@@ -948,7 +965,14 @@ class Rooms extends Component {
     // };
     // let isLoading = this.state.isLoading;
     let adress = [];
+    let other = false;
     let button = this.state.button.toLowerCase();
+    if (JSON.parse(localStorage.getItem("checkedQuestions"))) {
+      other = JSON.parse(localStorage.getItem("checkedQuestions"))[button][
+        "other"
+      ];
+    }
+
     let value2 = this.state.value2;
     // let value3 = this.state.value3;
     // console.log(typeof this.state.buildingNum);
@@ -1001,9 +1025,11 @@ class Rooms extends Component {
         />
       );
     });
+    let makeReady = false;
     const showModalInputOther = this.state.showModalInputOther;
-    const makeReady = this.state.makeReady;
-
+    if (JSON.parse(localStorage.getItem("makeReady"))) {
+      makeReady = JSON.parse(localStorage.getItem("makeReady"));
+    }
     return (
       <div className="container main-page">
         {/* <img className="testImg" src={this.state.source} alt="" /> */}
@@ -1251,14 +1277,14 @@ class Rooms extends Component {
                           value="other"
                           checked={
                             checkedQuestions[button + "1"]
-                              ? checkedQuestions[button + "1"]
-                              : null
+                              ? checkedQuestions[button + "1"]["other"]
+                              : ""
                           }
                           onClick={e => this.handleOptionOther(e)}
                         />
                         Other
                         <br />
-                        {showModalInputOther ? (
+                        {showModalInputOther || other ? (
                           <textarea
                             onChange={e => this.handleOptionOtherComment(e)}
                             placeholder="Comment"
@@ -1269,10 +1295,12 @@ class Rooms extends Component {
                             value={
                               checkedQuestions[button]
                                 ? checkedQuestions[button]["other"]
-                                : null
+                                : ""
                             }
                           />
-                        ) : null}
+                        ) : (
+                          ""
+                        )}
                       </div>
                     ) : (
                       //           showModalInputOther?(

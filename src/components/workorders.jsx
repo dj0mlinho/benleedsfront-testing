@@ -202,9 +202,9 @@ class Workorders extends Form {
                               id: item._id,
                               level: item.level,
                               squareFeet: item.squareFeet,
-                              questions: item.questions[0],
+                              questions: item.questions,
                               checkedQuestions: item.checkedQuestions
-                                ? item.checkedQuestions[0]
+                                ? item.checkedQuestions
                                 : null
                             }
                           }}
