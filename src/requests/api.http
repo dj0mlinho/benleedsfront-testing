@@ -69,4 +69,11 @@ content-type: application/json
 
 # }
 
+###
+POST http://localhost:3500/login
+content-type: application/json
 
+{
+  "email":"roxana@benleedsapp.com",
+  "password":"123"
+}
