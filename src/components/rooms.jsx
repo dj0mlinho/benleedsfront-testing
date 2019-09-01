@@ -1076,7 +1076,7 @@ class Rooms extends Component {
               onClick={() => this.handleHomeButton()}
               className="btn btn-info m-3"
             >
-            🆕  Home
+              🏙 Home
             </button>
           </div>
           {this.state.start && !this.state.isLoading ? (
@@ -1084,7 +1084,7 @@ class Rooms extends Component {
               onClick={() => this.handleFinishedButton()}
               className="btn btn-primary m-3"
             >
-             ➔ Forward
+              Forward ➔
             </button>
           ) : null}
           {!this.state.start ? (
