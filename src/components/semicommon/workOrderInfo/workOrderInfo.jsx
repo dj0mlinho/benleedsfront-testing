@@ -86,25 +86,25 @@ export default class workOrderInfo extends PureComponent {
 
         <div className="row">
          <div className="col-sm-6">
-             <span>A/C : {this.checkAnswer(workorder.questions.appliances.ac)} </span>
+             <span>A/C : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.ac : "" ))} </span>
          </div>
          <div className="col-sm-6">
-            <span>Microwave : {this.checkAnswer(workorder.questions.appliances.microwave)} </span>
+            <span>Microwave : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.microwave : "" ))} </span>
            </div>
         </div>
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Dishwasher : {this.checkAnswer(workorder.questions.appliances.dishwasher)} </span>
+             <span>Dishwasher : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.dishwasher : "" ))} </span>
          </div>
          <div className="col-sm-6">
-            <span>Refrigerator : {this.checkAnswer(workorder.questions.appliances.refrigeRator)} </span>
+            <span>Refrigerator : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.refrigeRator : "" ))} </span>
            </div>
         </div>
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Stove : {this.checkAnswer(workorder.questions.appliances.stove)} </span>
+             <span>Stove : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.stove : "" ))} </span>
          </div>
          <div className="col-sm-6">
             
