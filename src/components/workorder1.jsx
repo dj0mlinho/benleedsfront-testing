@@ -8,7 +8,6 @@ import "../css/workorder.css";
 class Wo extends Component {
   state = {
     allItems: {}
-  
   };
   saveStateToLocalStorage() {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
@@ -22,26 +21,21 @@ class Wo extends Component {
     }
   }
 
-  componentDidMount() {
-   
-  }
+  componentDidMount() {}
   handleLevels = e => {
-   
     let work = JSON.parse(localStorage.getItem("workorder"));
-    
+
     work.level = e.target.value;
-    
+
     localStorage.setItem("workorder", JSON.stringify(work));
   };
   handleGeneralNotes = e => {
-   
     let woComment = e.target.value;
     this.setState({ woComment });
   };
   handleBackButton = url => {
-  
     const region = JSON.parse(localStorage.getItem("currentUser")).region;
-   
+
     this.props.history.push("/rooms/" + region);
   };
 
@@ -68,14 +62,14 @@ class Wo extends Component {
         };
       });
       const finalData = JSON.parse(localStorage.getItem("workorder"));
-     
+
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       const total = this.state.total;
       const woComment = this.state.woComment;
-   
+
       let work = {};
       work.workorder = {};
-     
+
       work.jobs = finalItems;
       work.user = currentUser;
       if (finalData._id) {
@@ -142,7 +136,7 @@ class Wo extends Component {
           );
         }
       }
-    
+
       work.workorder.loginTime = new Date(finalData.loginTime);
       work.workorder.level = finalData.level;
 
@@ -161,12 +155,11 @@ class Wo extends Component {
       // delete work._id;
       // localStorage.setItem("workorder", JSON.stringify(work));
 
-      
       const data = await axios.post(
         process.env.REACT_APP_API_URL + "/user/newWorkorder",
         JSON.stringify(work)
       );
-   
+
       if (data.statusText === "OK") {
         const work = JSON.parse(localStorage.getItem("workorder"));
         // localStorage.removeItem("jobs");
@@ -195,8 +188,8 @@ class Wo extends Component {
       }
       let region = JSON.parse(localStorage.getItem("currentUser")).region;
 
-      // this.props.history.push(`/rooms/${region}`);
-      // document.location.reload();
+      this.props.history.push(`/rooms/${region}`);
+      document.location.reload();
     }
   };
   constructor(props) {
@@ -211,7 +204,7 @@ class Wo extends Component {
       }
       total = total.toFixed(2);
     }
-    
+
     this.state = {
       total,
 
@@ -220,16 +213,16 @@ class Wo extends Component {
   }
   render() {
     let jobs = "";
-   
+
     let total = this.state.total;
-   
+
     const allItems = JSON.parse(localStorage.getItem("allItems"));
 
     jobs = [...allItems].filter(m => m.checked === true);
-  
+
     const showing = true;
     const adress = JSON.parse(localStorage.getItem("workorder")).adress;
-  
+
     const workorder = JSON.parse(localStorage.getItem("workorder"));
     const userName = JSON.parse(localStorage.getItem("currentUser")).name;
     const userEmail = JSON.parse(localStorage.getItem("currentUser")).email;
@@ -353,9 +346,7 @@ class Wo extends Component {
               </button>
               <button
                 className="btn btn-success m-3"
-            
                 onClick={this.handlePrintButton}
-              
               >
                 Print
               </button>
