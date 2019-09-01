@@ -318,6 +318,7 @@ class Rooms extends Component {
       work.checkedQuestions = "";
 
       localStorage.removeItem("checkedQuestions");
+      localStorage.removeItem("makeReady");
       delete work._id;
       delete work.questions;
 
@@ -493,7 +494,11 @@ class Rooms extends Component {
     if (jobs != null) {
       work.jobs = jobs;
     }
+    work.checkedQuestions = JSON.parse(
+      localStorage.getItem("checkedQuestions")
+    );
 
+    console.log(work);
     console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
@@ -561,9 +566,12 @@ class Rooms extends Component {
     const name = e.currentTarget.name.toLowerCase();
     const showModalInputOther = this.state.showModalInputOther;
     // const checked = JSON.parse(localStorage.getItem("checkedQuestions"));
-
-    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
     const work = JSON.parse(localStorage.getItem("workorder"));
+
+    work.questions = {};
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
+    // const work = JSON.parse(localStorage.getItem("workorder"));
 
     let checked = work.questions;
     let novo = checked[name];
@@ -968,9 +976,12 @@ class Rooms extends Component {
     let other = false;
     let button = this.state.button.toLowerCase();
     if (JSON.parse(localStorage.getItem("checkedQuestions"))) {
-      other = JSON.parse(localStorage.getItem("checkedQuestions"))[button][
-        "other"
-      ];
+      if (JSON.parse(localStorage.getItem("checkedQuestions"))[button]) {
+        other = JSON.parse(localStorage.getItem("checkedQuestions"))[button][
+          "other"
+        ];
+      } else {
+      }
     }
 
     let value2 = this.state.value2;
@@ -1065,7 +1076,7 @@ class Rooms extends Component {
               onClick={() => this.handleHomeButton()}
               className="btn btn-info m-3"
             >
-              Home
+              🏙 Home
             </button>
           </div>
           {this.state.start && !this.state.isLoading ? (
@@ -1073,7 +1084,7 @@ class Rooms extends Component {
               onClick={() => this.handleFinishedButton()}
               className="btn btn-primary m-3"
             >
-              Forward
+              Forward ➔
             </button>
           ) : null}
           {!this.state.start ? (
@@ -1113,9 +1124,9 @@ class Rooms extends Component {
           </div>
         </div>
         {this.state.start && value ? (
-          <div className="row m-2">
+          <div className="row m-2 questions">
             {!makeReady ? (
-              <div className="col-3">
+              <div className="col-sm-3">
                 <button
                   onClick={() => this.handleMakeReady()}
                   className="btn btn-outline-primary btn-lg m-1"
@@ -1125,7 +1136,7 @@ class Rooms extends Component {
               </div>
             ) : null}
             {!makeReady ? (
-              <div className="col-9">
+              <div className="col-sm-9">
                 {this.state.buttons.map(button => (
                   <button
                     className=" btn  btn-primary  m-1"
@@ -1297,6 +1308,7 @@ class Rooms extends Component {
                               id=""
                               cols="50"
                               rows="5"
+                              className="option-other"
                               value={
                                 checkedQuestions[button]
                                   ? checkedQuestions[button]["other"]
