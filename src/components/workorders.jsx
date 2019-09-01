@@ -6,7 +6,6 @@ import Form from "./common/form";
 import "../css/fullroom.css";
 
 import SearchBox from "./common/searchbox";
-import { jsxClosingFragment } from "@babel/types";
 
 class Workorders extends Form {
   state = {
@@ -47,83 +46,32 @@ class Workorders extends Form {
 
   render() {
     let message = false;
-    // console.log(this.state.allItems);
+
     let workorders = JSON.parse(localStorage.getItem("workorders"));
-    console.log(workorders);
 
     if (workorders[0] == undefined) {
       message = true;
     }
-    // console.log(workorders);
-    // const allItems = this.state.allItems;
+
     const searchQuery = this.state.searchQuery;
 
-    // console.log(this.state.searchQuery);
-    // const searchQuery = this.state.searchQuery;
-    // const showing = true;
-    // // const adress = [];
-    // if (
-    //   !JSON.parse(localStorage.getItem("workorder")).workorder.buildingNumber
-    // ) {
-    // }
-    // const buildNumber = JSON.parse(localStorage.getItem("workorder")).workorder
-    //   .buildingNumber;
-
-    // const building = JSON.parse(localStorage.getItem("buildings")).find(
-    //   m => m.number == buildNumber
-    // );
-
-    // // element.value = element.number + " (" + element.zip + ")";
-
-    // // const { data, errors, checked, renderedItems } = this.state;
-
-    // const adress = building.adress + " (" + building.zip + ")";
-    // console.log(searchQuery);
-
-    // if (searchQuery) {
-    //   datas = this.state.allItems.filter(m =>
-    //     m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
-    //   );
-    // }
-    // let title = "";
-    // if (datas[0] == undefined) {
-    //   title = "Not found";
-    // } else {
-    //   title = datas[0].room;
-    // }
-    // console.log(datas);
-    // let datas = this.state.allItems;
-
-    console.log(workorders);
     let allItems = workorders;
-    // if (this.props.match.params.i === "saved") {
-    //   allItems = workorders.filter(m => m.status == this.props.match.params.i);
-    // } else {
-    //   allItems = workorders.filter(m => m.status == this.props.match.params.i);
-    // }
 
     const region = JSON.parse(localStorage.getItem("currentUser")).region;
-    // console.log(allItems);
+
     if (searchQuery) {
       allItems = allItems.filter(m =>
         m.adress.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    // if(){
 
-    // }
-    // const workorder = JSON.parse(localStorage.getItem("workorder"));
-    // const value = workorder.workorder.apartmentNumber;
-    // const { adress } = this.state;
-    // console.log(adress);
     let status = "";
     if (this.props.match.params.i == "pending") {
       status = false;
-      console.log("radi");
     } else {
       status = true;
     }
-    // console.log(this.props.match.params.i);
+
     return (
       <React.Fragment>
         <div className="container main-page">

@@ -8,7 +8,7 @@ import "../css/workorder.css";
 class Wo extends Component {
   state = {
     allItems: {}
-    // jobsList: getItemList()
+  
   };
   saveStateToLocalStorage() {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
@@ -23,34 +23,25 @@ class Wo extends Component {
   }
 
   componentDidMount() {
-    // this.hydrateStateWithLocalStorage();
-    // add event listener to save state to localStorage
-    // when user leaves/refreshes the page
-    // window.addEventListener(
-    //   "beforeunload",
-    //   this.saveStateToLocalStorage.bind(this)
-    // );
+   
   }
   handleLevels = e => {
-    console.log("object");
+   
     let work = JSON.parse(localStorage.getItem("workorder"));
-    // value = workorder.apartmentNumber;
-    // console.log("radi e", e, e.target.value);
+    
     work.level = e.target.value;
-    // const workOrder = JSON.parse(localStorage.getItem("workorder"));
-    // workOrder.workorder.apartmentNumber = e.target.value;
+    
     localStorage.setItem("workorder", JSON.stringify(work));
   };
   handleGeneralNotes = e => {
-    // let woComment = this.state.woComment;
-    // console.log(e.target.value);
+   
     let woComment = e.target.value;
     this.setState({ woComment });
   };
   handleBackButton = url => {
-    // console.log(this.props.match.params.m);
+  
     const region = JSON.parse(localStorage.getItem("currentUser")).region;
-    console.log(this.props.match.params);
+   
     this.props.history.push("/rooms/" + region);
   };
 
@@ -77,79 +68,81 @@ class Wo extends Component {
         };
       });
       const finalData = JSON.parse(localStorage.getItem("workorder"));
+     
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       const total = this.state.total;
       const woComment = this.state.woComment;
-      // console.log(woComment);
+   
       let work = {};
       work.workorder = {};
-      // work.id = finalData._id;
+     
       work.jobs = finalItems;
       work.user = currentUser;
       if (finalData._id) {
         work.tempWorkorderId = finalData._id;
       }
       work.workorder.questions = { ...finalData.questions };
+      if (work.workorder.questions.appliances) {
+        work.workorder.questions.appliances = {
+          stove: [],
+          dishwasher: [],
+          microwave: [],
+          ac: [],
+          refrigeRator: []
+        };
+        if (finalData.questions.appliances.stove1) {
+          work.workorder.questions.appliances.stove.push(
+            finalData.questions.appliances.stove1[0]
+          );
+        }
+        if (finalData.questions.appliances.stove2) {
+          work.workorder.questions.appliances.stove.push(
+            finalData.questions.appliances.stove2[0]
+          );
+        }
+        if (finalData.questions.appliances.stove3) {
+          work.workorder.questions.appliances.stove.push(
+            finalData.questions.appliances.stove3[0]
+          );
+        }
 
-      work.workorder.questions.appliances = {
-        stove: [],
-        dishwasher: [],
-        microwave: [],
-        ac: [],
-        refrigeRator: []
-      };
-      if (finalData.questions.appliances.stove1) {
-        work.workorder.questions.appliances.stove.push(
-          finalData.questions.appliances.stove1[0]
-        );
+        if (finalData.questions.appliances.microwave) {
+          work.workorder.questions.appliances.microwave.push(
+            finalData.questions.appliances.microwave[0]
+          );
+        }
+        if (finalData.questions.appliances.dishwasher) {
+          work.workorder.questions.appliances.dishwasher.push(
+            finalData.questions.appliances.dishwasher[0]
+          );
+        }
+        if (finalData.questions.appliances.dishwasher1) {
+          work.workorder.questions.appliances.dishwasher.push(
+            finalData.questions.appliances.dishwasher1[0]
+          );
+        }
+        if (finalData.questions.appliances.refrigeRator) {
+          work.workorder.questions.appliances.refrigeRator.push(
+            finalData.questions.appliances.refrigeRator[0]
+          );
+        }
+        if (finalData.questions.appliances.refrigeRator1) {
+          work.workorder.questions.appliances.refrigeRator.push(
+            finalData.questions.appliances.refrigeRator1[0]
+          );
+        }
+        if (finalData.questions.appliances.ac) {
+          work.workorder.questions.appliances.ac.push(
+            finalData.questions.appliances.ac[0]
+          );
+        }
+        if (finalData.questions.appliances.ac1) {
+          work.workorder.questions.appliances.ac.push(
+            finalData.questions.appliances.ac1[0]
+          );
+        }
       }
-      if (finalData.questions.appliances.stove2) {
-        work.workorder.questions.appliances.stove.push(
-          finalData.questions.appliances.stove2[0]
-        );
-      }
-      if (finalData.questions.appliances.stove3) {
-        work.workorder.questions.appliances.stove.push(
-          finalData.questions.appliances.stove3[0]
-        );
-      }
-
-      if (finalData.questions.appliances.microwave) {
-        work.workorder.questions.appliances.microwave.push(
-          finalData.questions.appliances.microwave[0]
-        );
-      }
-      if (finalData.questions.appliances.dishwasher) {
-        work.workorder.questions.appliances.dishwasher.push(
-          finalData.questions.appliances.dishwasher[0]
-        );
-      }
-      if (finalData.questions.appliances.dishwasher1) {
-        work.workorder.questions.appliances.dishwasher.push(
-          finalData.questions.appliances.dishwasher1[0]
-        );
-      }
-      if (finalData.questions.appliances.refrigeRator) {
-        work.workorder.questions.appliances.refrigeRator.push(
-          finalData.questions.appliances.refrigeRator[0]
-        );
-      }
-      if (finalData.questions.appliances.refrigeRator1) {
-        work.workorder.questions.appliances.refrigeRator.push(
-          finalData.questions.appliances.refrigeRator1[0]
-        );
-      }
-      if (finalData.questions.appliances.ac) {
-        work.workorder.questions.appliances.ac.push(
-          finalData.questions.appliances.ac[0]
-        );
-      }
-      if (finalData.questions.appliances.ac1) {
-        work.workorder.questions.appliances.ac.push(
-          finalData.questions.appliances.ac1[0]
-        );
-      }
-      console.log(finalData);
+    
       work.workorder.loginTime = new Date(finalData.loginTime);
       work.workorder.level = finalData.level;
 
@@ -168,12 +161,12 @@ class Wo extends Component {
       // delete work._id;
       // localStorage.setItem("workorder", JSON.stringify(work));
 
-      console.log("final data", work);
+      
       const data = await axios.post(
         process.env.REACT_APP_API_URL + "/user/newWorkorder",
         JSON.stringify(work)
       );
-      console.log(data);
+   
       if (data.statusText === "OK") {
         const work = JSON.parse(localStorage.getItem("workorder"));
         // localStorage.removeItem("jobs");
@@ -202,8 +195,8 @@ class Wo extends Component {
       }
       let region = JSON.parse(localStorage.getItem("currentUser")).region;
 
-      this.props.history.push(`/rooms/${region}`);
-      document.location.reload();
+      // this.props.history.push(`/rooms/${region}`);
+      // document.location.reload();
     }
   };
   constructor(props) {
@@ -218,7 +211,7 @@ class Wo extends Component {
       }
       total = total.toFixed(2);
     }
-    // console.log(total);
+    
     this.state = {
       total,
 
@@ -227,26 +220,16 @@ class Wo extends Component {
   }
   render() {
     let jobs = "";
-    // console.log(this.state.woComment);
+   
     let total = this.state.total;
-    // if (localStorage.getItem("jobs")) {
-    //  jobs = JSON.parse(localStorage.getItem("jobs"));
-    // console.log(total);
+   
     const allItems = JSON.parse(localStorage.getItem("allItems"));
 
     jobs = [...allItems].filter(m => m.checked === true);
-    // } else {
-    //   jobs = false;
-    // }
-    console.log(jobs);
+  
     const showing = true;
     const adress = JSON.parse(localStorage.getItem("workorder")).adress;
-    // const total = this.state.total;
-    // const totalprice = this.state.allItems.map(
-    //   item => item.quantity * item.price
-    // );
-
-    // const total = totalprice.map(item => );
+  
     const workorder = JSON.parse(localStorage.getItem("workorder"));
     const userName = JSON.parse(localStorage.getItem("currentUser")).name;
     const userEmail = JSON.parse(localStorage.getItem("currentUser")).email;
@@ -325,16 +308,17 @@ class Wo extends Component {
                     </tbody>
                   ))
                 : null}
-
-              <tr>
-                <td colSpan="2" />
-                <td className="itemTd text-right" colSpan="3">
-                  Total Price:
-                </td>
-                <td className="itemTd">
-                  <div>${total}</div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td colSpan="2" />
+                  <td className="itemTd text-right" colSpan="3">
+                    Total Price:
+                  </td>
+                  <td className="itemTd">
+                    <div>${total}</div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
 
             <textarea
@@ -369,12 +353,9 @@ class Wo extends Component {
               </button>
               <button
                 className="btn btn-success m-3"
-                // placeholder="General Notes"
+            
                 onClick={this.handlePrintButton}
-                // name=""
-                // id=""
-                // cols="30"
-                // rows="4"
+              
               >
                 Print
               </button>

@@ -9,7 +9,7 @@ import ReactModal from "react-modal";
 import { getRooms } from "../services/fakeRoomService";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { useState } from "react";
+
 class Rooms extends Component {
   state = {
     value: [],
@@ -33,7 +33,6 @@ class Rooms extends Component {
       work.jobs = jobs;
     }
 
-    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -50,27 +49,16 @@ class Rooms extends Component {
       finalData.apartmentNumber = work.apartmentNumber;
       finalData.userId = work.userId;
 
-      // finalData.getItems = false;
-
-      // work.autosaveTime = new Date();
-      // work.jobs = jobs;
-      // localStorage.setItem("workorder", JSON.stringify(work));
-      // const finalData = JSON.parse(localStorage.getItem("workorder"));
-      console.log(finalData);
       const data1 = await axios.post(
         process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
         JSON.stringify(finalData)
       );
 
-      console.log("GET", finalData);
-      console.log("GET", data1);
-
       if (data1.data) {
         let _id = data1.data._id;
         work._id = _id;
-        console.log("Radi", _id);
+
         localStorage.setItem("workorder", JSON.stringify(work));
-        // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
       }
 
       if (data1.statusText === "OK") {
@@ -88,15 +76,12 @@ class Rooms extends Component {
         );
         allItems = checked.concat(unchecked);
         localStorage.setItem("allItems", JSON.stringify(allItems));
-        console.log("get", finalData);
-        console.log("get", data1);
-        // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
+
         this.props.history.push(
           "/rooms/" + id + "/" + this.props.match.params.id
         );
       }
     }
-    // const jobs = JSON.parse(localStorage.getItem("jobs"));
   };
 
   async handleAsync() {
@@ -109,26 +94,19 @@ class Rooms extends Component {
       finalData.apartmentNumber = work.apartmentNumber;
       finalData.userId = work.userId;
 
-      // finalData.getItems = false;
-
       const data1 = await axios.get(
         process.env.REACT_APP_API_URL + "/user/allItems"
       );
-      // const data1 = await axios.get(
-      //   process.env.REACT_APP_API_URL + "/user/allItems",
-      //   JSON.stringify(finalData)
-      // );
+
       this.setState({ isLoading: false });
 
       localStorage.setItem("allItems", JSON.stringify(data1.data.items));
       if (data1.statusText === "OK") {
-        console.log("radi itemsi");
         const data2 = await axios.post(
           process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
           JSON.stringify(finalData)
         );
-        console.log(finalData, "data2FinalData");
-        console.log("data2", data2);
+
         if (data2.statusText === "OK") {
           let allItems = JSON.parse(localStorage.getItem("allItems"));
           let jobsi = [];
@@ -144,25 +122,14 @@ class Rooms extends Component {
           );
           allItems = checked.concat(unchecked);
           localStorage.setItem("allItems", JSON.stringify(allItems));
-          console.log("finalni", finalData, data2);
 
-          console.log("radi get id");
           if (data2.data._id) {
             let _id = data2.data._id;
             work._id = _id;
 
-            console.log("workorder u getu", work);
             localStorage.setItem("workorder", JSON.stringify(work));
           }
         }
-        // localStorage.setItem(
-        //   "allItems",
-        //   JSON.stringify(data2.data.items)
-        // );
-        // localStorage.setItem(
-        //   "jobs",
-        //   JSON.stringify(data1.data.workorder.jobs)
-        // );
       }
       let start = true;
 
@@ -184,34 +151,27 @@ class Rooms extends Component {
       m => m.region === this.props.match.params.id
     );
 
-    console.log(this.props);
-
     if (this.state.start || this.props.location.state) {
       let allItems = JSON.parse(localStorage.getItem("allItems"));
       if (this.props.location.state) {
         const buildNumber = this.props.location.state.buildingNumber;
 
         let building = buildings.find(m => m.number == buildNumber);
-        // }urac
 
         const adress = building.adress + " (" + building.zip + ")";
-        // console.log(buildings);
+
         const work = JSON.parse(localStorage.getItem("workorder"));
-        //  allItems = JSON.parse(localStorage.getItem("allItems"));
-        // // work.workorder.id = this.props.location.state.id;
-        // work.workorder.buildingNumber = buildNumber;
-        // work.workorder.apartmentNumber = this.props.location.state.apartmentNumber;
+
         if (this.state.start) {
           let checkedJobs = this.props.location.state.jobs;
           let k = checkedJobs.filter(j => allItems.filter(m => m._id == j._id));
-          // console.log(kurac);
+
           let j = checkedJobs.map(j => j).map(m => m._id);
           let p = allItems.filter(d => d._id != j.find(m => m == d._id));
 
           allItems = k.concat(p);
 
           localStorage.setItem("allItems", JSON.stringify(allItems));
-          // localStorage.setItem("jobs", JSON.stringify(allItems));
         }
 
         localStorage.removeItem("chosenOpt");
@@ -242,45 +202,11 @@ class Rooms extends Component {
       }
     }
   }
-  // async handleSavedWorkorders() {
-  //   localStorage.removeItem("chosenOpt");
-  //   const work = JSON.parse(localStorage.getItem("workorder"));
-  //   let finalData = {};
-  //   finalData.buildingNumber = work.buildingNumber;
-  //   finalData.apartmentNumber = work.apartmentNumber;
-  //   finalData.userId = work.userId;
-
-  //   // work.autosaveTime = new Date();
-  //   // work.jobs = jobs;
-  //   // localStorage.setItem("workorder", JSON.stringify(work));
-  //   // const finalData = JSON.parse(localStorage.getItem("workorder"));
-  //   console.log(finalData);
-  //   const data1 = await axios.post(
-  //     process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
-  //     JSON.stringify(finalData)
-  //   );
-  //   console.log(data1);
-  //   localStorage.setItem("allItems", JSON.stringify(data1.data.items));
-  //   this.props.history.push(`/user/workorders/saved`);
-  //   document.location.reload();
-  // }
-
-  // handleOpenModal(tittle) {
-  //   let button = this.state.button;
-  //   let showModal = this.state.showModal;
-  //   this.setState({ showModal: true, button: tittle });
-  // }
-
-  // handleCloseModal() {
-  //   let showModal = this.state.showModal;
-
-  //   this.setState({ showModal: false });
-  // }
 
   async handleHomeButton() {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
-    // const jobs = JSON.parse(localStorage.getItem("jobs"));
+
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -290,7 +216,6 @@ class Rooms extends Component {
       localStorage.getItem("checkedQuestions")
     );
 
-    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -299,8 +224,6 @@ class Rooms extends Component {
       JSON.stringify(finalData)
     );
 
-    console.log("newWorkorder", finalData);
-    console.log("newW", data);
     if (data.statusText === "OK") {
       let work = JSON.parse(localStorage.getItem("workorder"));
 
@@ -329,27 +252,7 @@ class Rooms extends Component {
       document.location.reload();
     }
   }
-  // async handleHomeButton() {
-  //   // const userId = JSON.parse(localStorage.getItem("currentUser"))._id;
-  //   // localStorage.removeItem("jobs");
-  //   // localStorage.removeItem("startBtn");
-  //   // localStorage.removeItem("building");
-  //   // localStorage.removeItem("chosenOpt");
-  //   // localStorage.removeItem("isLoadingFullRoom");
-  //   // // localStorage.removeItem("allItems");
-  //   // let work = JSON.parse(localStorage.getItem("workorder"));
-  //   // work.jobs = {};
-  //   // work.buildingNumber = "";
-  //   // work.apartmentNumber = "";
-  //   // work.adress = "";
-  //   // work.squareFeet = "";
-  //   // delete work._id;
-  //   // localStorage.setItem("workorder", JSON.stringify(work));
-  //   // const region = JSON.parse(localStorage.getItem("currentUser")).region;
-  //   // this.setState({ buildingState: false });
-  //   // this.props.history.push(`/rooms/${region}`);
-  //   // document.location.reload();
-  // }
+
   handleBackButton = url => {
     // this.props.history.push("/rooms/" + this.props.match.params.id);
     // return console.log(this.props.match.url);
@@ -360,7 +263,7 @@ class Rooms extends Component {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const allItemsi = [...allItems];
     let jobs = allItemsi.filter(m => m.checked === true);
-    // localStorage.setItem("jobs", JSON.stringify(jobs));
+   
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -375,25 +278,19 @@ class Rooms extends Component {
       JSON.stringify(finalData)
     );
     if (data.statusText === "OK") {
-      console.log("newWorkorder", finalData);
-      console.log("newW", data);
       this.props.history.push(
         "/rooms/" + this.props.match.params.id + "/work-order"
       );
-      // const work = JSON.parse(localStorage.getItem("workorder"));
+
       const date = new Date();
       work.completedTime = date;
       localStorage.setItem("workorder", JSON.stringify(work));
     }
   };
-  // handleWorkOrder = async () => {
-  //   window.alert("In development...");
-  // };
 
   handleInput = e => {
-    // console.log(e.target.value);
     const { showing } = this.state;
-    // const{ build}=this.state;
+
     let buildings = JSON.parse(localStorage.getItem("buildings")).filter(
       m => m.region === this.props.match.params.id
     );
@@ -498,8 +395,6 @@ class Rooms extends Component {
       localStorage.getItem("checkedQuestions")
     );
 
-    console.log(work);
-    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -516,25 +411,15 @@ class Rooms extends Component {
       finalData.apartmentNumber = work.apartmentNumber;
       finalData.userId = work.userId;
 
-      // finalData.getItems = false;
-
-      // work.autosaveTime = new Date();
-      // work.jobs = jobs;
-      // localStorage.setItem("workorder", JSON.stringify(work));
-      // const finalData = JSON.parse(localStorage.getItem("workorder"));
-      console.log(finalData);
       const data1 = await axios.post(
         process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
         JSON.stringify(finalData)
       );
 
-      console.log("GET", finalData);
-      console.log("GET", data1);
-
       if (data1.data) {
         let _id = data1.data._id;
         work._id = _id;
-        console.log("Radi", _id);
+
         localStorage.setItem("workorder", JSON.stringify(work));
         // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
       }
@@ -554,9 +439,6 @@ class Rooms extends Component {
         );
         allItems = checked.concat(unchecked);
         localStorage.setItem("allItems", JSON.stringify(allItems));
-        console.log("get", finalData);
-        console.log("get", data1);
-        // document.location = "/rooms/" + this.props.id + "/" + this.props.region;
       }
     }
   }
@@ -565,13 +447,12 @@ class Rooms extends Component {
     const optionOther = this.state.optionOther;
     const name = e.currentTarget.name.toLowerCase();
     const showModalInputOther = this.state.showModalInputOther;
-    // const checked = JSON.parse(localStorage.getItem("checkedQuestions"));
-    const work = JSON.parse(localStorage.getItem("workorder"));
 
-    work.questions = {};
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    work.questions = { ...work.questions };
+
     localStorage.setItem("workorder", JSON.stringify(work));
     const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
-    // const work = JSON.parse(localStorage.getItem("workorder"));
 
     let checked = work.questions;
     let novo = checked[name];
@@ -584,15 +465,6 @@ class Rooms extends Component {
     };
 
     localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
-    // if (checkedQuestions) {
-    //   // console.log("radi gde treba", optionOther);
-    //   // work[name] = optionOther;
-
-    // [name][value] = true;
-    // localStorage.setItem(
-    //   "checkedQuestions",
-    //   JSON.stringify(checkedQuestions)
-    // );
 
     this.setState({ showModalInputOther: true, checkedQuestions });
   };
@@ -604,7 +476,7 @@ class Rooms extends Component {
 
     work.questions = { ...work.questions, [name]: value };
     localStorage.setItem("workorder", JSON.stringify(work));
-    console.log("value", value);
+
     const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
 
     let checked = work.questions;
@@ -619,16 +491,9 @@ class Rooms extends Component {
 
     localStorage.setItem("checkedQuestions", JSON.stringify(checkedQuestions));
 
-    //
-    // let checked = work.questions;
-    // let novo = checked[name];
-    // let checked1 = { other: [novo] };
-
-    // localStorage.setItem(name, JSON.stringify(checked1));
     this.setState({ optionOther: value });
   };
   handleOptionYes = e => {
-    // console.log("eee", e.target.value, e.currentTarget.name);
     const value = e.target.value;
     const name = e.currentTarget.name.toLowerCase();
     const showModalInputOther = this.state.showModalInputOther;
@@ -668,35 +533,19 @@ class Rooms extends Component {
     this.setState({ showModalInputOther: false, checkedQuestions });
   };
   handleAppliancesOptions(e) {
-    // let checked = this.state.checked;
-    // checked[e.currentTarget.name] = e.target.checked;
-    // let microwave = this.state.microwave;
-    // microwave[0].checked = true;
-    // this.setState({
-    //   checked
-    //   // appliancesName: false,
-    //   // stove: false,
-    //   // ac: false
-    // });
-
     const value = e.target.value;
     let name = e.target.attributes.getNamedItem("name").value;
-    // console.log(e.currentTarget.data - name);
 
     const showModalInputOther = this.state.showModalInputOther;
     const work = JSON.parse(localStorage.getItem("workorder"));
-    // if (work.questions.appliances[name]) {
-    //   work.questions.appliances[name].push(value);
-    // } else {
+
     let name1 = name;
 
     work.questions.appliances = {
       ...work.questions.appliances,
       [name]: [value]
-      //   };
-      //   // console.log(work.questions.appliances[name].push(value));
     };
-    // work.questions.appliances[name].push(value);
+
     localStorage.setItem("workorder", JSON.stringify(work));
     const checked1 = JSON.parse(localStorage.getItem("checkedQuestions"));
     if (checked1) {
@@ -729,13 +578,15 @@ class Rooms extends Component {
   }
 
   handleAppliances(e, name) {
-    // const value = e.target.value;
-    // const idName = e.currentTarget.idName;
-    // const showModalInputOther = this.state.showModalInputOther;
-
     const work = JSON.parse(localStorage.getItem("workorder"));
+
+    if (!work.questions) {
+      work.questions = {};
+      localStorage.setItem("workorder", JSON.stringify(work));
+    }
+
     const checked = JSON.parse(localStorage.getItem("checkedQuestions"));
-    console.log("nameeee", name);
+
     if (!work.questions.appliances) {
       const appliances = {};
       work.questions = { ...work.questions, appliances };
@@ -757,9 +608,7 @@ class Rooms extends Component {
       const stove = this.state.stove;
       const stove1 = this.state.stove1;
       const stove2 = this.state.stove2;
-      console.log("stove eee", name, stove);
-      // this.setState({ [name.toLowerCase()]: true });
-      console.log("uslo u stove");
+
       this.setState({
         active: name,
         stove,
@@ -768,22 +617,18 @@ class Rooms extends Component {
         appliancesName: name.toLowerCase()
       });
     } else if (name.toLowerCase() == "microwave") {
-      console.log("microwave", name);
       this.setState({
         active: name,
         appliancesName: this.state.microwave,
         appliancesName1: false
       });
-      console.log("uslo u sove");
     } else if (name.toLowerCase() == "dishwasher") {
-      console.log("dishwasher", name);
       this.setState({
         active: name,
         appliancesName: this.state.dishwasher,
         appliancesName1: this.state.dishwasher1
       });
     } else {
-      console.log("refrige", name);
       this.setState({
         active: name,
         appliancesName: this.state.refrigeRator,
@@ -794,11 +639,10 @@ class Rooms extends Component {
 
   constructor(props) {
     super(props);
-    // const [show, seSt
+
     const setShow = false;
     const showModalInputOther = false;
-    // toast.error("Please enter Building and Apartment number");
-    // const build = [...this.state.build];
+
     let start = "";
     let buildingState = "";
     let build = "";
@@ -944,34 +788,7 @@ class Rooms extends Component {
     const appliancesName1 = this.state.appliancesName1;
     const active = this.state.active;
     const appliances = this.state.appliances;
-    console.log("act", active === "refrigeRator");
-    // const customStyles = {
-    //   content: {
-    //     // textAlign: "center",
-    //     top: "50%",
-    //     left: "50%",
-    //     right: "auto",
-    //     bottom: "auto",
-    //     marginRight: "-50%",
-    //     transform: "translate(-50%, -50%)"
-    //   }
-    // };
-    // const customStyles = {
-    //   content: {
-    //     position: "absolute",
-    //     top: "100px",
-    //     left: "100px",
-    //     right: "100px",
-    //     bottom: "100px",
-    //     border: "1px solid rgb(204, 204, 204)",
-    //     background: "rgb(255, 255, 255)",
-    //     overflow: "auto",
-    //     borderRadius: "4px",
-    //     outline: "none",
-    //     padding: "20px"
-    //   }
-    // };
-    // let isLoading = this.state.isLoading;
+
     let adress = [];
     let other = false;
     let button = this.state.button.toLowerCase();
@@ -985,17 +802,16 @@ class Rooms extends Component {
     }
 
     let value2 = this.state.value2;
-    // let value3 = this.state.value3;
-    // console.log(typeof this.state.buildingNum);
+
     let showing = this.state.showing;
     let saved = false;
-    // let isLoading = this.state.isLoading;
+
     let isLoadingFullRoom = this.state.isLoadingFullRoom;
-    console.log("APPLIANCES NAME", appliancesName);
+
     if (JSON.parse(localStorage.getItem("chosenOpt")) == "saved") {
       saved = true;
     }
-    // );
+
     let workorder = JSON.parse(localStorage.getItem("workorder"));
     let value = "";
     value = this.state.value;
@@ -1004,7 +820,6 @@ class Rooms extends Component {
     let building = "";
 
     if (this.state.buildingNum && workorder.adress != undefined) {
-      // console.log("radi");
       value = workorder.apartmentNumber;
       adress = workorder.adress;
 
@@ -1100,17 +915,17 @@ class Rooms extends Component {
 
           {isLoading || !isLoadingFullRoom ? (
             <div className="col-6 m-3">
-              <div class="spinner-border text-success" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner-border text-success" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
-              <div class="spinner-border text-danger" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner-border text-danger" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
-              <div class="spinner-border text-warning" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner-border text-warning" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
-              <div class="spinner-border text-info" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner-border text-info" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
             </div>
           ) : null}
@@ -1139,59 +954,14 @@ class Rooms extends Component {
               <div className="col-sm-9">
                 {this.state.buttons.map(button => (
                   <button
-                    className=" btn  btn-primary  m-1"
+                    key={button}
+                    className="btn  btn-primary  m-1"
                     onClick={() => this.handleShow(button)}
                   >
                     {button}
                   </button>
                 ))}
 
-                {/* <button
-                className=" btn  btn-primary  m-1"
-                onClick={() => this.handleShow("Paint")}
-              >
-                Paint
-              </button>
-              <button
-                className=" btn btn-primary   m-1"
-                onClick={() => this.handleShow("Appliances")}
-              >
-                Appliances
-              </button>
-              <button
-                className="btn btn-primary   m-1"
-                onClick={() => this.handleShow("Windows")}
-              >
-                Windows
-              </button>
-              <button
-                className=" btn btn-primary   m-1"
-                onClick={() => this.handleShow("Blinds")}
-              >
-                Blinds
-              </button>
-              <button
-                className=" btn btn-primary    m-1"
-                onClick={() => this.handleShow("Cleaning")}
-              >
-                Cleaning
-              </button>
-              <button
-                className="btn btn-primary   m-1"
-                onClick={() => this.handleShow("Re-glazed")}
-              >
-                Re-glazed
-              </button>
-              <button
-                className="btn btn-primary   m-1"
-                onClick={() => this.handleShow("Pest Cont")}
-              >
-                Pest Cont
-              </button> */}
-
-                {/* <Button variant="primary" onClick={this.handleShow}>
-              Launch demo modal
-            </Button> */}
 
                 <Modal show={this.state.setShow} onHide={this.handleClose}>
                   <Modal.Header id="modal-styling-title" closeButton>
@@ -1219,38 +989,11 @@ class Rooms extends Component {
                                     ? "btn btn-sm btn-success p-1 active"
                                     : "btn btn-sm btn-warning p-1"
                                 }
-                                // className={`btn btn-sm btn-warning mr-1 ${active}`}
+                               
                               >
                                 {app.name}
                               </button>
-                              {/* <button
-                              onClick={e =>
-                                this.handleAppliances(e, "Microwave")
-                              }
-                              className="btn btn-sm btn-warning m-1"
-                            >
-                              Microwave
-                            </button>
-                            <button
-                              onClick={e =>
-                                this.handleAppliances(e, "Dishwasher")
-                              }
-                              className="btn btn-sm btn-warning m-1"
-                            >
-                              Dishwasher
-                            </button>{" "}
-                            <button
-                              onClick={e => this.handleAppliances(e, "Stove")}
-                              className="btn btn-sm btn-warning m-1"
-                            >
-                              Stove
-                            </button>{" "}
-                            <button
-                              onClick={e => this.handleAppliances(e, "AC")}
-                              className="btn btn-sm btn-warning m-1"
-                            >
-                              A/C
-                            </button> */}
+                      
                             </div>
                           ))}
                         </div>
@@ -1320,54 +1063,7 @@ class Rooms extends Component {
                           )}
                         </div>
                       ) : (
-                        //           showModalInputOther?(
-                        //           <textarea
-                        //             onChange = { e => this.handleOptionOtherComment(e)}
-                        //     placeholder="Comment"
-                        //             name={button}
-                        //             id=""
-                        //     cols="50"
-                        //     rows="5"
-                        //   />
-                        // ) : null
-                        // <div className="col-12">
-                        //   <div className="col-12">
-                        //     <button
-                        //       onClick={e =>
-                        //         this.handleAppliances(e, "refrigeRator")
-                        //       }
-                        //       className="btn btn-sm btn-warning mr-1"
-                        //     >
-                        //       {" "}
-                        //       Refrige rator
-                        //     </button>
-                        //     <button
-                        //       onClick={e => this.handleAppliances(e, "Microwave")}
-                        //       className="btn btn-sm btn-warning m-1"
-                        //     >
-                        //       Microwave
-                        //     </button>
-                        //     <button
-                        //       onClick={e =>
-                        //         this.handleAppliances(e, "Dishwasher")
-                        //       }
-                        //       className="btn btn-sm btn-warning m-1"
-                        //     >
-                        //       Dishwasher
-                        //     </button>{" "}
-                        //     <button
-                        //       onClick={e => this.handleAppliances(e, "Stove")}
-                        //       className="btn btn-sm btn-warning m-1"
-                        //     >
-                        //       Stove
-                        //     </button>{" "}
-                        //     <button
-                        //       onClick={e => this.handleAppliances(e, "AC")}
-                        //       className="btn btn-sm btn-warning m-1"
-                        //     >
-                        //       A/C
-                        //     </button>
-                        //   </div>
+                   
 
                         <div className="col-12">
                           {appliancesName != "stove" &&
@@ -1426,37 +1122,7 @@ class Rooms extends Component {
                               ))}
                             </div>
                           ) : null}
-                          {/* <input
-                                className="m-3"
-                                type="radio"
-                                data-name={appliancesName}
-                                name={appliancesName}
-                                value="Stainless"
-                                onClick={e => this.handleAppliancesOptions(e)}
-                              />
-                              Stainless
-                              <br />
-                            </div>
-                            <div>
-                              <input
-                                className="m-3"
-                                type="radio"
-                                data-name={appliancesName + "1"}
-                                name={appliancesName + "1"}
-                                value="Standard"
-                                onClick={e => this.handleAppliancesOptions(e)}
-                              />
-                              Standard
-                              <input
-                                className="m-3"
-                                type="radio"
-                                data-name={appliancesName + "1"}
-                                name={appliancesName + "1"}
-                                value="Small"
-                                onClick={e => this.handleAppliancesOptions(e)}
-                              />
-                              Small
-                            </div> */}
+                        
                           {appliancesName == "stove" ? (
                             <div>
                               {stove.map(app => (
@@ -1522,103 +1188,7 @@ class Rooms extends Component {
                                   {app.value}
                                 </div>
                               ))}
-                              {/* <input
-                                  className="m-3"
-                                  type="radio"
-                                  data-name="Stove"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  name="stove1"
-                                  value="electric"
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                Electric
-                                <br />
-                                <input
-                                  className="m-3"
-                                  data-name="Stove1"
-                                  type="radio"
-                                  name="stove2"
-                                  value="30"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                30"
-                                <input
-                                  className="m-3"
-                                  type="radio"
-                                  data-name="Stove1"
-                                  name="stove2"
-                                  value="24"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                24"
-                                <input
-                                  className="m-3"
-                                  type="radio"
-                                  data-name="Stove1"
-                                  name="stove2"
-                                  value="20"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                20" <br /> */}
-                              {/* <input
-                                  className="m-3 p-3"
-                                  type="radio"
-                                  data-name="Stove2"
-                                  name="stove3"
-                                  value="White"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                White
-                                <input
-                                  className="m-3 p-3"
-                                  type="radio"
-                                  data-name="Stove2"
-                                  name="stove3"
-                                  value="Stainless"
-                                  checked={
-                                    JSON.parse(localStorage.getItem(app.name))
-                                      ? JSON.parse(
-                                          localStorage.getItem(app.name)
-                                        )[app.value]
-                                      : null
-                                  }
-                                  onClick={e => this.handleAppliancesOptions(e)}
-                                />
-                                Stainless <br /> */}
+                     
                             </div>
                           ) : null}
                           {appliancesName == "ac" ? (
@@ -1665,69 +1235,7 @@ class Rooms extends Component {
                                   {app.value}
                                 </div>
                               ))}
-                              {/* <input
-                              className="m-3"
-                              type="radio"
-                              data-name="AC"
-                              name={button}
-                              value="Rear Vent"
-                              // checked={
-                              //   JSON.parse(localStorage.getItem(app.name))
-                              //     ? JSON.parse(localStorage.getItem(app.name))[
-                              //         app.value
-                              //       ]
-                              //     : null
-                              // }
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            Rear Vent
-                            <input
-                              className="m-3"
-                              type="radio"
-                              data-name="AC"
-                              name={button}
-                              value="Standard"
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            Standard
-                            <input
-                              className="m-3"
-                              type="radio"
-                              data-name="AC"
-                              name={button}
-                              value="A/C Heater"
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            A/C Heater
-                             className="m-3"
-                              type="radio"
-                              data-name="AC1"
-                              name={button}
-                              value="12,000"
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            12,000
-                            <input
-                              className="m-3"
-                              type="radio"
-                              data-name="AC1"
-                              name={button}
-                              value="10,000"
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            10,000
-                            <input
-                              className="m-3"
-                              type="radio"
-                              data-name="AC1"
-                              name={button}
-                              value="8,000"
-                              onClick={e => this.handleAppliancesOptions(e)}
-                            />
-                            8,000
-                            <br />
-                          </div>
-                        ) : null}               <br /> */}
+                             
                             </div>
                           ) : null}
                         </div>
@@ -1735,78 +1243,28 @@ class Rooms extends Component {
                     </div>
                   </Modal.Body>
                   <Modal.Footer>
-                    {/* <Button variant="secondary" onClick={this.handleClose}>
-                  Close
-                </Button> */}
+                 
                     <Button variant="primary" onClick={this.handleClose}>
                       Close
                     </Button>
                   </Modal.Footer>
                 </Modal>
-                {/* <ReactModal
-              style={customStyles}
-              isOpen={this.state.showModal}
-              contentLabel="Minimal Modal Example"
-            >
-              <div className="row">
-                <div className="col-11 m-3">
-                  <h3 className="text-center">{button}</h3>
-                  <br />
-                  <input
-                    className="m-3"
-                    type="radio"
-                    name="gender"
-                    value="male"
-                  />
-                  Yes
-                  <br />
-                  <input
-                    className="m-3"
-                    type="radio"
-                    name="gender"
-                    value="female"
-                  />
-                  No
-                  <br />
-                  <input
-                    className="m-3"
-                    type="radio"
-                    name="gender"
-                    value="other"
-                  />
-                  Other
-                  <br />
-                </div>
-                <div className="col-12 text-right ">
-                  <button onClick={() => this.handleCloseModal()}>
-                    Close Modal
-                  </button>
-                </div>
-              </div>
-            </ReactModal> */}
+       
               </div>
             ) : null}
           </div>
         ) : null}
 
-        {/* <div className="row"> */}
-        {/* <p>Please select your gender:</p>
-          <input type="radio" name="gender" value="male" /> Male
-          <br />
-          <input type="radio" name="gender" value="female" /> Female
-          <br />
-          <input type="radio" name="gender" value="other" /> Other
-          <br />
-        </div> */}
+     
         {this.state.start && value && makeReady ? (
           <div className="row">
             {this.state.rooms.map(room => (
-              <div className="col-4 p-3">
+              <div key={room.id} className="col-4 p-3">
                 <div className="card mb-3 text-center">
                   <Link
                     className="links"
                     onClick={() => this.handleLinks(room.id)}
-                    // to={"/rooms/" + this.props.id + "/" + this.props.region}
+                    to="null"
                   >
                     <img
                       className="card-img-top img-fluid"

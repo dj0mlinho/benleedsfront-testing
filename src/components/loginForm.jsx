@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import qs from "qs";
-import { Redirect, Route } from "react-router-dom";
+
 import logo from "../img/ben-leeds-logo.png";
 import Joi from "joi-browser";
 import Form from "./common/form";
@@ -23,12 +23,10 @@ class LoginForm extends Form {
   };
 
   async componentDidMount() {
-    console.log(window.location);
     if (window.location.pathname === "/login") {
       const response = await axios.get(process.env.REACT_APP_API_URL);
       const buildings = response.data.buildings;
       localStorage.setItem("buildings", JSON.stringify(buildings));
-      console.log(response);
     }
   }
   doSubmit = async () => {
@@ -43,22 +41,10 @@ class LoginForm extends Form {
       password: data.password
     };
 
-    // console.log(params);
     const { data: response } = await axios.post(
       process.env.REACT_APP_API_URL + "/login",
       qs.stringify(params)
     );
-
-    // localStorage.setItem(
-    //   "completedWorkorders",
-    //   JSON.stringify(response.workorders)
-    // );
-    // localStorage.setItem(
-    //   "savedWorkorders",
-    //   JSON.stringify(response.tempWorkorders)
-    // );
-
-    // console.log(response);
 
     if (response.error === "no email" || response.error === "bad password") {
       const errors = { ...this.state.errors };
@@ -75,7 +61,6 @@ class LoginForm extends Form {
         localStorage.setItem("admin", JSON.stringify(data));
         this.props.history.push(`./admin`);
       } else {
-        console.log(response.user);
         const currentUser = {
           emailPassword: response.user.emailPassword,
           name: response.user.name,
@@ -85,7 +70,7 @@ class LoginForm extends Form {
           region: response.user.region,
           _id: response.user._id
         };
-        // console.log(user);
+
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
         localStorage.removeItem("building");
         localStorage.removeItem("startBtn");

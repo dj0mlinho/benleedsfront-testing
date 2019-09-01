@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import "../css/navbar.css";
 import logo from "../img/ben-leeds-logo.png";
-import user from "../img/user.jpg";
-import WorkOrder from "./workOrder";
-import { BrowserRouter } from "react-router-dom";
 
 class NavBar extends Component {
   state = {
@@ -16,23 +13,6 @@ class NavBar extends Component {
   async componentDidMount() {
     let source = JSON.parse(localStorage.getItem("currentUser")).imgPath;
     this.setState({ source });
-    // const userId = "5d42f45141318e15a443b260";
-    // const response = await axios.get(
-    //   process.env.REACT_APP_API_URL + `/avatar/${userId}`,
-    //   { responseType: "arraybuffer" }
-    // );
-
-    // console.log("resonse", response);
-    // // this.setState({ img });
-    // // console.log(img);
-    // const base64 = btoa(
-    //   new Uint8Array(response.data).reduce(
-    //     (data, byte) => data + String.fromCharCode(byte),
-    //     ""
-    //   )
-    // );
-    // console.log(base64);
-    // this.setState({ source: "data:;base64," + base64 });
   }
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
@@ -46,57 +26,36 @@ class NavBar extends Component {
       e.preventDefault();
       e.persist();
       let userId = JSON.parse(localStorage.getItem("currentUser"))._id;
-      // let workorders = JSON.parse(localStorage.getItem("savedWorkorders"));
 
-      // console.log(userId);
-      // let workorders = JSON.parse(localStorage.getItem("savedWorkorders"));
-      // let workorders1 =
       const data = await axios.get(
         process.env.REACT_APP_API_URL + `/user/getAllTempWorkorders/${userId}`
       );
-      console.log(data);
+
       localStorage.setItem("savedWorkorders", JSON.stringify(data.data));
       localStorage.setItem("workorders", JSON.stringify(data.data));
       localStorage.setItem("chosenOpt", JSON.stringify("saved"));
-      // console.log(workorders1);
-      // workorders = data;
-      // window.alert("In development...");
-      // let value = "saved";
+
       this.props.history.push(`/user/workorders/${e.target.value}`);
-      // document.location.reload();
+
       document.location.reload();
     } else if (e.target.value == "pending") {
       // let userId = JSON.parse(localStorage.getItem("savedWorkorders")).userId;
       e.preventDefault();
       e.persist();
       let userId = JSON.parse(localStorage.getItem("currentUser"))._id;
-      // let workorders = JSON.parse(localStorage.getItem("savedWorkorders"));
 
-      console.log(userId);
-      // let workorders = JSON.parse(localStorage.getItem("savedWorkorders"));
-      // let workorders1 =
       const data = await axios.get(
         process.env.REACT_APP_API_URL + `/user/allUserWorkorders/${userId}`
       );
-      console.log(data.data);
-      // if (data) {
-      // localStorage.setItem("savedWorkorders", JSON.stringify(data.data));
+
       localStorage.setItem("completedWorkorders", JSON.stringify(data.data));
-      console.log(e.target.value);
 
       localStorage.removeItem("jobs");
-      // let allWorkorders = JSON.parse(localStorage.getItem("workorders"));
-      // let completedWorkorders = allWorkorders.filter(
-      //   m => m.status == "pending"
-      // );
-      // let workorders = completedWorkorders;
+
       localStorage.setItem("workorders", JSON.stringify(data.data));
       localStorage.setItem("chosenOpt", JSON.stringify("pending"));
-      // window.location.reload();
+
       this.props.history.push(`/user/workorders/${e.target.value}`);
-      // document.location.reload();
-      // }
-      // window.location = `/user/workorders/${e.target.value}`;
     } else if (e.target.value == "new") {
       localStorage.removeItem("jobs");
       localStorage.removeItem("makeReady");
@@ -128,20 +87,6 @@ class NavBar extends Component {
 
   constructor(props) {
     super(props);
-
-    // const buildings = JSON.parse(localStorage.getItem("buildings")).filter(
-    //   m => m.region === this.props.match.params.id
-    // );
-
-    // const data = [...this.state.data];
-
-    // const d = buildings.map(
-    //   element => (element.value = element.adress + " (" + element.zip + ")")
-    // );
-
-    // const showing = false;
-    // data.push(d);
-    // this.state = { data, showing };
   }
 
   handleChange(e) {
@@ -155,7 +100,6 @@ class NavBar extends Component {
   }
 
   render() {
-    console.log("location state", this.props.location.state);
     let start = "";
     let klasa = "";
     let building = "";
@@ -183,7 +127,7 @@ class NavBar extends Component {
     if (JSON.parse(localStorage.getItem("chosenOpt")) == "saved") {
       saved = true;
     }
-    console.log(this.props.buildingState);
+
     if (this.props.buildingState) {
       if (JSON.parse(localStorage.getItem("building")) != null) {
         building = JSON.parse(localStorage.getItem("building"));
@@ -229,14 +173,14 @@ class NavBar extends Component {
             <div className="card card-user col-sm-4 offset-sm-4 ">
               <img
                 src={this.state.source}
-                class="card-img-top user-img"
+                className="card-img-top user-img"
                 alt="..."
               />
-              <div class="card-body user-name">
-                <h5 class="card-title">{userName}</h5>
+              <div className="card-body user-name">
+                <h5 className="card-title">{userName}</h5>
               </div>
-              <div class="card-footer user-info">
-                <small class="text-center">{region}</small>
+              <div className="card-footer user-info">
+                <small className="text-center">{region}</small>
               </div>
             </div>
           ) : null}
@@ -277,17 +221,6 @@ class NavBar extends Component {
               ) : (
                 <option value="pending">Sent Work Orders</option>
               )}
-              {/* <label class="mdb-main-label">Blue select</label> */}
-              {/* <option value="">Select building</option>
-                  {this.props.build[0].map(e => {
-                    console.log(e);
-                    // console.log(e);
-                    // console.log(this.state.data);
-                    // console.log(e);
-                    // console.log(index);
-
-                    return <option value={e}>{e}</option>;
-                  })} */}
             </select>
           </div>
         ) : null}
@@ -350,7 +283,7 @@ class NavBar extends Component {
                     className={`build-input ${this.props.classs}`}
                   />
                 </div>
-                {/* <label className="btn btn-secondary ">Workorders</label> */}
+             
               </div>
 
               <div className="col-sm-4">
@@ -367,30 +300,25 @@ class NavBar extends Component {
                   />
                 </div>
 
-                {/* <label className="btn btn-secondary ">Workorders</label> */}
               </div>
 
               {this.props.buildingState ? (
                 <div className="col-12">
-                  <div class="card text-dark bg-light mb-3">
-                    <div class="card-header">Manager Info</div>
-                    <div class="card-body">
-                      <h5 class="card-title">{"Name: " + managerName}</h5>
-                      <p class="card-text">{"Phone: " + managerPhone}</p>
-                      <p class="card-text">{"Email: " + managerEmail}</p>
+                  <div className="card text-dark bg-light mb-3">
+                    <div className="card-header">Manager Info</div>
+                    <div className="card-body">
+                      <h5 className="card-title">{"Name: " + managerName}</h5>
+                      <p className="card-text">{"Phone: " + managerPhone}</p>
+                      <p className="card-text">{"Email: " + managerEmail}</p>
                     </div>
                   </div>
 
-                  {/* <label className="btn btn-secondary ">Workorders</label> */}
                 </div>
               ) : null}
             </div>
           ) : null}
         </div>
-        {/* <div>
-
-
-        </div> */}
+    
       </nav>
     );
   }

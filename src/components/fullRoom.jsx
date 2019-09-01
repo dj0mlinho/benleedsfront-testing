@@ -9,7 +9,6 @@ import "../css/fullroom.css";
 import { getRooms } from "../services/fakeRoomService";
 import axios from "axios";
 import SearchBox from "./common/searchbox";
-import { KeyObject } from "crypto";
 
 class FullRoom extends Form {
   state = {
@@ -24,31 +23,8 @@ class FullRoom extends Form {
     build: []
   };
 
-  componentDidMount() {
-    // this.refs.iScroll.addEventListener("scroll", () => {
-    //   if (
-    //     this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=
-    //     this.refs.iScroll.scrollHeight
-    //   ) {
-    //     this.loadMoreItems();
-    //   }
-    // });
-  }
-  // loadMoreItems() {
-  //   let renderedItems = [...this.state.renderedItems];
-  //   // console.log("provera", this.state.itemsi);
-  //   // for (var i = 0; i < this.state.itemsi; i++) {
-  //   //   itemsiii.push(this.state.renderedItems[i]);
-  //   // }
-  //   // console.log("renderedItems", renderedItems);
-  //   // this.setState({ loadingState: true });
-  //   // setTimeout(() => {
-  //   // this.setState({ itemsi: this.state.itemsi + 10 });
+  componentDidMount() {}
 
-  //   renderedItems = this.state.renderedItemsExtra;
-  //   this.setState({ renderedItems });
-  //   // }, 3000);
-  // }
   getCurrentRoom = () => {
     return this.props.match.params.id;
   };
@@ -64,7 +40,7 @@ class FullRoom extends Form {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
 
     let jobs = [...allItems].filter(m => m.checked === true);
-    // const jobs = JSON.parse(localStorage.getItem("jobs"));
+
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -79,8 +55,6 @@ class FullRoom extends Form {
       JSON.stringify(finalData)
     );
     if (data.statusText === "OK") {
-      console.log("newW", finalData);
-      console.log("newW", data);
       this.props.history.push("/rooms/" + this.props.match.params.m);
     }
   };
@@ -127,8 +101,6 @@ class FullRoom extends Form {
       JSON.stringify(finalData)
     );
     if (data.statusText === "OK") {
-      console.log(finalData, "NewWorkorder");
-      console.log(data);
       this.props.history.push(
         "/rooms/" + this.props.match.params.id + "/work-order"
       );
@@ -141,7 +113,6 @@ class FullRoom extends Form {
 
   handleChangeArea = ({ currentTarget: input }) => {
     const value = this.state.value1;
-    console.log(input.name, value);
 
     value[input.id] = input.value;
 
@@ -168,7 +139,6 @@ class FullRoom extends Form {
     const obj = { [name]: value };
     const schema = { [name]: this.state.schema[name] };
     const { error } = Joi.validate(obj, schema);
-    console.log(error);
 
     return error ? error.details[0].message : null;
   };
@@ -184,10 +154,7 @@ class FullRoom extends Form {
     const data = { ...this.state.data };
 
     data[input.id] = input.value;
-    // console.log(input.value);
 
-    // let number = e.currentTarget.value;
-    // console.log(number);
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const rooms = this.state.allItems.find(room => room._id === input.id);
 
@@ -229,9 +196,8 @@ class FullRoom extends Form {
       m => m.number == buildNumber
     );
 
-    // element.value = element.number + " (" + element.zip + ")";
     const adress = buildings.adress + " (" + buildings.zip + ")";
-    // console.log(buildings);
+
     this.setState({ adress });
   };
   async handleHomeButton() {
@@ -239,8 +205,6 @@ class FullRoom extends Form {
     let jobs = [...allItems].filter(m => m.checked === true);
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
-
-    console.log(work);
     work.autosaveTime = new Date();
     if (jobs != null) {
       work.jobs = jobs;
@@ -250,7 +214,6 @@ class FullRoom extends Form {
       localStorage.getItem("checkedQuestions")
     );
 
-    console.log(work);
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
 
@@ -259,8 +222,6 @@ class FullRoom extends Form {
       JSON.stringify(finalData)
     );
 
-    console.log("newWorkorder", finalData);
-    console.log("newW", data);
     if (data.statusText === "OK") {
       let work = JSON.parse(localStorage.getItem("workorder"));
 
@@ -291,11 +252,9 @@ class FullRoom extends Form {
   }
   handleCheckboxChange = e => {
     const checked = { ...this.state.checked };
-    // let value = this.state.value;
-    // console.log(this.state.value);
+
     let value = this.state.value;
 
-    // console.log(this.state.value);
     const rooms = this.state.allItems.find(
       room => room._id === e.currentTarget.id
     );
@@ -310,14 +269,11 @@ class FullRoom extends Form {
       rooms.checked = false;
 
       rooms.quantity = value;
-      // localStorage.setItem("allItems", JSON.stringify(this.state.allItems));
-      // localStorage.setItem("jobs", JSON.stringify(this.state.allItems));
 
       this.setState({ checked, checkedTrue: true });
     } else {
       checked[e.currentTarget.id] = e.target.checked;
       rooms.checked = true;
-      // console.log(this.state.quantity);
 
       if (
         this.state.data[e.currentTarget.id] == undefined ||
@@ -325,9 +281,7 @@ class FullRoom extends Form {
       ) {
         value = 1;
       }
-      // if (value == undefined) {
-      //   value = 1;
-      // }
+
       if (this.state.data[e.currentTarget.id] != undefined) {
         value = this.state.data[e.currentTarget.id];
       } else {
@@ -353,9 +307,7 @@ class FullRoom extends Form {
 
   handleLinks = (e, link) => {
     let target = this.state.target;
-    // console.log(link);
-    // let b = e.currentTarget.target;
-    // console.log(e.currentTarget.target);
+
     if (link == "") {
       target = "#";
       this.setState({ target });
@@ -368,10 +320,9 @@ class FullRoom extends Form {
   handleSquare = e => {
     let value2 = "";
     let work = JSON.parse(localStorage.getItem("workorder"));
-    // value = workorder.apartmentNumber;
+
     work.squareFeet = e.target.value;
-    // const workOrder = JSON.parse(localStorage.getItem("workorder"));
-    // workOrder.workorder.apartmentNumber = e.target.value;
+
     localStorage.setItem("workorder", JSON.stringify(work));
 
     this.setState({
@@ -405,10 +356,6 @@ class FullRoom extends Form {
     let allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
     if (jobs != undefined) {
-      // const jobs = JSON.parse(localStorage.getItem("jobs"));
-      // const jobsi = [...jobs];
-
-      console.log("da vidimo sad", jobs);
       allItems = JSON.parse(localStorage.getItem("allItems"));
       data = { ...this.state.data };
       let newArr = [...jobs];
@@ -420,22 +367,11 @@ class FullRoom extends Form {
 
       data = datas;
 
-      // console.log(jobs);
-      // localStorage.setItem("jobs", JSON.stringify(checked));
-
       room = this.props.match.params.id;
 
       room0 = rooms.filter(m => m.id == this.props.match.params.id);
 
       renderedItems = allItems.filter(m => m.room === room0[0].name);
-      // console.log();
-
-      // let itemsiii = [];
-
-      // renderedItemsRegular = renderedItems.filter(m => m.status === "regular");
-      // renderedItemsExtra = renderedItems.filter(m => m.status === "extra");
-      // renderedItems = renderedItemsRegular;
-      // console.log("ALL ITEMS NOVO", renderedItems);
     } else {
       allItems = JSON.parse(localStorage.getItem("allItems"));
 
@@ -444,9 +380,6 @@ class FullRoom extends Form {
       room0 = rooms.filter(m => m.id == this.props.match.params.id);
 
       renderedItems = allItems.filter(m => m.room === room0[0].name);
-      // {
-      //   renderedItems.map(item => (checked[item.name] = false));
-      // }
     }
     let schema = this.state.schema;
 
@@ -495,15 +428,6 @@ class FullRoom extends Form {
   }
 
   render() {
-    // console.log("provera iz rendera", this.state.data);
-    // // console.log(this.state.renderedItems);
-
-    // // console.log(this.state.data);
-    // // // let number = 1;
-    // // // if (this.state.value==undefined){
-    // // //   number=
-    // // // }
-    // console.log("status", this.state.status);
     let checked = this.state.checked;
     let checkedTrue = this.state.checkedTrue;
 
