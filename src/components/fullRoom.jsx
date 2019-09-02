@@ -201,53 +201,79 @@ class FullRoom extends Form {
     this.setState({ adress });
   };
   async handleHomeButton() {
-    const allItems = JSON.parse(localStorage.getItem("allItems"));
-    let jobs = [...allItems].filter(m => m.checked === true);
-    // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
-    work.autosaveTime = new Date();
-    if (jobs != null) {
-      work.jobs = jobs;
+    let finalData = {};
+    if (work.buildingNumber && work.apartmentNumber) {
+      finalData.buildingNumber = work.buildingNumber;
+      finalData.apartmentNumber = work.apartmentNumber;
+      finalData.userId = work.userId;
     }
 
-    work.checkedQuestions = JSON.parse(
-      localStorage.getItem("checkedQuestions")
-    );
+    // this.setState({ isLoading: false });
 
-    localStorage.setItem("workorder", JSON.stringify(work));
-    const finalData = JSON.parse(localStorage.getItem("workorder"));
-
-    const data = await axios.post(
-      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+    const data1 = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
       JSON.stringify(finalData)
     );
 
-    if (data.statusText === "OK") {
-      let work = JSON.parse(localStorage.getItem("workorder"));
+    console.log(data1);
 
-      localStorage.removeItem("jobs");
-
-      localStorage.removeItem("startBtn");
-      localStorage.removeItem("building");
-      localStorage.removeItem("chosenOpt");
-      work.jobs = {};
-      work.buildingNumber = "";
-      work.apartmentNumber = "";
-      work.adress = "";
-      work.squareFeet = "";
-      work.level = "";
-      work.checkedQuestions = "";
-
-      localStorage.removeItem("checkedQuestions");
-      localStorage.removeItem("makeReady");
-      delete work._id;
-      delete work.questions;
+    if (data1.data) {
+      let _id = data1.data._id;
+      work._id = _id;
 
       localStorage.setItem("workorder", JSON.stringify(work));
-      const region = JSON.parse(localStorage.getItem("currentUser")).region;
-      // this.setState({ buildingState: false });
-      this.props.history.push(`/rooms/${region}`);
-      document.location.reload();
+      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+    }
+    if (data1.statusText === "OK") {
+      const allItems = JSON.parse(localStorage.getItem("allItems"));
+      let jobs = [...allItems].filter(m => m.checked === true);
+      // const jobs = JSON.parse(localStorage.getItem("jobs"));
+      const work = JSON.parse(localStorage.getItem("workorder"));
+      work.autosaveTime = new Date();
+      if (jobs != null) {
+        work.jobs = jobs;
+      }
+      console.log(work);
+      work.checkedQuestions = JSON.parse(
+        localStorage.getItem("checkedQuestions")
+      );
+
+      localStorage.setItem("workorder", JSON.stringify(work));
+      const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+      const data = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+        JSON.stringify(finalData)
+      );
+
+      if (data.statusText === "OK") {
+        let work = JSON.parse(localStorage.getItem("workorder"));
+
+        localStorage.removeItem("jobs");
+
+        localStorage.removeItem("startBtn");
+        localStorage.removeItem("building");
+        localStorage.removeItem("chosenOpt");
+        work.jobs = {};
+        work.buildingNumber = "";
+        work.apartmentNumber = "";
+        work.adress = "";
+        work.squareFeet = "";
+        work.level = "";
+        work.checkedQuestions = "";
+
+        localStorage.removeItem("checkedQuestions");
+        localStorage.removeItem("makeReady");
+        delete work._id;
+        delete work.questions;
+
+        localStorage.setItem("workorder", JSON.stringify(work));
+        const region = JSON.parse(localStorage.getItem("currentUser")).region;
+        // this.setState({ buildingState: false });
+        this.props.history.push(`/rooms/${region}`);
+        document.location.reload();
+      }
     }
   }
   handleCheckboxChange = e => {

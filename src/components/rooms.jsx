@@ -22,7 +22,7 @@ class Rooms extends Component {
       "isLoadingFullRoom",
       JSON.stringify(isLoadingFullRoom)
     );
-    this.setState({ isLoadingFullRoom: false, isLoading: true });
+    this.setState({ start: true, isLoadingFullRoom: false, isLoading: true });
 
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
@@ -74,18 +74,17 @@ class Rooms extends Component {
         let unchecked = allItems.filter(
           d => d._id != checkedArr.find(m => m == d._id)
         );
+        console.log(this.props);
         allItems = checked.concat(unchecked);
         localStorage.setItem("allItems", JSON.stringify(allItems));
-
-        this.props.history.push(
-          "/rooms/" + id + "/" + this.props.match.params.id
-        );
+        const region = JSON.parse(localStorage.getItem("currentUser")).region;
+        this.props.history.push("/rooms/" + id + "/" + region);
       }
     }
   };
 
   async handleAsync() {
-    this.setState({ start: true, isLoading: true });
+    this.setState({ start: true, isLoadingFullRoom: false });
     const work = JSON.parse(localStorage.getItem("workorder"));
     if (work.buildingNumber && work.apartmentNumber) {
       let finalData = {};
@@ -108,6 +107,9 @@ class Rooms extends Component {
         );
 
         if (data2.statusText === "OK") {
+          this.setState({
+            isLoadingFullRoom: true
+          });
           let allItems = JSON.parse(localStorage.getItem("allItems"));
           let jobsi = [];
           if (data2.data.jobs != undefined) {
@@ -382,19 +384,19 @@ class Rooms extends Component {
     let start = true;
 
     localStorage.setItem("startBtn", JSON.stringify(start));
-    this.setState({ start: true, isLoading: false });
+    this.setState({ start: true, isLoading: false, startMakeReady: true });
     let makeReady = true;
     localStorage.setItem("makeReady", JSON.stringify(makeReady));
     this.setState({ makeReady: true });
     const allItems = JSON.parse(localStorage.getItem("allItems"));
-    let jobs = [...allItems].filter(m => m.checked === true);
+    // let jobs = [...allItems].filter(m => m.checked === true);
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
 
-    work.autosaveTime = new Date();
-    if (jobs != null) {
-      work.jobs = jobs;
-    }
+    // work.autosaveTime = new Date();
+    // if (jobs != null) {
+    //   work.jobs = jobs;
+    // }
     work.checkedQuestions = JSON.parse(
       localStorage.getItem("checkedQuestions")
     );
@@ -732,11 +734,13 @@ class Rooms extends Component {
     if (localStorage.getItem("building")) {
       buildingState = true;
     }
+    let startMakeReady = false;
     let appliancesName = [];
     let appliancesName1 = [];
     let allApp = ["Refrige Rator", "Microwave", "Dishwasher"];
     let rooms = getRooms();
     this.state = {
+      startMakeReady,
       stove,
       stove1,
       stove2,
@@ -780,7 +784,7 @@ class Rooms extends Component {
     } else {
       checkedQuestions = [];
     }
-
+    const startMakeReady = this.state.startMakeReady;
     let isLoading = false;
     const stove = this.state.stove;
     const stove1 = this.state.stove1;
@@ -882,7 +886,7 @@ class Rooms extends Component {
           onChangeBuildings={() => this.handleChangeBuilding()}
         />
         <div className="buttons">
-          {this.state.start && !this.state.isLoading ? (
+          {this.state.start && !this.state.isLoading && startMakeReady ? (
             <button
               onClick={() => this.handleBackButton()}
               className="btn btn-warning m-3"
@@ -898,7 +902,7 @@ class Rooms extends Component {
               🏙 Home
             </button>
           </div>
-          {this.state.start && !this.state.isLoading ? (
+          {this.state.start && !this.state.isLoading && startMakeReady ? (
             <button
               onClick={() => this.handleFinishedButton()}
               className="btn btn-primary m-3"
@@ -941,314 +945,326 @@ class Rooms extends Component {
               &#x2716; Logout
             </button>
           </div>
-      
-        {this.state.start && value ? (
-          <div className="row m-2 questions">
-            {!makeReady ? (
-              <div className="col-sm-3">
-                <button
-                  onClick={() => this.handleMakeReady()}
-                  className="btn btn-outline-primary btn-lg m-1"
-                >
-                  Make Ready
-                </button>
-              </div>
-            ) : null}
-            {!makeReady ? (
-              <div className="col-sm-9">
-                {this.state.buttons.map(button => (
-                  <button
-                    key={button}
-                    className="btn  btn-primary  m-1"
-                    onClick={() => this.handleShow(button)}
-                  >
-                    {button}
-                  </button>
-                ))}
 
-                <Modal show={this.state.setShow} onHide={this.handleClose}>
-                  <Modal.Header id="modal-styling-title" closeButton>
-                    <div className="row">
-                      <div className="col-12 text-center">
-                        <Modal.Title className="btn btn-outline-info">
-                          {" "}
-                          {button.toUpperCase()}
-                        </Modal.Title>
-                      </div>
-                    </div>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <div className="row">
-                      {button == "appliances" ? (
-                        <div className="row">
-                          {appliances.map(app => (
-                            <div className="m-3">
-                              <button
-                                onClick={e =>
-                                  this.handleAppliances(e, app.type)
-                                }
-                                className={
-                                  active === app.type
-                                    ? "btn btn-sm btn-success p-1 active"
-                                    : "btn btn-sm btn-warning p-1"
-                                }
-                              >
-                                {app.name}
-                              </button>
-                            </div>
-                          ))}
+          {this.state.start && value && isLoadingFullRoom ? (
+            <div className="row m-2 questions">
+              {!makeReady ? (
+                <div className="col-sm-3">
+                  <button
+                    onClick={() => this.handleMakeReady()}
+                    className="btn btn-outline-primary btn-lg m-1"
+                  >
+                    Make Ready
+                  </button>
+                </div>
+              ) : null}
+              {!makeReady ? (
+                <div className="col-sm-9">
+                  {this.state.buttons.map(button => (
+                    <button
+                      key={button}
+                      className="btn  btn-primary  m-1"
+                      onClick={() => this.handleShow(button)}
+                    >
+                      {button}
+                    </button>
+                  ))}
+
+                  <Modal show={this.state.setShow} onHide={this.handleClose}>
+                    <Modal.Header id="modal-styling-title" closeButton>
+                      <div className="row">
+                        <div className="col-12 text-center">
+                          <Modal.Title className="btn btn-outline-info">
+                            {" "}
+                            {button.toUpperCase()}
+                          </Modal.Title>
                         </div>
-                      ) : null}
-                      {button !== "appliances" ? (
-                        <div className="col-12 m-3">
-                          {/* <h3 className="text-center">{button}</h3> */}
-                          <input
-                            className="m-3"
-                            type="radio"
-                            name={button}
-                            checked={
-                              checkedQuestions[button]
-                                ? checkedQuestions[button]["yes"]
-                                : null
-                            }
-                            value="yes"
-                            onClick={e => this.handleOptionYes(e)}
-                          />
-                          Yes
-                          <br />
-                          <input
-                            className="m-3"
-                            type="radio"
-                            name={button}
-                            value="no"
-                            checked={
-                              checkedQuestions[button]
-                                ? checkedQuestions[button]["no"]
-                                : null
-                            }
-                            onClick={e => this.handleOptionNo(e)}
-                          />
-                          No
-                          <br />
-                          <input
-                            className="m-3"
-                            type="radio"
-                            name={button}
-                            value="other"
-                            checked={
-                              checkedQuestions[button + "1"]
-                                ? checkedQuestions[button + "1"]["other"]
-                                : ""
-                            }
-                            onClick={e => this.handleOptionOther(e)}
-                          />
-                          Other
-                          <br />
-                          {showModalInputOther || other ? (
-                            <textarea
-                              onChange={e => this.handleOptionOtherComment(e)}
-                              placeholder="Comment"
+                      </div>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div className="row ">
+                        {button == "appliances" ? (
+                          <div className="row m-1">
+                            {appliances.map(app => (
+                              <div className="m-1">
+                                <button
+                                  onClick={e =>
+                                    this.handleAppliances(e, app.type)
+                                  }
+                                  className={
+                                    active === app.type
+                                      ? "btn btn-sm btn-success p-1 active"
+                                      : "btn btn-sm btn-warning p-1"
+                                  }
+                                >
+                                  {app.name}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                        {button !== "appliances" ? (
+                          <div className="col-12 m-1">
+                            {/* <h3 className="text-center">{button}</h3> */}
+                            <input
+                              className="m-3"
+                              type="radio"
                               name={button}
-                              id=""
-                              cols="50"
-                              rows="5"
-                              className="option-other"
-                              value={
+                              checked={
                                 checkedQuestions[button]
-                                  ? checkedQuestions[button]["other"]
+                                  ? checkedQuestions[button]["yes"]
+                                  : null
+                              }
+                              value="yes"
+                              onClick={e => this.handleOptionYes(e)}
+                            />
+                            Yes
+                            <br />
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="no"
+                              checked={
+                                checkedQuestions[button]
+                                  ? checkedQuestions[button]["no"]
+                                  : null
+                              }
+                              onClick={e => this.handleOptionNo(e)}
+                            />
+                            No
+                            <br />
+                            <input
+                              className="m-3"
+                              type="radio"
+                              name={button}
+                              value="other"
+                              checked={
+                                checkedQuestions[button + "1"]
+                                  ? checkedQuestions[button + "1"]["other"]
                                   : ""
                               }
+                              onClick={e => this.handleOptionOther(e)}
                             />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      ) : (
-                        <div className="col-12">
-                          {appliancesName != "stove" &&
-                          appliancesName != "ac" ? (
-                            <div className="col-12">
-                              {appliancesName.map(app => (
-                                <div className="col-6">
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.name}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : app.checked
-                                    }
-                                    onChange={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
-                              <br />
-                              <br />
-                            </div>
-                          ) : null}
+                            Other
+                            <br />
+                            {showModalInputOther || other ? (
+                              <textarea
+                                onChange={e => this.handleOptionOtherComment(e)}
+                                placeholder="Comment"
+                                name={button}
+                                id=""
+                                cols="50"
+                                rows="5"
+                                className="option-other"
+                                value={
+                                  checkedQuestions[button]
+                                    ? checkedQuestions[button]["other"]
+                                    : ""
+                                }
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          <div className="col-12">
+                            {appliancesName != "stove" &&
+                            appliancesName != "ac" ? (
+                              <div className="col-12">
+                                {appliancesName.map(app => (
+                                  <div className="col-6">
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.name}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : app.checked
+                                      }
+                                      onChange={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
+                                <br />
+                                <br />
+                              </div>
+                            ) : null}
 
-                          {appliancesName != "stove" &&
-                          appliancesName != "ac" &&
-                          appliancesName1 ? (
-                            <div className="col-12">
-                              {appliancesName1.map(app1 => (
-                                <div className="col-6">
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app1.name1}
-                                    name={app1.name1}
-                                    value={app1.value1}
-                                    checked={
-                                      checkedQuestions[app1.name1]
-                                        ? checkedQuestions[app1.name1][
-                                            app1.value1
-                                          ]
-                                        : app1.checked1
-                                    }
-                                    onChange={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app1.value1}
-                                </div>
-                              ))}
-                            </div>
-                          ) : null}
+                            {appliancesName != "stove" &&
+                            appliancesName != "ac" &&
+                            appliancesName1 ? (
+                              <div className="col-12">
+                                {appliancesName1.map(app1 => (
+                                  <div className="col-6">
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app1.name1}
+                                      name={app1.name1}
+                                      value={app1.value1}
+                                      checked={
+                                        checkedQuestions[app1.name1]
+                                          ? checkedQuestions[app1.name1][
+                                              app1.value1
+                                            ]
+                                          : app1.checked1
+                                      }
+                                      onChange={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app1.value1}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
 
-                          {appliancesName == "stove" ? (
-                            <div>
-                              {stove.map(app => (
-                                <div>
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.dataName}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : null
-                                    }
-                                    onClick={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
+                            {appliancesName == "stove" ? (
+                              <div>
+                                {stove.map(app => (
+                                  <div>
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.dataName}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : null
+                                      }
+                                      onClick={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
 
-                              <br />
-                              {stove1.map(app => (
-                                <div>
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.dataName}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : null
-                                    }
-                                    onClick={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
-                              <br />
-                              {stove2.map(app => (
-                                <div>
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.dataName}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : null
-                                    }
-                                    onClick={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
-                            </div>
-                          ) : null}
-                          {appliancesName == "ac" ? (
-                            <div>
-                              {ac.map(app => (
-                                <div>
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.dataName}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : null
-                                    }
-                                    onClick={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
-                              <br />
+                                <br />
+                                {stove1.map(app => (
+                                  <div>
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.dataName}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : null
+                                      }
+                                      onClick={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
+                                <br />
+                                {stove2.map(app => (
+                                  <div>
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.dataName}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : null
+                                      }
+                                      onClick={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                            {appliancesName == "ac" ? (
+                              <div>
+                                {ac.map(app => (
+                                  <div>
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.dataName}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : null
+                                      }
+                                      onClick={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
+                                <br />
 
-                              {ac1.map(app => (
-                                <div>
-                                  <input
-                                    className="m-3"
-                                    type="radio"
-                                    data-name={app.dataName}
-                                    name={app.name}
-                                    value={app.value}
-                                    checked={
-                                      checkedQuestions[app.name]
-                                        ? checkedQuestions[app.name][app.value]
-                                        : null
-                                    }
-                                    onClick={e =>
-                                      this.handleAppliancesOptions(e)
-                                    }
-                                  />
-                                  {app.value}
-                                </div>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="primary" onClick={this.handleClose}>
-                      Close
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
+                                {ac1.map(app => (
+                                  <div>
+                                    <input
+                                      className="m-3"
+                                      type="radio"
+                                      data-name={app.dataName}
+                                      name={app.name}
+                                      value={app.value}
+                                      checked={
+                                        checkedQuestions[app.name]
+                                          ? checkedQuestions[app.name][
+                                              app.value
+                                            ]
+                                          : null
+                                      }
+                                      onClick={e =>
+                                        this.handleAppliancesOptions(e)
+                                      }
+                                    />
+                                    {app.value}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                        )}
+                      </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="primary" onClick={this.handleClose}>
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         {this.state.start && value && makeReady ? (
           <div className="row">
@@ -1258,7 +1274,7 @@ class Rooms extends Component {
                   <Link
                     className="links"
                     onClick={() => this.handleLinks(room.id)}
-                    to="null"
+                    // to="null"
                   >
                     <img
                       className="card-img-top img-fluid"

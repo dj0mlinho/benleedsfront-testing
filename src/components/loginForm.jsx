@@ -110,14 +110,6 @@ class LoginForm extends Form {
             {this.renderInput("email", "Email")}
             {this.renderInput("password", "Password", "password")}
             {this.renderButton("Submit", this.state.isLoading)}
-            {/* <button class="btn btn-primary" type="button" enabled>
-              <span
-                class="spinner-grow spinner-grow-sm"
-                role="status"
-                aria-hidden="true"
-              />
-              <span class="sr-only">Loading...</span>
-            </button> */}
           </form>
         </div>
       </div>
