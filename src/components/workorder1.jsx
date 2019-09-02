@@ -150,11 +150,6 @@ class Wo extends Component {
       work.workorder.comment = woComment;
       work.workorder.sendTime = new Date();
 
-      // let jobs=work.jobs
-      //  let id= finalData._id
-      // delete work._id;
-      // localStorage.setItem("workorder", JSON.stringify(work));
-
       const data = await axios.post(
         process.env.REACT_APP_API_URL + "/user/newWorkorder",
         JSON.stringify(work)

@@ -6,6 +6,10 @@
 #modal-styling-title {
   margin: 0 auto;
 }
+
+.buttons {
+  flex-wrap: wrap-reverse !important;
+}
 /* .card-footer {
   /* height: 120px;
   line-height: 50px; */

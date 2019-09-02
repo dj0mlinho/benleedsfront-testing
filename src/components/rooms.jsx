@@ -98,7 +98,7 @@ class Rooms extends Component {
         process.env.REACT_APP_API_URL + "/user/allItems"
       );
 
-      this.setState({ isLoading: false });
+      // this.setState({ isLoading: false });
 
       localStorage.setItem("allItems", JSON.stringify(data1.data.items));
       if (data1.statusText === "OK") {
@@ -131,10 +131,10 @@ class Rooms extends Component {
           }
         }
       }
-      let start = true;
+      // let start = true;
 
-      localStorage.setItem("startBtn", JSON.stringify(start));
-      this.setState({ start: true, isLoading: false });
+      // localStorage.setItem("startBtn", JSON.stringify(start));
+      // this.setState({ start: true, isLoading: false });
     } else {
       alert("Please enter Building and Apartment Number!");
       this.setState({ start: false, isLoading: false });
@@ -263,7 +263,7 @@ class Rooms extends Component {
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     const allItemsi = [...allItems];
     let jobs = allItemsi.filter(m => m.checked === true);
-   
+
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
     if (jobs != null) {
@@ -379,6 +379,10 @@ class Rooms extends Component {
     this.setState({ setShow: true, button: tittle, showModalInputOther });
   };
   async handleMakeReady() {
+    let start = true;
+
+    localStorage.setItem("startBtn", JSON.stringify(start));
+    this.setState({ start: true, isLoading: false });
     let makeReady = true;
     localStorage.setItem("makeReady", JSON.stringify(makeReady));
     this.setState({ makeReady: true });
@@ -937,7 +941,7 @@ class Rooms extends Component {
               &#x2716; Logout
             </button>
           </div>
-        </div>
+      
         {this.state.start && value ? (
           <div className="row m-2 questions">
             {!makeReady ? (
@@ -961,7 +965,6 @@ class Rooms extends Component {
                     {button}
                   </button>
                 ))}
-
 
                 <Modal show={this.state.setShow} onHide={this.handleClose}>
                   <Modal.Header id="modal-styling-title" closeButton>
@@ -989,11 +992,9 @@ class Rooms extends Component {
                                     ? "btn btn-sm btn-success p-1 active"
                                     : "btn btn-sm btn-warning p-1"
                                 }
-                               
                               >
                                 {app.name}
                               </button>
-                      
                             </div>
                           ))}
                         </div>
@@ -1063,8 +1064,6 @@ class Rooms extends Component {
                           )}
                         </div>
                       ) : (
-                   
-
                         <div className="col-12">
                           {appliancesName != "stove" &&
                           appliancesName != "ac" ? (
@@ -1122,7 +1121,7 @@ class Rooms extends Component {
                               ))}
                             </div>
                           ) : null}
-                        
+
                           {appliancesName == "stove" ? (
                             <div>
                               {stove.map(app => (
@@ -1188,7 +1187,6 @@ class Rooms extends Component {
                                   {app.value}
                                 </div>
                               ))}
-                     
                             </div>
                           ) : null}
                           {appliancesName == "ac" ? (
@@ -1235,7 +1233,6 @@ class Rooms extends Component {
                                   {app.value}
                                 </div>
                               ))}
-                             
                             </div>
                           ) : null}
                         </div>
@@ -1243,19 +1240,16 @@ class Rooms extends Component {
                     </div>
                   </Modal.Body>
                   <Modal.Footer>
-                 
                     <Button variant="primary" onClick={this.handleClose}>
                       Close
                     </Button>
                   </Modal.Footer>
                 </Modal>
-       
               </div>
             ) : null}
           </div>
         ) : null}
-
-     
+        </div>
         {this.state.start && value && makeReady ? (
           <div className="row">
             {this.state.rooms.map(room => (
