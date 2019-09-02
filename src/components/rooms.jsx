@@ -949,7 +949,7 @@ class Rooms extends Component {
             </button>
           ) : null}
 
-          {this.state.start && value && isLoadingFullRoom ? (
+          {this.state.start && value && isLoadingFullRoom && !startMakeReady ? (
             <div className="row m-2 questions">
               {!makeReady ? (
                 <div className="col-sm-3">
