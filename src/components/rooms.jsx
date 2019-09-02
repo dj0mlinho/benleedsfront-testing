@@ -784,8 +784,8 @@ class Rooms extends Component {
     } else {
       checkedQuestions = [];
     }
-    const startMakeReady = this.state.startMakeReady;
-    let isLoading = false;
+    const startMakeReady = JSON.parse(localStorage.getItem("makeReady"));
+    let isLoading = this.state.isLoading;
     const stove = this.state.stove;
     const stove1 = this.state.stove1;
     const stove2 = this.state.stove2;
@@ -847,7 +847,7 @@ class Rooms extends Component {
       workorder.apartmentNumber = "";
       localStorage.setItem("workorder", JSON.stringify(workorder));
     }
-
+    const start = JSON.parse(localStorage.getItem("startBtn"));
     let rooms = this.state.rooms.map(room => {
       return (
         <Room
@@ -886,7 +886,7 @@ class Rooms extends Component {
           onChangeBuildings={() => this.handleChangeBuilding()}
         />
         <div className="buttons">
-          {this.state.start && !this.state.isLoading && startMakeReady ? (
+          {start && startMakeReady && isLoadingFullRoom ? (
             <button
               onClick={() => this.handleBackButton()}
               className="btn btn-warning m-3"
@@ -894,15 +894,19 @@ class Rooms extends Component {
               ⏎ Back
             </button>
           ) : null}
-          <div className="float-left">
-            <button
-              onClick={() => this.handleHomeButton()}
-              className="btn btn-info m-3"
-            >
-              🏙 Home
-            </button>
-          </div>
-          {this.state.start && !this.state.isLoading && startMakeReady ? (
+
+          {isLoadingFullRoom ? (
+            <div className="float-left">
+              <button
+                onClick={() => this.handleHomeButton()}
+                className="btn btn-info m-3"
+              >
+                🏙 Home
+              </button>
+            </div>
+          ) : null}
+
+          {start && startMakeReady && isLoadingFullRoom ? (
             <button
               onClick={() => this.handleFinishedButton()}
               className="btn btn-primary m-3"
@@ -911,18 +915,16 @@ class Rooms extends Component {
             </button>
           ) : null}
           {!this.state.start ? (
-            <div className="col-6">
-              <button
-                onClick={() => this.handleAsync()}
-                className="btn btn-success m-3"
-              >
-                {saved ? "Continue Saved Workorder" : "Start"}
-              </button>
-            </div>
+            <button
+              onClick={() => this.handleAsync()}
+              className="btn btn-success m-3"
+            >
+              {saved ? "Continue Saved Workorder" : "Start"}
+            </button>
           ) : null}
 
           {isLoading || !isLoadingFullRoom ? (
-            <div className="col-6 m-3">
+            <div className="col-6 m-3 m-auto">
               <div className="spinner-border text-success" role="status">
                 <span className="sr-only">Loading...</span>
               </div>
@@ -937,14 +939,15 @@ class Rooms extends Component {
               </div>
             </div>
           ) : null}
-          <div>
+
+          {isLoadingFullRoom ? (
             <button
               onClick={() => this.handlelogOut()}
-              className="btn btn-danger m-3"
+              className="btn btn-danger m-3 float-right"
             >
               &#x2716; Logout
             </button>
-          </div>
+          ) : null}
 
           {this.state.start && value && isLoadingFullRoom ? (
             <div className="row m-2 questions">

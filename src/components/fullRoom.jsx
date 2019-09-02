@@ -30,7 +30,7 @@ class FullRoom extends Form {
   };
   handleBackButton = async () => {
     let start = true;
-    let isLoadingFullRoom = false;
+    let isLoadingFullRoom = true;
 
     localStorage.setItem("startBtn", JSON.stringify(start));
     localStorage.setItem(
