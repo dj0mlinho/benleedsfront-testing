@@ -206,50 +206,57 @@ class Rooms extends Component {
   }
 
   async handleHomeButton() {
-    const allItems = JSON.parse(localStorage.getItem("allItems"));
-    let jobs = [...allItems].filter(m => m.checked === true);
+    if (JSON.parse(localStorage.getItem("allItems"))) {
+      const work = JSON.parse(localStorage.getItem("workorder"));
+      const allItems = JSON.parse(localStorage.getItem("allItems"));
+      let jobs = [...allItems].filter(m => m.checked === true);
 
-    const work = JSON.parse(localStorage.getItem("workorder"));
-    work.autosaveTime = new Date();
-    if (jobs != null) {
-      work.jobs = jobs;
-    }
-    work.checkedQuestions = JSON.parse(
-      localStorage.getItem("checkedQuestions")
-    );
-
-    localStorage.setItem("workorder", JSON.stringify(work));
-    const finalData = JSON.parse(localStorage.getItem("workorder"));
-
-    const data = await axios.post(
-      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-      JSON.stringify(finalData)
-    );
-
-    if (data.statusText === "OK") {
-      let work = JSON.parse(localStorage.getItem("workorder"));
-
-      localStorage.removeItem("jobs");
-
-      localStorage.removeItem("startBtn");
-      localStorage.removeItem("building");
-      localStorage.removeItem("chosenOpt");
-      work.jobs = {};
-      work.buildingNumber = "";
-      work.apartmentNumber = "";
-      work.adress = "";
-      work.squareFeet = "";
-      work.level = "";
-      work.checkedQuestions = "";
-
-      localStorage.removeItem("checkedQuestions");
-      localStorage.removeItem("makeReady");
-      delete work._id;
-      delete work.questions;
+      work.autosaveTime = new Date();
+      if (jobs != null) {
+        work.jobs = jobs;
+      }
+      work.checkedQuestions = JSON.parse(
+        localStorage.getItem("checkedQuestions")
+      );
 
       localStorage.setItem("workorder", JSON.stringify(work));
+      const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+      const data = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+        JSON.stringify(finalData)
+      );
+
+      if (data.statusText === "OK") {
+        let work = JSON.parse(localStorage.getItem("workorder"));
+
+        localStorage.removeItem("jobs");
+
+        localStorage.removeItem("startBtn");
+        localStorage.removeItem("building");
+        localStorage.removeItem("chosenOpt");
+        work.jobs = {};
+        work.buildingNumber = "";
+        work.apartmentNumber = "";
+        work.adress = "";
+        work.squareFeet = "";
+        work.level = "";
+        work.checkedQuestions = "";
+
+        localStorage.removeItem("checkedQuestions");
+        localStorage.removeItem("makeReady");
+        delete work._id;
+        delete work.questions;
+
+        localStorage.setItem("workorder", JSON.stringify(work));
+        const region = JSON.parse(localStorage.getItem("currentUser")).region;
+        // this.setState({ buildingState: false });
+        this.props.history.push(`/rooms/${region}`);
+        document.location.reload();
+      }
+    } else {
+      localStorage.removeItem("chosenOpt");
       const region = JSON.parse(localStorage.getItem("currentUser")).region;
-      // this.setState({ buildingState: false });
       this.props.history.push(`/rooms/${region}`);
       document.location.reload();
     }
@@ -773,11 +780,16 @@ class Rooms extends Component {
   }
 
   render() {
+    let chosenOptNew = false;
     const bla = JSON.parse(localStorage.getItem("workorder"))[
       JSON.parse(localStorage.getItem("questions"))
     ];
 
     const checked = JSON.parse(localStorage.getItem("Refrige rator1"));
+    if (JSON.parse(localStorage.getItem("chosenOpt")) == "new") {
+      chosenOptNew = true;
+    }
+
     let checkedQuestions = [];
     if (JSON.parse(localStorage.getItem("checkedQuestions"))) {
       checkedQuestions = JSON.parse(localStorage.getItem("checkedQuestions"));
@@ -914,7 +926,7 @@ class Rooms extends Component {
               Forward ➔
             </button>
           ) : null}
-          {!this.state.start ? (
+          {!this.state.start && chosenOptNew ? (
             <button
               onClick={() => this.handleAsync()}
               className="btn btn-success m-3"

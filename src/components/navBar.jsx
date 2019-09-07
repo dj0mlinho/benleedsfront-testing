@@ -22,6 +22,7 @@ class NavBar extends Component {
     }
   }
   handleWorkorders = async e => {
+    console.log(e.target);
     if (e.target.value == "saved") {
       e.preventDefault();
       e.persist();
@@ -79,7 +80,7 @@ class NavBar extends Component {
       const region = JSON.parse(localStorage.getItem("currentUser")).region;
 
       this.props.history.push(`/rooms/${region}`);
-      document.location.reload();
+      // document.location.reload();
       // window.location = `/rooms/${region}`;
     } else {
     }
@@ -142,6 +143,7 @@ class NavBar extends Component {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let userName = currentUser.name;
     let userEmail = currentUser.email;
+    let userRegion = currentUser.region;
 
     if (this.props.adress == "Wrong Building Number") {
       klasa = "build-div btn btn-danger";
@@ -166,85 +168,99 @@ class NavBar extends Component {
           <div className="logoBenLeeds col-12 p-3">
             <img src={logo} alt="Ben Leeds Logo" />
           </div>
-          {!chosenOptSaved &&
-          !chosenOptPending &&
-          !start &&
-          !this.props.location.state ? (
-            <div className="card card-user col-sm-4 offset-sm-4 ">
-              <img
-                src={this.state.source}
-                className="card-img-top user-img"
-                alt="..."
-              />
-              <div className="card-body user-name">
-                <h5 className="card-title">{userName}</h5>
-              </div>
-              <div className="card-footer user-info">
-                <small className="text-center">{region}</small>
-              </div>
-            </div>
-          ) : null}
         </div>
         {!start ? (
           <div className="px-3">
-            <span className="btn text-bold">Choose your option ⇩</span>
-            <select
+            <div className="row m-1">
+              <div className="date col-sm-4 offset-sm-4">
+                {!chosenOptSaved &&
+                !chosenOptPending &&
+                !start &&
+                !this.props.location.state ? (
+                  <div className="card card-user col-sm-8  offset-sm-2">
+                    <img
+                      src={this.state.source}
+                      className="card-img-top user-img"
+                      alt="..."
+                    />
+                    <div className="card-body user-name">
+                      <h5 className="card-title">{userName}</h5>
+                    </div>
+                    <div className="card-footer user-info">
+                      <small className="text-center">{region}</small>
+                    </div>
+                  </div>
+                ) : null}
+                <div className="input-group ">
+                  <div className="input-group-prepend">
+                    <div className="build input-group-text text-white ">
+                      Date/Time:
+                    </div>
+                  </div>
+                  <input
+                    disabled
+                    type="text"
+                    className="form-control text-center"
+                    defaultValue={dateNow}
+                  />
+                </div>
+              </div>
+              {/* <span className="btn text-bold">Choose your option:</span> */}
+            </div>
+
+            {/* <div
               className="select dropdown-primary form-control mb-3 "
               name="country"
-              onChange={this.handleWorkorders}
-            >
-              {/* {optionNone ? (
+            > */}
+            {/* {optionNone ? (
                 <option selected value="optionNone">
                   Choose your option
                 </option>
               ) : (
                 <option value="optionNone">Choose your option</option>
               )} */}
-              {chosenOptNew ? (
-                <option selected value="new">
-                  New Work Order
-                </option>
-              ) : (
-                <option value="new">New Work Order</option>
-              )}
-              {chosenOptSaved ? (
-                <option selected value="saved">
-                  Saved Work Orders
-                </option>
-              ) : (
-                <option value="saved">Saved Work Orders</option>
-              )}
-              {chosenOptPending ? (
-                <option selected value="pending">
-                  Sent Work Orders
-                </option>
-              ) : (
-                <option value="pending">Sent Work Orders</option>
-              )}
-            </select>
-          </div>
-        ) : null}
-        <div className="row m-1">
-          <div className="date col-sm-4 offset-sm-4">
-            <div className="input-group ">
-              <div className="input-group-prepend">
-                <div className="build input-group-text text-white ">
-                  Date/Time:
-                </div>
+            <div className="col-12">
+              <div>
+                {!chosenOptNew ? (
+                  <div>
+                    <div className="col-12">
+                      <button
+                        value="new"
+                        className="btn btn-secondary btn-lg m-3"
+                        onClick={this.handleWorkorders}
+                      >
+                        New Work Order
+                      </button>
+                    </div>
+                    <button className="btn btn-secondary btn-lg m-3" disabled>
+                      To Do List
+                    </button>
+                    <button
+                      value="saved"
+                      className="btn btn-secondary btn-lg m-3"
+                      onClick={this.handleWorkorders}
+                    >
+                      Saved Work Orders
+                    </button>
+
+                    <button
+                      value="pending"
+                      className="btn btn-secondary btn-lg m-3"
+                      onClick={this.handleWorkorders}
+                    >
+                      Sent Work Orders
+                    </button>
+                  </div>
+                ) : null}
               </div>
-              <input
-                disabled
-                type="text"
-                className="form-control text-center"
-                defaultValue={dateNow}
-              />
             </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="container mainPage">
           {!chosenOptSaved &&
           !chosenOptPending &&
+          chosenOptNew &&
           !start &&
           !this.props.location.state ? (
             <div className="row nav-box">
@@ -283,7 +299,6 @@ class NavBar extends Component {
                     className={`build-input ${this.props.classs}`}
                   />
                 </div>
-             
               </div>
 
               <div className="col-sm-4">
@@ -299,26 +314,30 @@ class NavBar extends Component {
                     className={`build-input ${this.props.classs}`}
                   />
                 </div>
-
               </div>
 
               {this.props.buildingState ? (
                 <div className="col-12">
                   <div className="card text-dark bg-light mb-3">
-                    <div className="card-header">Manager Info</div>
-                    <div className="card-body">
-                      <h5 className="card-title">{"Name: " + managerName}</h5>
-                      <p className="card-text">{"Phone: " + managerPhone}</p>
-                      <p className="card-text">{"Email: " + managerEmail}</p>
+                    {/* <div className="card-header">Manager Info</div> */}
+                    <div className="row m-2">
+                      <div className="col-2">Menager:</div>
+                      <div className="col-3">{"Name: " + managerName}</div>
+                      <div className="col-3">{"Phone: " + managerPhone}</div>
+                      <div className="col-4">{"Email: " + managerEmail}</div>
+                    </div>
+                    <div className="row m-2">
+                      <div className="col-2">Regional:</div>
+                      <div className="col-3">{"Name: " + userName}</div>
+                      <div className="col-3">{"Region: " + userRegion}</div>
+                      <div className="col-4">{"Phone: " + userEmail}</div>
                     </div>
                   </div>
-
                 </div>
               ) : null}
             </div>
           ) : null}
         </div>
-    
       </nav>
     );
   }
