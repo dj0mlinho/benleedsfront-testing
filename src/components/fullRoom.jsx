@@ -113,7 +113,7 @@ class FullRoom extends Form {
 
   handleChangeArea = ({ currentTarget: input }) => {
     const value = this.state.value1;
-
+    console.log(value);
     value[input.id] = input.value;
 
     this.setState({ value });
