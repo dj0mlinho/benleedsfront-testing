@@ -7,7 +7,7 @@ export default class workOrderInfo extends PureComponent {
   checkAnswer = ( answer ) => {
      if (typeof answer === "object") {
         if (answer.length === 0) {
-          return <span> Ok </span> ;
+          return <span> "User didn't review it" </span> ;
         }  
 
         let text = answer.join(" ") ; 
@@ -26,7 +26,7 @@ export default class workOrderInfo extends PureComponent {
 
     return (
        <div className={styles.woInfoContainer}>
-        {/* {console.log("workORDER",workorder)} */}
+        {console.log("workORDER",workorder)}
         <div className="row">
           <div className="col-sm">
             <pre className="lead font-weight-bold">Workorder General Info</pre>
@@ -59,28 +59,28 @@ export default class workOrderInfo extends PureComponent {
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Floor : {this.checkAnswer(workorder.questions.floor)} </span>
+             <span>Floor : {this.checkAnswer(workorder.questions ? workorder.questions.floor : "")} </span>
          </div>
          <div className="col-sm-6">
-         <span>Paint : { this.checkAnswer(workorder.questions.paint)} </span>
+         <span>Paint : { this.checkAnswer(workorder.questions ? workorder.questions.paint : "")} </span>
            </div>
         </div>
          
         <div className="row">
          <div className="col-sm-6">
-             <span>Windows : {this.checkAnswer(workorder.questions.windows)} </span>
+             <span>Windows : {this.checkAnswer(workorder.questions ? workorder.questions.windows : "")} </span>
          </div>
          <div className="col-sm-6">
-         <span>Blinds : { this.checkAnswer(workorder.questions.blinds)} </span>
+         <span>Blinds : { this.checkAnswer(workorder.questions ? workorder.questions.blinds : "")} </span>
            </div>
         </div>
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Cleaning : {this.checkAnswer(workorder.questions.cleaning)} </span>
+             <span>Cleaning : {this.checkAnswer(workorder.questions ? workorder.questions.cleaning : "")} </span>
          </div>
          <div className="col-sm-6">
-         <span>Re-glaze : { this.checkAnswer(workorder.questions["re-glazed"])} </span>
+         <span>Re-glaze : { this.checkAnswer( workorder.questions ? workorder.questions["re-glazed"] : "")} </span>
            </div>
         </div>
 
@@ -90,25 +90,25 @@ export default class workOrderInfo extends PureComponent {
 
         <div className="row">
          <div className="col-sm-6">
-             <span>A/C : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.ac : "" ))} </span>
+             <span>A/C : {this.checkAnswer((workorder.questions ? (workorder.questions.appliances ? workorder.questions.appliances.ac : "" ) : "" ))} </span>
          </div>
          <div className="col-sm-6">
-            <span>Microwave : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.microwave : "" ))} </span>
+            <span>Microwave : {this.checkAnswer((workorder.questions ? (workorder.questions.appliances ? workorder.questions.appliances.microwave : "" ) : "" ))} </span>
            </div>
         </div>
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Dishwasher : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.dishwasher : "" ))} </span>
+             <span>Dishwasher : {this.checkAnswer((workorder.questions ? (workorder.questions.appliances ? workorder.questions.appliances.dishwasher : "" ) : "" ))} </span>
          </div>
          <div className="col-sm-6">
-            <span>Refrigerator : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.refrigeRator : "" ))} </span>
+            <span>Refrigerator : {this.checkAnswer((workorder.questions ? (workorder.questions.appliances ? workorder.questions.appliances.refrigeRator : "" ) : "" ))} </span>
            </div>
         </div>
 
         <div className="row">
          <div className="col-sm-6">
-             <span>Stove : {this.checkAnswer((workorder.questions.appliances ? workorder.questions.appliances.stove : "" ))} </span>
+         <span>Stove : {this.checkAnswer((workorder.questions ? (workorder.questions.appliances ? workorder.questions.appliances.stove : "" ) : "" ))} </span>
          </div>
          <div className="col-sm-6">
             
