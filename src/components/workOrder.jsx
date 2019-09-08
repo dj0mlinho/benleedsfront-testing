@@ -188,7 +188,7 @@ export default class WorkOrder extends Component {
       let jobForSendArrey = [] ;
       jobForSendArrey.push(newJobForSentObj) ;
       
-       console.log("pred state" , jobForSendArrey );
+      //  console.log("pred state" , jobForSendArrey );
        
       return jobForSendArrey ;
    }  
@@ -215,7 +215,7 @@ export default class WorkOrder extends Component {
 
     let jobForSendNotFromState =   this.createJobForSend(id) ;
 
-   console.log("test" , jobForSendNotFromState);
+        //  console.log("test" , jobForSendNotFromState);
      
     const checkArrey = ( this.state.jobForSendArrey.length === 0 ) ?  jobForSendNotFromState : this.state.jobForSendArrey ;
 
@@ -258,7 +258,7 @@ export default class WorkOrder extends Component {
     if (vendorObj) {
       selVendorId = vendorObj.selVendorId;
     } else {
-      console.log("jebem ti mater!");
+      
       return null;
     }
 
@@ -282,7 +282,7 @@ export default class WorkOrder extends Component {
     let allJobs = [...this.state.jobs] ;
 
     const { data } = await assignJob(clickBtnId, job, vendor, workorder, allJobs);
-    console.log("posle assigne",data);
+      //  console.log("posle assigne",data);
     
     if (data.success) {
       const woAndJobs = this.state.workorder;
@@ -315,7 +315,8 @@ export default class WorkOrder extends Component {
       <div>
         <AdminNavbar pageName="Work Order" />
         <ToastContainer />
-        
+          
+          {console.log("wowowo" , this.state.workorder)}
 
         <WorkOrderTable
           allWorkOrders={this.state.allWorkOrders}

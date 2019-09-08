@@ -6,7 +6,10 @@ export default class workOrderInfo extends PureComponent {
   
   checkAnswer = ( answer ) => {
      if (typeof answer === "object") {
-        
+        if (answer.length === 0) {
+          return <span> Ok </span> ;
+        }  
+
         let text = answer.join(" ") ; 
         return <span> {text} </span> ;
      }  else {
@@ -22,7 +25,8 @@ export default class workOrderInfo extends PureComponent {
     const workorder = this.props.workorder;
 
     return (
-      <div className={styles.woInfoContainer}>
+       <div className={styles.woInfoContainer}>
+        {/* {console.log("workORDER",workorder)} */}
         <div className="row">
           <div className="col-sm">
             <pre className="lead font-weight-bold">Workorder General Info</pre>
