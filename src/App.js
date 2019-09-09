@@ -46,7 +46,7 @@ class App extends Component {
           />
           <Route
             path="/:id/:m/work-order"
-            render={props => <Wo props={this.state.rooms} {...props} />}
+            render={props => <Wo {...props} />}
           />
           <Route path="/rooms/:id/:m" component={FullRoom} />{" "}
           <Route path="/rooms/:id" render={props => <Rooms {...props} />} />

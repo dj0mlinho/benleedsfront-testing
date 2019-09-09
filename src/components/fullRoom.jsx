@@ -54,6 +54,7 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
+    console.log(data);
     if (data.statusText === "OK") {
       this.props.history.push("/rooms/" + this.props.match.params.m);
     }
@@ -100,6 +101,8 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
+
+    console.log(data);
     if (data.statusText === "OK") {
       this.props.history.push(
         "/rooms/" + this.props.match.params.id + "/work-order"

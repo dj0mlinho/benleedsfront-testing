@@ -63,7 +63,13 @@
   .date {
     width: 100%;
   }
-
+  .counter {
+    top: 1px;
+    right: 50%;
+  }
+  .counter-div {
+    display: block;
+  }
   .buttons {
     display: flex;
     flex-wrap: wrap-reverse;

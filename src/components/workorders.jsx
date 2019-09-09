@@ -44,6 +44,10 @@ class Workorders extends Form {
     };
   }
 
+  handleResume() {
+    localStorage.setItem("chosenOpt", JSON.stringify("saved"));
+    // localStorage.setItem("chosenOpt", JSON.stringify("new"));
+  }
   render() {
     let message = false;
 
@@ -143,6 +147,7 @@ class Workorders extends Form {
                     {status ? (
                       <td className="itemTd btn btn-warning mt-3">
                         <Link
+                          onClick={this.handleResume}
                           to={{
                             pathname: `/rooms/${region}`,
                             state: {
