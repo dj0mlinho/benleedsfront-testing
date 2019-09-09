@@ -33,14 +33,14 @@ export default class workOrderInfo extends PureComponent {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             <span>
               
               <span className="font-weight-bold">Building Number:</span>
               {workorder.buildingNumber}
             </span>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             
             <span>
               
@@ -48,11 +48,18 @@ export default class workOrderInfo extends PureComponent {
               {workorder.apartmentNumber}
             </span>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             <span>
             
               <span className="font-weight-bold">Adress :</span>
               {workorder.adress}
+            </span>
+          </div>
+          <div className="col-sm-3">
+            <span>
+            
+              <span className="font-weight-bold">Total price: </span>
+              &#36; {workorder.totalPrice}
             </span>
           </div>
         </div>
