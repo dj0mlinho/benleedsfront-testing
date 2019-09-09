@@ -926,13 +926,25 @@ class Rooms extends Component {
               Forward ➔
             </button>
           ) : null}
-          {!this.state.start && chosenOptNew ? (
-            <button
-              onClick={() => this.handleAsync()}
-              className="btn btn-success m-3 mx-auto"
-            >
-              {saved ? "Continue Saved Workorder" : "Start"}
-            </button>
+          {!this.state.start ? (
+            <div className="mx-auto">
+              {chosenOptNew ? (
+                <button
+                  onClick={() => this.handleAsync()}
+                  className="btn btn-success m-3 mx-auto"
+                >
+                  Start New
+                </button>
+              ) : null}
+              {saved ? (
+                <button
+                  onClick={() => this.handleAsync()}
+                  className="btn btn-success m-3 mx-auto"
+                >
+                  Continue Saved Workorder
+                </button>
+              ) : null}
+            </div>
           ) : null}
 
           {isLoading || !isLoadingFullRoom ? (

@@ -230,7 +230,6 @@ class Wo extends Component {
       <React.Fragment>
         <div className="container main-page">
           <NavBar
-            {...this.props}
             adress={adress}
             showing={showing}
             build={buildingNumber}

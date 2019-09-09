@@ -44,6 +44,10 @@ class Workorders extends Form {
     };
   }
 
+  handleResume() {
+    localStorage.setItem("chosenOpt", JSON.stringify("saved"));
+    // localStorage.setItem("chosenOpt", JSON.stringify("new"));
+  }
   render() {
     let message = false;
 
@@ -89,12 +93,12 @@ class Workorders extends Form {
             onFinishedButton={this.handleFinishedButton}
           />
           <div className="rooms border text-center">
-            <button
+            {/* <button
               onClick={() => this.handlelogOut()}
               className="btn btn-danger m-3"
             >
               Logout
-            </button>
+            </button> */}
             <h1 className="lead m-2">
               All {this.props.match.params.i} workorders
             </h1>
@@ -143,6 +147,7 @@ class Workorders extends Form {
                     {status ? (
                       <td className="itemTd btn btn-warning mt-3">
                         <Link
+                          onClick={this.handleResume}
                           to={{
                             pathname: `/rooms/${region}`,
                             state: {
