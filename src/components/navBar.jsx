@@ -365,7 +365,7 @@ class NavBar extends Component {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Building#
+                      Building Code
                     </div>
                   </div>
 
@@ -387,7 +387,7 @@ class NavBar extends Component {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Apartment#
+                      Unit #
                     </div>
                   </div>
                   <input
