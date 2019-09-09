@@ -64,12 +64,14 @@ class Workorders extends Form {
         m.adress.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
+    let dateWo = "";
     let status = "";
     if (this.props.match.params.i == "pending") {
       status = false;
+      dateWo = "Sent";
     } else {
       status = true;
+      dateWo = "Starting";
     }
 
     return (
@@ -111,7 +113,7 @@ class Workorders extends Form {
             <table className="table">
               <thead>
                 <tr>
-                  <th className="item">Save/Send Date</th>
+                  <th className="item">{dateWo} Date</th>
                   <th className="item">Building Number</th>
                   <th className="item">Apartment Number</th>
                   <th className="item">Address</th>
@@ -139,7 +141,7 @@ class Workorders extends Form {
                         <div className="row">{rooms}</div>
                       ) : null} */}
                     {status ? (
-                      <td className="itemTd btn btn-warning">
+                      <td className="itemTd btn btn-warning mt-3">
                         <Link
                           to={{
                             pathname: `/rooms/${region}`,

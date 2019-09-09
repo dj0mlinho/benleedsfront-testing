@@ -259,7 +259,7 @@ class NavBar extends Component {
               <div className="float-right col-sm-4">
                 <button
                   onClick={() => this.handlelogOut()}
-                  className="btn btn-secondary  "
+                  className="btn btn-danger "
                 >
                   &#x2716; Sign Out
                 </button>
@@ -284,7 +284,7 @@ class NavBar extends Component {
                   <div className="col-sm-12">
                     <button
                       value="new"
-                      className="btn btn-secondary btn-lg m-3 "
+                      className="btn btn-success btn-lg m-3 p-3"
                       onClick={this.handleWorkorders}
                     >
                       New
@@ -427,7 +427,7 @@ class NavBar extends Component {
                       <div className="col-sm-2">Regional:</div>
                       <div className="col-sm-3">{"Name: " + userName}</div>
                       <div className="col-sm-3">{"Region: " + userRegion}</div>
-                      <div className="col-sm-4">{"Phone: " + userEmail}</div>
+                      <div className="col-sm-4">{"Email: " + userEmail}</div>
                     </div>
                   </div>
                 </div>
