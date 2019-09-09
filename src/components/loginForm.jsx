@@ -102,14 +102,14 @@ class LoginForm extends Form {
           <div className="m-5">
             <img src={logo} className="img-fluid" alt="Ben Leeds Logo" />
           </div>
-          <h1 className="p-3">Log-In</h1>
+          <h1 className="p-3">Sign In</h1>
           <form
             className="col-8 offset-2 text-center"
             onSubmit={this.handleSubmit}
           >
             {this.renderInput("email", "Email")}
             {this.renderInput("password", "Password", "password")}
-            {this.renderButton("Submit", this.state.isLoading)}
+            {this.renderButton("Next", this.state.isLoading)}
           </form>
         </div>
       </div>

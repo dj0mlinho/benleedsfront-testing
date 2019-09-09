@@ -898,22 +898,22 @@ class Rooms extends Component {
           onChangeBuildings={() => this.handleChangeBuilding()}
         />
         <div className="buttons">
-          {start && startMakeReady && isLoadingFullRoom ? (
-            <button
-              onClick={() => this.handleBackButton()}
-              className="btn btn-warning m-3"
-            >
-              ⏎ Back
-            </button>
-          ) : null}
+          {/* {start && startMakeReady && isLoadingFullRoom ? (
+            // <button
+            //   onClick={() => this.handleBackButton()}
+            //   className="btn btn-warning m-3"
+            // >
+            //   ⏎ Back
+            // </button>
+          ) : null} */}
 
-          {isLoadingFullRoom ? (
+          {isLoadingFullRoom && startMakeReady ? (
             <div className="float-left">
               <button
                 onClick={() => this.handleHomeButton()}
                 className="btn btn-info m-3"
               >
-                🏙 Home
+                ⏎ Back
               </button>
             </div>
           ) : null}
@@ -929,7 +929,7 @@ class Rooms extends Component {
           {!this.state.start && chosenOptNew ? (
             <button
               onClick={() => this.handleAsync()}
-              className="btn btn-success m-3"
+              className="btn btn-success m-3 mx-auto"
             >
               {saved ? "Continue Saved Workorder" : "Start"}
             </button>
@@ -952,29 +952,20 @@ class Rooms extends Component {
             </div>
           ) : null}
 
-          {isLoadingFullRoom ? (
-            <button
-              onClick={() => this.handlelogOut()}
-              className="btn btn-danger m-3 float-right"
-            >
-              &#x2716; Logout
-            </button>
-          ) : null}
-
           {this.state.start && value && isLoadingFullRoom && !startMakeReady ? (
-            <div className="row m-2 questions">
+            <div className="row m-2 questions mx-auto">
               {!makeReady ? (
-                <div className="col-sm-3">
+                <div className="col-sm-2">
                   <button
                     onClick={() => this.handleMakeReady()}
-                    className="btn btn-outline-primary btn-lg m-1"
+                    className="btn btn-success btn-lg m-1"
                   >
                     Make Ready
                   </button>
                 </div>
               ) : null}
               {!makeReady ? (
-                <div className="col-sm-9">
+                <div className="col-sm-10">
                   {this.state.buttons.map(button => (
                     <button
                       key={button}

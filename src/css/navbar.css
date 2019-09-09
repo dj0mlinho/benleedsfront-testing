@@ -6,7 +6,8 @@
   background-color: #8d98f2;
   font-size: 1em;
 }
-
+.textarea-nav {
+}
 .buttons {
   display: flex;
   justify-content: space-between;
@@ -22,7 +23,9 @@
   background-color: #23408e !important;
   font-weight: bold;
 }
-
+.card-user {
+  margin-bottom: 5px;
+}
 .logo {
   background-color: #8d98f2;
 }
@@ -42,7 +45,16 @@
   padding: 1px;
   /* background-color: #ffd740; */
 }
-
+.counter-div {
+  position: relative;
+  padding-top: 5px;
+}
+.counter {
+  position: absolute;
+  right: 10px;
+  /* border: 1px solid red; */
+  border-radius: 20px !important;
+}
 .date {
   margin-bottom: 15px !important;
 }

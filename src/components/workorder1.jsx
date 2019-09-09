@@ -311,7 +311,7 @@ class Wo extends Component {
             </table>
 
             <textarea
-              className="text-area"
+              className="textarea-workorder"
               placeholder="General Notes"
               onChange={this.handleGeneralNotes}
               name=""

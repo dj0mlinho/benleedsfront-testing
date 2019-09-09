@@ -2,17 +2,45 @@ import React, { Component } from "react";
 import axios from "axios";
 import "../css/navbar.css";
 import logo from "../img/ben-leeds-logo.png";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 class NavBar extends Component {
   state = {
     data: [],
     value: "",
-    showing: true
+    showing: true,
+    setShow: false
   };
 
   async componentDidMount() {
     let source = JSON.parse(localStorage.getItem("currentUser")).imgPath;
+
     this.setState({ source });
+    let userId = JSON.parse(localStorage.getItem("currentUser"))._id;
+    const data = await axios.get(
+      process.env.REACT_APP_API_URL + `/user/getAllTempWorkorders/${userId}`
+    );
+
+    console.log(data.data);
+    let pending = data.data.map(m => m);
+    if (pending[0] == undefined) {
+      pending = "0";
+    } else {
+      pending = data.data.map(m => m).length;
+    }
+    console.log(pending);
+
+    let data1 = await axios.get(
+      process.env.REACT_APP_API_URL + `/user/allUserWorkorders/${userId}`
+    );
+    let sent = data1.data.map(m => m);
+    if (sent[0] == undefined) {
+      sent = "0";
+    } else {
+      sent = data1.data.map(m => m).length;
+    }
+
+    this.setState({ sent, pending });
   }
   handlelogOut() {
     const answer = window.confirm("Are you sure you want to log out?");
@@ -86,10 +114,16 @@ class NavBar extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-  }
+  handleToDoModal = () => {
+    console.log("radi");
+    const setShow = this.state.setShow;
 
+    this.setState({ setShow: true });
+  };
+  handleClose = () => {
+    const setShow = false;
+    this.setState({ setShow });
+  };
   handleChange(e) {
     const building1 = e.target.value;
     const build = building1.split(":");
@@ -99,8 +133,25 @@ class NavBar extends Component {
     work.buildingNumber = building;
     localStorage.setItem("workorder", JSON.stringify(work));
   }
+  // constructor(props) {
+  //   super(props);
 
+  //   this.props = {
+  //     setShow: false
+  //   };
+  // }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.setShow !== this.props.setShow) {
+  //     this.setState({ setShow: this.props.setShow });
+  //   }
+  // }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return this.state.setShow;
+  // }
   render() {
+    console.log("radiiii");
+
+    console.log();
     let start = "";
     let klasa = "";
     let building = "";
@@ -156,7 +207,7 @@ class NavBar extends Component {
     }
 
     const data = this.state.data;
-    const datas = data[0];
+    // const datas = data[0];
     const workorder = JSON.parse(localStorage.getItem("workorder"));
     let dat = new Date(workorder.loginTime).toLocaleString();
     const dateNow =
@@ -205,6 +256,14 @@ class NavBar extends Component {
                   />
                 </div>
               </div>
+              <div className="float-right col-sm-4">
+                <button
+                  onClick={() => this.handlelogOut()}
+                  className="btn btn-danger float-right"
+                >
+                  &#x2716; Sign Out
+                </button>
+              </div>
               {/* <span className="btn text-bold">Choose your option:</span> */}
             </div>
 
@@ -219,44 +278,82 @@ class NavBar extends Component {
               ) : (
                 <option value="optionNone">Choose your option</option>
               )} */}
-            <div className="col-12">
-              <div>
-                {!chosenOptNew ? (
-                  <div>
-                    <div className="col-12">
-                      <button
-                        value="new"
-                        className="btn btn-secondary btn-lg m-3"
-                        onClick={this.handleWorkorders}
-                      >
-                        New Work Order
-                      </button>
-                    </div>
-                    <button className="btn btn-secondary btn-lg m-3" disabled>
-                      To Do List
-                    </button>
+            <div className="row">
+              {!chosenOptNew ? (
+                <div className="col-sm-12">
+                  <div className="col-sm-12">
                     <button
-                      value="saved"
-                      className="btn btn-secondary btn-lg m-3"
+                      value="new"
+                      className="btn btn-success btn-lg m-3 p-3"
                       onClick={this.handleWorkorders}
                     >
-                      Saved Work Orders
-                    </button>
-
-                    <button
-                      value="pending"
-                      className="btn btn-secondary btn-lg m-3"
-                      onClick={this.handleWorkorders}
-                    >
-                      Sent Work Orders
+                      New
                     </button>
                   </div>
-                ) : null}
-              </div>
+                  <button
+                    onClick={e => this.handleToDoModal(e)}
+                    className="btn btn-secondary btn-lg m-3"
+                  >
+                    To-Do Units
+                  </button>
+                  <span className="counter-div">
+                    <button
+                      value="saved"
+                      className="btn btn-secondary btn-lg m-3 "
+                      onClick={this.handleWorkorders}
+                    >
+                      Pending Reports
+                    </button>
+                    <span className="btn btn-danger counter">
+                      {this.state.pending}
+                    </span>
+                  </span>
+                  <span className="counter-div">
+                    <button
+                      value="pending"
+                      className="btn btn-secondary btn-lg m-3 "
+                      onClick={this.handleWorkorders}
+                    >
+                      Sent Reports
+                    </button>
+                    <span className="btn btn-danger counter">
+                      {this.state.sent}
+                    </span>
+                  </span>
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}
-
+        <Modal show={this.state.setShow} onHide={this.handleClose}>
+          <Modal.Header id="modal-styling-title" closeButton>
+            <div className="row">
+              <div className="col-12 text-center">
+                <Modal.Title className="btn btn-outline-info">
+                  To Do Units{" "}
+                </Modal.Title>
+              </div>
+            </div>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              <div className="col-8 mx-auto">
+                <textarea
+                  className="textarea-nav"
+                  name=""
+                  id=""
+                  cols="20"
+                  rows="8"
+                ></textarea>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer className="float-right">
+            <Button variant="primary" onClick={this.handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <div className="container mainPage">
           {!chosenOptSaved &&
           !chosenOptPending &&
@@ -268,7 +365,7 @@ class NavBar extends Component {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Building#
+                      Building Code
                     </div>
                   </div>
 
@@ -290,7 +387,7 @@ class NavBar extends Component {
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Apartment#
+                      Unit #
                     </div>
                   </div>
                   <input
@@ -321,16 +418,16 @@ class NavBar extends Component {
                   <div className="card text-dark bg-light mb-3">
                     {/* <div className="card-header">Manager Info</div> */}
                     <div className="row m-2">
-                      <div className="col-2">Menager:</div>
-                      <div className="col-3">{"Name: " + managerName}</div>
-                      <div className="col-3">{"Phone: " + managerPhone}</div>
-                      <div className="col-4">{"Email: " + managerEmail}</div>
+                      <div className="col-sm-2">Menager:</div>
+                      <div className="col-sm-3">{"Name: " + managerName}</div>
+                      <div className="col-sm-3">{"Phone: " + managerPhone}</div>
+                      <div className="col-sm-4">{"Email: " + managerEmail}</div>
                     </div>
                     <div className="row m-2">
-                      <div className="col-2">Regional:</div>
-                      <div className="col-3">{"Name: " + userName}</div>
-                      <div className="col-3">{"Region: " + userRegion}</div>
-                      <div className="col-4">{"Phone: " + userEmail}</div>
+                      <div className="col-sm-2">Regional:</div>
+                      <div className="col-sm-3">{"Name: " + userName}</div>
+                      <div className="col-sm-3">{"Region: " + userRegion}</div>
+                      <div className="col-sm-4">{"Email: " + userEmail}</div>
                     </div>
                   </div>
                 </div>
