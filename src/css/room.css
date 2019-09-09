@@ -45,7 +45,7 @@
     line-height: 20px;
   }
 
-  textarea {
+  .textarea-rooms {
     width: 100px;
 
     background-color: #eee;
@@ -89,7 +89,7 @@
     padding: 2px;
   }
 
-  textarea {
+  .textarea-rooms {
     width: 100px;
 
     background-color: #eee;

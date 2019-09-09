@@ -643,7 +643,7 @@ class FullRoom extends Form {
                             name={item.name}
                             value={item.comment}
                             id={item._id}
-                            className="form-control placeholder-input"
+                            className="textarea-rooms form-control placeholder-input"
                           />
                         ) : null}
                       </td>

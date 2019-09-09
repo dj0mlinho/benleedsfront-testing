@@ -256,7 +256,7 @@ class NavBar extends Component {
                   />
                 </div>
               </div>
-              <div className="float-right col-4">
+              <div className="float-right col-sm-4">
                 <button
                   onClick={() => this.handlelogOut()}
                   className="btn btn-secondary  "
@@ -278,52 +278,50 @@ class NavBar extends Component {
               ) : (
                 <option value="optionNone">Choose your option</option>
               )} */}
-            <div className="col-12">
-              <div>
-                {!chosenOptNew ? (
-                  <div>
-                    <div className="col-12">
-                      <button
-                        value="new"
-                        className="btn btn-secondary btn-lg m-3 "
-                        onClick={this.handleWorkorders}
-                      >
-                        New
-                      </button>
-                    </div>
+            <div className="row">
+              {!chosenOptNew ? (
+                <div className="col-sm-12">
+                  <div className="col-sm-12">
                     <button
-                      onClick={e => this.handleToDoModal(e)}
-                      className="btn btn-secondary btn-lg m-3"
+                      value="new"
+                      className="btn btn-secondary btn-lg m-3 "
+                      onClick={this.handleWorkorders}
                     >
-                      To-Do Units
+                      New
                     </button>
-                    <span className="counter-div">
-                      <button
-                        value="saved"
-                        className="btn btn-secondary btn-lg m-3 "
-                        onClick={this.handleWorkorders}
-                      >
-                        Pending Reports
-                      </button>
-                      <span className="btn btn-danger counter">
-                        {this.state.pending}
-                      </span>
-                    </span>
-                    <span className="counter-div">
-                      <button
-                        value="pending"
-                        className="btn btn-secondary btn-lg m-3 "
-                        onClick={this.handleWorkorders}
-                      >
-                        Sent Reports
-                      </button>
-                      <span className="btn btn-danger counter">
-                        {this.state.sent}
-                      </span>
-                    </span>
                   </div>
-                ) : null}
-              </div>
+                  <button
+                    onClick={e => this.handleToDoModal(e)}
+                    className="btn btn-secondary btn-lg m-3"
+                  >
+                    To-Do Units
+                  </button>
+                  <span className="counter-div">
+                    <button
+                      value="saved"
+                      className="btn btn-secondary btn-lg m-3 "
+                      onClick={this.handleWorkorders}
+                    >
+                      Pending Reports
+                    </button>
+                    <span className="btn btn-danger counter">
+                      {this.state.pending}
+                    </span>
+                  </span>
+                  <span className="counter-div">
+                    <button
+                      value="pending"
+                      className="btn btn-secondary btn-lg m-3 "
+                      onClick={this.handleWorkorders}
+                    >
+                      Sent Reports
+                    </button>
+                    <span className="btn btn-danger counter">
+                      {this.state.sent}
+                    </span>
+                  </span>
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}
@@ -340,7 +338,13 @@ class NavBar extends Component {
           <Modal.Body>
             <div className="row">
               <div className="col-8 mx-auto">
-                <textarea name="" id="" cols="30" rows="10"></textarea>
+                <textarea
+                  className="textarea-nav"
+                  name=""
+                  id=""
+                  cols="20"
+                  rows="8"
+                ></textarea>
               </div>
             </div>
           </Modal.Body>
@@ -414,16 +418,16 @@ class NavBar extends Component {
                   <div className="card text-dark bg-light mb-3">
                     {/* <div className="card-header">Manager Info</div> */}
                     <div className="row m-2">
-                      <div className="col-2">Menager:</div>
-                      <div className="col-3">{"Name: " + managerName}</div>
-                      <div className="col-3">{"Phone: " + managerPhone}</div>
-                      <div className="col-4">{"Email: " + managerEmail}</div>
+                      <div className="col-sm-2">Menager:</div>
+                      <div className="col-sm-3">{"Name: " + managerName}</div>
+                      <div className="col-sm-3">{"Phone: " + managerPhone}</div>
+                      <div className="col-sm-4">{"Email: " + managerEmail}</div>
                     </div>
                     <div className="row m-2">
-                      <div className="col-2">Regional:</div>
-                      <div className="col-3">{"Name: " + userName}</div>
-                      <div className="col-3">{"Region: " + userRegion}</div>
-                      <div className="col-4">{"Phone: " + userEmail}</div>
+                      <div className="col-sm-2">Regional:</div>
+                      <div className="col-sm-3">{"Name: " + userName}</div>
+                      <div className="col-sm-3">{"Region: " + userRegion}</div>
+                      <div className="col-sm-4">{"Phone: " + userEmail}</div>
                     </div>
                   </div>
                 </div>

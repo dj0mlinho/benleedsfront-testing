@@ -6,7 +6,8 @@
   background-color: #8d98f2;
   font-size: 1em;
 }
-
+.textarea-nav {
+}
 .buttons {
   display: flex;
   justify-content: space-between;
