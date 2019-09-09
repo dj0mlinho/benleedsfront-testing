@@ -27,6 +27,7 @@ export default class WorkOrder extends Component {
     // selProfession : "all",
     professions : null ,
     jobIdFromDate: "",
+    roomPrices : null ,
     load: false
   };
 
@@ -52,7 +53,24 @@ export default class WorkOrder extends Component {
       delete vendorsWithoutDisabled[i].calendar;
     }
 
-    let allSentJoobs = jobs.filter(job=> job.status === "sent")
+    let allSentJoobs = jobs.filter(job=> job.status === "sent");
+
+    
+    ////// creating a obj whit separate rooms and filed whit appropriate jobs
+    let jobsA = [...workorder.jobs]
+    let roomNameArrey = [];
+    jobsA.forEach(job => {
+    roomNameArrey.push(job.room) ;
+     });
+     let newRoomNameArrey = [...new Set(roomNameArrey)];
+     let roomObj = {} ;
+     newRoomNameArrey.forEach(room => {
+          roomObj[room] = jobsA.filter(job => job.room === room) ;
+     }); 
+     
+  
+     
+      
 
     this.setState(() => ({
       jobs : jobs ,
@@ -64,6 +82,7 @@ export default class WorkOrder extends Component {
       users: users,
       professions : professionsArrey,
       okTriger: false,
+      roomPrices : roomObj ,
       load: true
     }));
   }
@@ -316,9 +335,10 @@ export default class WorkOrder extends Component {
         <AdminNavbar pageName="Work Order" />
         <ToastContainer />
           
-          {console.log("wowowo" , this.state.workorder)}
+          {/* {console.log("wowowo" , this.state.workorder)} */}
 
         <WorkOrderTable
+          roomPrices = {this.state.roomPrices}
           allWorkOrders={this.state.allWorkOrders}
           workorder={this.state.workorder}
           users={this.state.users}

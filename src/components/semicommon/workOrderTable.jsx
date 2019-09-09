@@ -31,7 +31,7 @@ export default class workOrderTable extends Component {
 
   render() {
     const { workorder, jobs } = this.props.workorder;
-    const { users, onDateChange, onDateChangeTwo, onVendorChange , vendors, handleId, returnVendorId, onOk, okTriger , onProfessionChange, professions, vendorsWhitSamePro, allSentJoobs, allWorkOrders } = this.props;
+    const { users, onDateChange, onDateChangeTwo, onVendorChange , vendors, handleId, returnVendorId, onOk, okTriger , onProfessionChange, professions, vendorsWhitSamePro, allSentJoobs, allWorkOrders, roomPrices } = this.props;
 
     let workorderUser = users.find(x => x._id === workorder.userId);
     const userName =   workorderUser.name ;  
@@ -94,6 +94,7 @@ export default class workOrderTable extends Component {
           </div>
 
           <WorkOrderJobs 
+             roomPrices = {roomPrices}
              allWorkOrders ={allWorkOrders}
              jobs={jobs}
              searchOption ={this.state.searchOption}

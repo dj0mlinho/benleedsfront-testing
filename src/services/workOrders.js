@@ -26,11 +26,11 @@ export function endJob(jobId){
 
 export function assignJob(jobId, job, vendor, workorder, allJobs){
 
-  console.log( "jobid as" , jobId);
-  console.log( "wo as" , workorder);
-  console.log( "job as" , job);
-  console.log( "jvendor as" , vendor);
-  console.log( "all jobs" , allJobs);
+  // console.log( "jobid as" , jobId);
+  // console.log( "wo as" , workorder);
+  // console.log( "job as" , job);
+  // console.log( "jvendor as" , vendor);
+  // console.log( "all jobs" , allJobs);
   // console.log("date" , typeof job.assignmentDate);
   // console.log("date" , job.assignmentDate);
 

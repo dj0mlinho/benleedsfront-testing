@@ -33,6 +33,12 @@
   display: inline;
 }
 
+.testDiv {
+  margin-top:  1rem ;
+  border-bottom: 2px dotted black ;
+  margin-bottom: 0.5rem ;
+}
+
 .reset-right-padding {
   padding-right: 0 !important ;
 }

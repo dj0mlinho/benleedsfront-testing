@@ -18,7 +18,8 @@ export default function WorkOrderJobs(props) {
     professions,
     vendorsWhitSamePro,
     allSentJoobs,
-    allWorkOrders
+    allWorkOrders,
+    roomPrices
   } = props;
 
   //// sort jobs and vendors
@@ -37,7 +38,7 @@ export default function WorkOrderJobs(props) {
   let searchedArrey = null;
   if (searchQuery !== "") {
     searchedArrey = sortJobs.filter(job =>
-      job[searchOption].toLowerCase().startsWith(searchQuery.toLowerCase())
+      job[searchOption].toLowerCase().includes(searchQuery.toLowerCase())
     );
     sortJobs = searchedArrey;
   } else {
@@ -66,15 +67,44 @@ export default function WorkOrderJobs(props) {
       return "Select vendor";
     }
   };
+  
+
+  const populateArrey = (room) => {
+       let filterRoom = sortJobs.filter(x => x.room === room) ;
+       return filterRoom ;
+       
+  }
+
+  const totalPrice = (room) => {   
+    let totalP = [] ;
+    roomPrices[room].forEach(job => {
+       totalP.push(parseFloat(job.price)) ;
+    });
+   let tot = totalP.reduce((acc,curent) => {
+     return acc + curent ;
+    }) ; 
+
+    return tot.toFixed(2) ;
+    
+  }
+
+  let roomNameArrey = [];
+  sortJobs.forEach(job => {
+    roomNameArrey.push(job.room) ;
+  });
+  let newRoomNameArrey = [...new Set(roomNameArrey)]
 
   return (
     <>
-      {sortJobs.map(job => (
+      {newRoomNameArrey.map(room => (
+        <React.Fragment>
+        <div className="testDiv font-weight-bold" key={room}>{room}    &#36; {totalPrice(room)}</div>
+        {populateArrey(room).map(job => (
         <table
           key={job._id}
           className="table table-bordered table-border-bottom table-responsive wo-jobs-table"
         >
-         
+           
           <thead>
             <tr className="font-resp-wo">
               <th>
@@ -210,7 +240,14 @@ export default function WorkOrderJobs(props) {
             </tr>
           </tbody>
         </table>
+      ))
+        
+        
+        
+        }
+        </React.Fragment>
       ))}
+            
     </>
   );
 }
