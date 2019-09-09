@@ -259,7 +259,7 @@ class NavBar extends Component {
               <div className="float-right col-sm-4">
                 <button
                   onClick={() => this.handlelogOut()}
-                  className="btn btn-danger "
+                  className="btn btn-danger float-right"
                 >
                   &#x2716; Sign Out
                 </button>
