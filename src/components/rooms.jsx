@@ -953,19 +953,19 @@ class Rooms extends Component {
           ) : null}
 
           {this.state.start && value && isLoadingFullRoom && !startMakeReady ? (
-            <div className="row m-2 questions">
+            <div className="row m-2 questions mx-auto">
               {!makeReady ? (
-                <div className="col-sm-3">
+                <div className="col-sm-2">
                   <button
                     onClick={() => this.handleMakeReady()}
-                    className="btn btn-outline-primary btn-lg m-1"
+                    className="btn btn-success btn-lg m-1"
                   >
                     Make Ready
                   </button>
                 </div>
               ) : null}
               {!makeReady ? (
-                <div className="col-sm-9">
+                <div className="col-sm-10">
                   {this.state.buttons.map(button => (
                     <button
                       key={button}
