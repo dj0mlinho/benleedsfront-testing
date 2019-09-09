@@ -89,12 +89,12 @@ class Workorders extends Form {
             onFinishedButton={this.handleFinishedButton}
           />
           <div className="rooms border text-center">
-            <button
+            {/* <button
               onClick={() => this.handlelogOut()}
               className="btn btn-danger m-3"
             >
               Logout
-            </button>
+            </button> */}
             <h1 className="lead m-2">
               All {this.props.match.params.i} workorders
             </h1>
