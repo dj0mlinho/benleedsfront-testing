@@ -948,7 +948,7 @@ class Rooms extends Component {
             <div className="float-left">
               <button
                 onClick={() => this.handleHomeButton()}
-                className="build-div btn btn-info m-3 "
+                className="button btn btn-info m-3 "
               >
                 ⏎ Back
               </button>
@@ -958,7 +958,7 @@ class Rooms extends Component {
           {start && startMakeReady && isLoadingFullRoom ? (
             <button
               onClick={() => this.handleFinishedButton()}
-              className="build-div btn btn-primary m-3 "
+              className="button btn btn-primary m-3 "
             >
               Forward ➔
             </button>
