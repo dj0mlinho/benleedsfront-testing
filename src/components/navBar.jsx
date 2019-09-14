@@ -12,6 +12,33 @@ class NavBar extends Component {
     setShow: false
   };
 
+  handleLevels = e => {
+    let work = JSON.parse(localStorage.getItem("workorder"));
+
+    work.level = e.target.value;
+
+    localStorage.setItem("workorder", JSON.stringify(work));
+  };
+  handleGeneralNotes = e => {
+    let woComment = e.target.value;
+    this.setState({ woComment });
+  };
+  handleBackButton = url => {
+    const region = JSON.parse(localStorage.getItem("currentUser")).region;
+
+    this.props.history.push("/rooms/" + region);
+  };
+
+  handleChangeArea = ({ currentTarget: input }) => {
+    const value = input.value;
+    console.log(this.state.value);
+    // value[input.id] = input.value;
+    let work = JSON.parse(localStorage.getItem("workorder"));
+    work.toDo = value;
+
+    localStorage.setItem("workorder", JSON.stringify(work));
+    this.setState({ value });
+  };
   async componentDidMount() {
     let source = JSON.parse(localStorage.getItem("currentUser")).imgPath;
 
@@ -62,7 +89,7 @@ class NavBar extends Component {
 
       localStorage.setItem("savedWorkorders", JSON.stringify(data.data));
       localStorage.setItem("workorders", JSON.stringify(data.data));
-      localStorage.setItem("chosenOpt", JSON.stringify("saved"));
+      // localStorage.setItem("chosenOpt", JSON.stringify("saved"));
 
       this.props.history.push(`/user/workorders/${e.target.value}`);
 
@@ -82,10 +109,14 @@ class NavBar extends Component {
       localStorage.removeItem("jobs");
 
       localStorage.setItem("workorders", JSON.stringify(data.data));
-      localStorage.setItem("chosenOpt", JSON.stringify("pending"));
+      // localStorage.setItem("chosenOpt", JSON.stringify("pending"));
 
       this.props.history.push(`/user/workorders/${e.target.value}`);
     } else if (e.target.value == "new") {
+      console.log("new");
+      // let start = false;
+
+      // localStorage.setItem("startBtn", JSON.stringify(start));
       localStorage.removeItem("jobs");
       localStorage.removeItem("makeReady");
       localStorage.removeItem("checkedQuestions");
@@ -214,14 +245,14 @@ class NavBar extends Component {
       dat.substring(0, dat.length - 6) + dat.slice(dat.length - 3);
 
     return (
-      <nav className="nav-box  text-center">
+      <nav className="nav-box text-center">
         <div className="row">
           <div className="logoBenLeeds col-12 p-3">
             <img src={logo} alt="Ben Leeds Logo" />
           </div>
         </div>
         {!start ? (
-          <div className="px-3">
+          <div className="px-3 text-center">
             <div className="row m-1">
               <div className="date col-sm-4 offset-sm-4">
                 {!chosenOptSaved &&
@@ -238,7 +269,7 @@ class NavBar extends Component {
                       <h5 className="card-title">{userName}</h5>
                     </div>
                     <div className="card-footer user-info">
-                      <small className="text-center">{region}</small>
+                      <div className="card-div text-center">{region}</div>
                     </div>
                   </div>
                 ) : null}
@@ -251,7 +282,7 @@ class NavBar extends Component {
                   <input
                     disabled
                     type="text"
-                    className="form-control text-center"
+                    className=" build-div form-control text-center"
                     defaultValue={dateNow}
                   />
                 </div>
@@ -259,7 +290,7 @@ class NavBar extends Component {
               <div className="float-right col-sm-4">
                 <button
                   onClick={() => this.handlelogOut()}
-                  className="btn btn-danger float-right"
+                  className="button btn btn-danger float-right"
                 >
                   &#x2716; Sign Out
                 </button>
@@ -325,26 +356,33 @@ class NavBar extends Component {
             </div>
           </div>
         ) : null}
-        <Modal show={this.state.setShow} onHide={this.handleClose}>
-          <Modal.Header id="modal-styling-title" closeButton>
-            <div className="row">
-              <div className="col-12 text-center">
+        <Modal
+          id="modal-styling"
+          show={this.state.setShow}
+          onHide={this.handleClose}
+        >
+          <Modal.Header closeButton className="text-center ">
+            <div className="row col-12">
+              <div className="col-8 mx-auto">
                 <Modal.Title className="btn btn-outline-info">
-                  To Do Units{" "}
+                  To Do
                 </Modal.Title>
               </div>
             </div>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body id="modal-styling-body">
             <div className="row">
-              <div className="col-8 mx-auto">
+              <div className="col-12 mx-auto">
                 <textarea
+                  onChange={this.handleChangeArea}
+                  value={this.state.valueArea}
                   className="textarea-nav"
                   name=""
                   id=""
-                  cols="20"
-                  rows="8"
+                  cols="40"
+                  rows="2"
                 ></textarea>
+                {/* <input type="text" /> */}
               </div>
             </div>
           </Modal.Body>
@@ -354,14 +392,33 @@ class NavBar extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <div className="container mainPage">
+          {saved ? (
+            <div className="col-12  ">
+              <div className="info">
+                {/* <div className="card-header">Manager Info</div> */}
+
+                <span className="">
+                  <h1 className="m-3">Work Order</h1>
+                  <p>
+                    Address: {workorder.adress} <br />
+                    Building Number: {workorder.buildingNumber} <br />
+                    Apartment Number: {workorder.apartmentNumber} <br />
+                    Square Footage: {workorder.squareFeet} <br />
+                    Level: {workorder.level}
+                  </p>
+                </span>
+              </div>
+            </div>
+          ) : null}
           {!chosenOptSaved &&
           !chosenOptPending &&
           chosenOptNew &&
           !start &&
           !this.props.location.state ? (
             <div className="row nav-box">
-              <div className="col-sm-4">
+              <div className="col-lg-3">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
@@ -383,7 +440,7 @@ class NavBar extends Component {
                   ) : null}
                 </div>
               </div>
-              <div className="col-sm-4">
+              <div className="col-lg-3">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
@@ -398,11 +455,38 @@ class NavBar extends Component {
                 </div>
               </div>
 
-              <div className="col-sm-4">
+              {/* <div className="col-lg-4">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <div className="build input-group-text  text-white">
-                      Square Footage
+                      Levels
+                    </div>
+                  </div>
+                  <input
+                    value={this.props.value2}
+                    onChange={this.props.onHandleSquare}
+                    className={`build-input ${this.props.classs}`}
+                  />
+                </div>
+              </div> */}
+              <div className="button col-lg-3 text-left">
+                <label className="build text-white p-2">
+                  Pick Level:
+                  <select className="bg-light" onChange={this.handleLevels}>
+                    <option value="1" />
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <div className="build input-group-text text-white">
+                      Sq. ft.
                     </div>
                   </div>
                   <input
@@ -414,20 +498,21 @@ class NavBar extends Component {
               </div>
 
               {this.props.buildingState ? (
-                <div className="col-12">
-                  <div className="card text-dark bg-light mb-3">
+                <div className="col-12  ">
+                  <div className="card text-dark bg-light mb-3 info">
                     {/* <div className="card-header">Manager Info</div> */}
-                    <div className="row m-2">
-                      <div className="col-sm-2">Menager:</div>
-                      <div className="col-sm-3">{"Name: " + managerName}</div>
-                      <div className="col-sm-3">{"Phone: " + managerPhone}</div>
-                      <div className="col-sm-4">{"Email: " + managerEmail}</div>
-                    </div>
+
                     <div className="row m-2">
                       <div className="col-sm-2">Regional:</div>
-                      <div className="col-sm-3">{"Name: " + userName}</div>
+                      <div className="col-sm-3">{userName}</div>
                       <div className="col-sm-3">{"Region: " + userRegion}</div>
                       <div className="col-sm-4">{"Email: " + userEmail}</div>
+                    </div>
+                    <div className="row m-2">
+                      <div className="col-sm-2">Manager:</div>
+                      <div className="col-sm-3">{managerName}</div>
+                      <div className="col-sm-3">{"Phone: " + managerPhone}</div>
+                      <div className="col-sm-4">{"Email: " + managerEmail}</div>
                     </div>
                   </div>
                 </div>

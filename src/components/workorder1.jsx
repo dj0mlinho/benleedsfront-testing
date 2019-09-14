@@ -22,13 +22,13 @@ class Wo extends Component {
   }
 
   componentDidMount() {}
-  handleLevels = e => {
-    let work = JSON.parse(localStorage.getItem("workorder"));
+  // handleLevels = e => {
+  //   let work = JSON.parse(localStorage.getItem("workorder"));
 
-    work.level = e.target.value;
+  //   work.level = e.target.value;
 
-    localStorage.setItem("workorder", JSON.stringify(work));
-  };
+  //   localStorage.setItem("workorder", JSON.stringify(work));
+  // };
   handleGeneralNotes = e => {
     let woComment = e.target.value;
     this.setState({ woComment });
@@ -226,6 +226,7 @@ class Wo extends Component {
     const address = workorder.adress;
     const value = workorder.apartmentNumber;
     const value2 = workorder.squareFeet;
+    const level = workorder.level;
     return (
       <React.Fragment>
         <div className="container main-page">
@@ -245,12 +246,13 @@ class Wo extends Component {
           <div className="work-order border text-center mt-3">
             <h1 className="m-3">Work Order</h1>
             <span>
-              <p>
+              <p className="build-div">
                 Name: {userName} <br />
                 Email: {userEmail} <br />
                 Address: {address} <br />
                 Building Number: {buildingNumber} <br />
                 Apartment Number: {value} <br />
+                Level: {level} <br />
                 Square Footage: {value2}
               </p>
             </span>
@@ -316,31 +318,18 @@ class Wo extends Component {
               name=""
               id=""
             />
-            <div className="col-sm-12">
-              <label>
-                Pick Level
-                <select onChange={this.handleLevels}>
-                  <option value="1" />
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-              </label>
-            </div>
 
             {/* <label className="btn btn-secondary ">Workorders</label> */}
 
             <div className="buttons">
               <button
                 onClick={() => this.handleBackButton()}
-                className="btn btn-warning m-3"
+                className="button btn btn-warning m-3"
               >
                 ⏎ Cancel
               </button>
               <button
-                className="btn btn-success m-3"
+                className="button btn btn-success m-3"
                 onClick={this.handlePrintButton}
               >
                 Print
@@ -348,7 +337,7 @@ class Wo extends Component {
 
               <button
                 onClick={() => this.handleFinishedButton()}
-                className="btn btn-primary m-3"
+                className="button btn btn-primary m-3"
               >
                 Send
               </button>

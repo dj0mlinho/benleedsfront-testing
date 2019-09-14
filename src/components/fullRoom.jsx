@@ -24,9 +24,119 @@ class FullRoom extends Form {
   };
 
   componentDidMount() {}
+  async handleHomeButton() {
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    let finalData = {};
+    if (work.buildingNumber && work.apartmentNumber) {
+      finalData.buildingNumber = work.buildingNumber;
+      finalData.apartmentNumber = work.apartmentNumber;
+      finalData.userId = work.userId;
+    }
 
+    // this.setState({ isLoading: false });
+
+    const data1 = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
+      JSON.stringify(finalData)
+    );
+
+    console.log(data1, "home button get full rooom");
+
+    if (data1.data) {
+      let _id = data1.data._id;
+      work._id = _id;
+
+      localStorage.setItem("workorder", JSON.stringify(work));
+      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
+    }
+    if (data1.statusText === "OK") {
+      const allItems = JSON.parse(localStorage.getItem("allItems"));
+      let jobs = [...allItems].filter(m => m.checked === true);
+      // const jobs = JSON.parse(localStorage.getItem("jobs"));
+      const work = JSON.parse(localStorage.getItem("workorder"));
+      work.autosaveTime = new Date();
+      if (jobs != null) {
+        work.jobs = jobs;
+      }
+
+      work.checkedQuestions = JSON.parse(
+        localStorage.getItem("checkedQuestions")
+      );
+
+      localStorage.setItem("workorder", JSON.stringify(work));
+      const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+      const data = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+        JSON.stringify(finalData)
+      );
+      console.log(data, "handle home full room newTemp");
+      if (data.statusText === "OK") {
+        let work = JSON.parse(localStorage.getItem("workorder"));
+
+        localStorage.removeItem("jobs");
+
+        localStorage.removeItem("startBtn");
+        localStorage.removeItem("building");
+        localStorage.removeItem("chosenOpt");
+        work.jobs = {};
+        work.buildingNumber = "";
+        work.apartmentNumber = "";
+        work.adress = "";
+        work.squareFeet = "";
+        work.level = "";
+        work.checkedQuestions = "";
+
+        localStorage.removeItem("checkedQuestions");
+        localStorage.removeItem("makeReady");
+        delete work._id;
+        delete work.questions;
+
+        localStorage.setItem("workorder", JSON.stringify(work));
+        const region = JSON.parse(localStorage.getItem("currentUser")).region;
+        // this.setState({ buildingState: false });
+        this.props.history.push(`/rooms/${region}`);
+        document.location.reload();
+      }
+    }
+  }
   getCurrentRoom = () => {
     return this.props.match.params.id;
+  };
+  handleFinishedButton = async () => {
+    localStorage.removeItem("chosenOpt");
+    let start = true;
+    localStorage.setItem("startBtn", JSON.stringify(start));
+    const allItems = JSON.parse(localStorage.getItem("allItems"));
+
+    let jobs = [...allItems].filter(m => m.checked === true);
+    // localStorage.setItem("jobs", JSON.stringify(checkedAllItems));
+    // const jobs = JSON.parse(localStorage.getItem("jobs"));
+    const work = JSON.parse(localStorage.getItem("workorder"));
+    work.autosaveTime = new Date();
+    if (jobs != null) {
+      work.jobs = jobs;
+    }
+
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+    const data = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+      JSON.stringify(finalData)
+    );
+    console.log(data, "handle finished full room newTemp");
+
+    if (data.statusText === "OK") {
+      // const work = JSON.parse(localStorage.getItem("workorder"));
+      const date = new Date();
+      work.completedTime = date;
+      localStorage.setItem("workorder", JSON.stringify(work));
+
+      this.props.history.push(
+        "/rooms/" + this.props.match.params.id + "/work-order"
+      );
+    }
   };
   handleBackButton = async () => {
     let start = true;
@@ -54,7 +164,7 @@ class FullRoom extends Form {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-    console.log(data);
+    console.log(data, "handle back full room newTemp");
     if (data.statusText === "OK") {
       this.props.history.push("/rooms/" + this.props.match.params.m);
     }
@@ -79,40 +189,6 @@ class FullRoom extends Form {
       document.location = "/";
     }
   }
-
-  handleFinishedButton = async () => {
-    let start = true;
-    localStorage.setItem("startBtn", JSON.stringify(start));
-    const allItems = JSON.parse(localStorage.getItem("allItems"));
-
-    let jobs = [...allItems].filter(m => m.checked === true);
-    // localStorage.setItem("jobs", JSON.stringify(checkedAllItems));
-    // const jobs = JSON.parse(localStorage.getItem("jobs"));
-    const work = JSON.parse(localStorage.getItem("workorder"));
-    work.autosaveTime = new Date();
-    if (jobs != null) {
-      work.jobs = jobs;
-    }
-
-    localStorage.setItem("workorder", JSON.stringify(work));
-    const finalData = JSON.parse(localStorage.getItem("workorder"));
-
-    const data = await axios.post(
-      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-      JSON.stringify(finalData)
-    );
-
-    console.log(data);
-    if (data.statusText === "OK") {
-      this.props.history.push(
-        "/rooms/" + this.props.match.params.id + "/work-order"
-      );
-      // const work = JSON.parse(localStorage.getItem("workorder"));
-      const date = new Date();
-      work.completedTime = date;
-      localStorage.setItem("workorder", JSON.stringify(work));
-    }
-  };
 
   handleChangeArea = ({ currentTarget: input }) => {
     const value = this.state.value1;
@@ -203,82 +279,7 @@ class FullRoom extends Form {
 
     this.setState({ adress });
   };
-  async handleHomeButton() {
-    const work = JSON.parse(localStorage.getItem("workorder"));
-    let finalData = {};
-    if (work.buildingNumber && work.apartmentNumber) {
-      finalData.buildingNumber = work.buildingNumber;
-      finalData.apartmentNumber = work.apartmentNumber;
-      finalData.userId = work.userId;
-    }
 
-    // this.setState({ isLoading: false });
-
-    const data1 = await axios.post(
-      process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
-      JSON.stringify(finalData)
-    );
-
-    console.log(data1);
-
-    if (data1.data) {
-      let _id = data1.data._id;
-      work._id = _id;
-
-      localStorage.setItem("workorder", JSON.stringify(work));
-      // localStorage.setItem("jobs", JSON.stringify(data1.data.workorder.jobs));
-    }
-    if (data1.statusText === "OK") {
-      const allItems = JSON.parse(localStorage.getItem("allItems"));
-      let jobs = [...allItems].filter(m => m.checked === true);
-      // const jobs = JSON.parse(localStorage.getItem("jobs"));
-      const work = JSON.parse(localStorage.getItem("workorder"));
-      work.autosaveTime = new Date();
-      if (jobs != null) {
-        work.jobs = jobs;
-      }
-      console.log(work);
-      work.checkedQuestions = JSON.parse(
-        localStorage.getItem("checkedQuestions")
-      );
-
-      localStorage.setItem("workorder", JSON.stringify(work));
-      const finalData = JSON.parse(localStorage.getItem("workorder"));
-
-      const data = await axios.post(
-        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-        JSON.stringify(finalData)
-      );
-
-      if (data.statusText === "OK") {
-        let work = JSON.parse(localStorage.getItem("workorder"));
-
-        localStorage.removeItem("jobs");
-
-        localStorage.removeItem("startBtn");
-        localStorage.removeItem("building");
-        localStorage.removeItem("chosenOpt");
-        work.jobs = {};
-        work.buildingNumber = "";
-        work.apartmentNumber = "";
-        work.adress = "";
-        work.squareFeet = "";
-        work.level = "";
-        work.checkedQuestions = "";
-
-        localStorage.removeItem("checkedQuestions");
-        localStorage.removeItem("makeReady");
-        delete work._id;
-        delete work.questions;
-
-        localStorage.setItem("workorder", JSON.stringify(work));
-        const region = JSON.parse(localStorage.getItem("currentUser")).region;
-        // this.setState({ buildingState: false });
-        this.props.history.push(`/rooms/${region}`);
-        document.location.reload();
-      }
-    }
-  }
   handleCheckboxChange = e => {
     const checked = { ...this.state.checked };
 
@@ -525,28 +526,28 @@ class FullRoom extends Form {
           <div className="buttons">
             <button
               onClick={() => this.handleBackButton()}
-              className="btn btn-warning m-3"
+              className="button btn btn-warning m-3"
             >
               ⏎ Back
             </button>
             <div className="float-left">
               <button
                 onClick={() => this.handleHomeButton()}
-                className="btn btn-info  m-3"
+                className="button btn btn-info  m-3"
               >
                 🏙 Home
               </button>
             </div>
             <button
               onClick={() => this.handleFinishedButton()}
-              className="btn btn-primary m-3"
+              className="button btn btn-primary m-3"
             >
               Forward ➔
             </button>
 
             <button
               onClick={() => this.handlelogOut()}
-              className="btn btn-danger m-3 float-right"
+              className="button btn btn-danger m-3 float-right"
             >
               &#x2716; Logout
             </button>
@@ -554,13 +555,13 @@ class FullRoom extends Form {
 
           <span
             onClick={e => this.firstInput.current.focus()}
-            className="btn btn-secondary btn-sm"
+            className="search-input btn btn-secondary btn-sm"
           >
             Search by Item's:
           </span>
           <SearchBox
             firstInput={this.firstInput}
-            // className="form-control"
+            // className="button"
             value={searchQuery}
             onChange={this.handleSearch}
           />
@@ -572,7 +573,7 @@ class FullRoom extends Form {
           >
             <h1 className="lead m-3">{title}</h1>
             <button
-              className="btn btn-primary"
+              className="button btn btn-primary"
               onClick={() => this.handleExtraItems()}
             >
               {statusOfExtraItems}

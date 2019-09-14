@@ -6,7 +6,9 @@
 #modal-styling-title {
   margin: 0 auto;
 }
-
+.card-div {
+  font-size: 1.1rem !important;
+}
 .buttons {
   flex-wrap: wrap-reverse !important;
 }
@@ -18,10 +20,20 @@
 /* .check-box {
   height: 40px !important;
 } */
+.textarea-rooms {
+  width: 100px;
+
+  background-color: #eee;
+}
 .main-page {
   padding: 1.5em;
 }
-
+.card-footer {
+  font-size: 1.5rem !important;
+  /* line-height: 2rem; */
+  height: 90px;
+  padding: 15px !important;
+}
 .main-page {
   background-color: #eee !important;
 }
@@ -36,19 +48,15 @@
   .questions {
     flex-wrap: wrap-reverse !important;
   }
-
+  .card-div {
+    font-size: 1rem !important;
+  }
   .card-footer {
     font-size: small !important;
     padding: 2px !important;
     height: 0px;
     text-align: center;
     line-height: 20px;
-  }
-
-  .textarea-rooms {
-    width: 100px;
-
-    background-color: #eee;
   }
 
   /* .table th {
@@ -79,11 +87,12 @@
     width: 80px;
   } */
   .card img {
+    /* font-size: 1.5rem !important; */
     height: inherit !important;
   }
 
   .card-footer {
-    font-size: 15px !important;
+    /* font-size: 15px !important; */
     line-height: 25px;
     height: 50px;
     padding: 2px;
@@ -103,8 +112,8 @@
   tr .item {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
-    padding-left: 5px !important;
-    padding-right: 8px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
     /* padding: 0px !important; */
     font-size: 13px !important;
   }
@@ -135,10 +144,10 @@
   position: absolute;
 }
 
-@media (min-width: 390px) and (min-width: 767.98px) {
+@media (min-width: 390px) and (max-width: 767.98px) {
   .card-footer {
     /* font-size: 15px !important; */
-    line-height: 2rem;
+    /* line-height: 2rem; */
     height: 90px;
     padding: 15px !important;
   }

@@ -4,11 +4,13 @@
 
 .nav-box {
   background-color: #8d98f2;
-  font-size: 1em;
+  font-size: 1.3rem;
 }
+
 .textarea-nav {
 }
 .buttons {
+  font-size: 1.3rem !important;
   display: flex;
   justify-content: space-between;
   background-color: #23408e;
@@ -21,7 +23,10 @@
 
 .build {
   background-color: #23408e !important;
-  font-weight: bold;
+  /* font-weight: bold; */
+  /* font-size: 1.3rem !important;
+}
+*/
 }
 .card-user {
   margin-bottom: 5px;
@@ -59,7 +64,7 @@
   margin-bottom: 15px !important;
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 576px) {
   .date {
     width: 100%;
   }
@@ -79,7 +84,7 @@
     width: 250px !important;
   }
   .card-user {
-    margin: 1em;
+    /* margin: 1em; */
     background-color: #23408e !important;
     /* border-radius: 20% !important; */
     color: white;
@@ -107,4 +112,34 @@
   background-color: #23408e !important;
   /* border-radius: 20% !important; */
   color: white;
+}
+#modal-styling {
+  width: min-content;
+}
+#modal-styling-body {
+  width: min-content;
+}
+
+@media only screen and (min-width: 768px) {
+  .build-input {
+    font-size: 1.1rem !important;
+  }
+  .textarea-workorder {
+    font-size: 1.1rem !important;
+  }
+  .search-input {
+    font-size: 1.1rem !important;
+  }
+  .button {
+    font-size: 1.1rem !important;
+  }
+  .build {
+    font-size: 1.1rem !important;
+  }
+  .info {
+    font-size: 1.1rem !important;
+  }
+  .build-div {
+    font-size: 1.1rem !important;
+  }
 }

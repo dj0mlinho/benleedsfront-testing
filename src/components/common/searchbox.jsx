@@ -7,7 +7,7 @@ const SearchBox = ({ value, onChange, firstInput }) => {
       name="query"
       ref={firstInput}
       // className="col-2 offset-10  mt-3"
-      className="mt-3"
+      className="mt-3 button"
       placeholder="Search..."
       value={value}
       onChange={e => onChange(e.currentTarget.value)}

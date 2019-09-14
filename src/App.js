@@ -42,7 +42,7 @@ class App extends Component {
           <ProtectedRoute path="/admin" component={AdminPanel} />{" "}
           <Route
             path="/user/workorders/:i"
-            render={props => <Workorders props={this.state.rooms} {...props} />}
+            render={props => <Workorders {...props} />}
           />
           <Route
             path="/:id/:m/work-order"

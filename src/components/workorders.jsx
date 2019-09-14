@@ -104,7 +104,7 @@ class Workorders extends Form {
             </h1>
             <span
               onClick={e => this.firstInput.current.focus()}
-              className="btn btn-secondary btn-sm mb-1"
+              className="search-input btn btn-secondary btn-sm mb-1"
             >
               Search by the Address:
             </span>

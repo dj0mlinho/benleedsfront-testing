@@ -17,3 +17,10 @@
   color: black;
   font-weight: bold;
 }
+
+.itemTd {
+  font-size: 1.1rem !important;
+}
+.item {
+  font-size: 1.1rem !important;
+}

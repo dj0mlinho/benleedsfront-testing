@@ -26,6 +26,8 @@ class Rooms extends Component {
 
     const allItems = JSON.parse(localStorage.getItem("allItems"));
     let jobs = [...allItems].filter(m => m.checked === true);
+
+    console.log(jobs == null, "jobs");
     // const jobs = JSON.parse(localStorage.getItem("jobs"));
     const work = JSON.parse(localStorage.getItem("workorder"));
     work.autosaveTime = new Date();
@@ -40,7 +42,7 @@ class Rooms extends Component {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-
+    console.log(data, "new temp links rooms ");
     if (data.statusText === "OK") {
       const work = JSON.parse(localStorage.getItem("workorder"));
 
@@ -53,7 +55,7 @@ class Rooms extends Component {
         process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
         JSON.stringify(finalData)
       );
-
+      console.log(data, " links  room get");
       if (data1.data) {
         let _id = data1.data._id;
         work._id = _id;
@@ -84,9 +86,10 @@ class Rooms extends Component {
   };
 
   async handleAsync() {
-    this.setState({ start: true, isLoadingFullRoom: false });
     const work = JSON.parse(localStorage.getItem("workorder"));
-    if (work.buildingNumber && work.apartmentNumber) {
+    if (work.buildingNumber && work.apartmentNumber && work.level) {
+      this.setState({ start: true, isLoadingFullRoom: false });
+
       let finalData = {};
 
       finalData.buildingNumber = work.buildingNumber;
@@ -106,6 +109,7 @@ class Rooms extends Component {
           JSON.stringify(finalData)
         );
 
+        console.log(data1, "handle handleAsync Start rooms  get");
         if (data2.statusText === "OK") {
           this.setState({
             isLoadingFullRoom: true
@@ -124,7 +128,9 @@ class Rooms extends Component {
           );
           allItems = checked.concat(unchecked);
           localStorage.setItem("allItems", JSON.stringify(allItems));
-
+          const loginTime = new Date();
+          work.loginTime = loginTime;
+          localStorage.setItem("workorder", JSON.stringify(work));
           if (data2.data._id) {
             let _id = data2.data._id;
             work._id = _id;
@@ -138,8 +144,10 @@ class Rooms extends Component {
       // localStorage.setItem("startBtn", JSON.stringify(start));
       // this.setState({ start: true, isLoading: false });
     } else {
-      alert("Please enter Building and Apartment Number!");
-      this.setState({ start: false, isLoading: false });
+      // localStorage.removeItem("startBtn");
+      // localStorage.removeItem("isLoading");
+      this.setState({ start: false, isLoadingFullRoom: true });
+      alert("Please enter Building Number, Apartment Number and Level!");
     }
   }
 
@@ -176,7 +184,7 @@ class Rooms extends Component {
           localStorage.setItem("allItems", JSON.stringify(allItems));
         }
 
-        localStorage.removeItem("chosenOpt");
+        // localStorage.removeItem("chosenOpt");
         work.adress = adress;
         work.jobs = this.props.location.state.jobs;
         value = this.props.location.state.apartmentNumber;
@@ -262,11 +270,37 @@ class Rooms extends Component {
     }
   }
 
-  handleBackButton = url => {
+  handleBackButton = () => {
+    let work = JSON.parse(localStorage.getItem("workorder"));
+
+    localStorage.removeItem("jobs");
+
+    localStorage.removeItem("startBtn");
+    localStorage.removeItem("building");
+    localStorage.removeItem("chosenOpt");
+    work.jobs = {};
+    work.buildingNumber = "";
+    work.apartmentNumber = "";
+    work.adress = "";
+    work.squareFeet = "";
+    work.level = "";
+    work.checkedQuestions = "";
+
+    localStorage.removeItem("checkedQuestions");
+    localStorage.removeItem("makeReady");
+    delete work._id;
+    delete work.questions;
+
+    localStorage.setItem("workorder", JSON.stringify(work));
+    const region = JSON.parse(localStorage.getItem("currentUser")).region;
+    // this.setState({ buildingState: false });
+    this.props.history.push(`/rooms/${region}`);
+    document.location.reload();
     // this.props.history.push("/rooms/" + this.props.match.params.id);
     // return console.log(this.props.match.url);
   };
   handleFinishedButton = async () => {
+    localStorage.removeItem("chosenOpt");
     let start = true;
     localStorage.setItem("startBtn", JSON.stringify(start));
     const allItems = JSON.parse(localStorage.getItem("allItems"));
@@ -286,6 +320,7 @@ class Rooms extends Component {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
+    console.log(data, "roooms  finished new data");
     if (data.statusText === "OK") {
       this.props.history.push(
         "/rooms/" + this.props.match.params.id + "/work-order"
@@ -415,7 +450,7 @@ class Rooms extends Component {
       process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
       JSON.stringify(finalData)
     );
-
+    console.log(data, "handle makeR full room newTemp");
     if (data.statusText === "OK") {
       const work = JSON.parse(localStorage.getItem("workorder"));
 
@@ -428,7 +463,7 @@ class Rooms extends Component {
         process.env.REACT_APP_API_URL + "/user/getTempWorkorder",
         JSON.stringify(finalData)
       );
-
+      console.log(data, "handle makeR full room get");
       if (data1.data) {
         let _id = data1.data._id;
         work._id = _id;
@@ -675,8 +710,10 @@ class Rooms extends Component {
       "Appliances",
       "Windows",
       "Blinds",
+
+      "Cleaning",
       "Re-glazed",
-      "Cleaning"
+      "Pest Cont"
     ];
     let microwave = [
       { name: "microwave", value: "white", checked: "" },
@@ -911,7 +948,7 @@ class Rooms extends Component {
             <div className="float-left">
               <button
                 onClick={() => this.handleHomeButton()}
-                className="btn btn-info m-3"
+                className="build-div btn btn-info m-3 "
               >
                 ⏎ Back
               </button>
@@ -921,25 +958,33 @@ class Rooms extends Component {
           {start && startMakeReady && isLoadingFullRoom ? (
             <button
               onClick={() => this.handleFinishedButton()}
-              className="btn btn-primary m-3"
+              className="build-div btn btn-primary m-3 "
             >
               Forward ➔
             </button>
           ) : null}
           {!this.state.start ? (
-            <div className="mx-auto">
+            <div className="col-12">
               {chosenOptNew ? (
-                <button
-                  onClick={() => this.handleAsync()}
-                  className="btn btn-success m-3 mx-auto"
-                >
-                  Start New
-                </button>
+                <div className="col-10">
+                  <button
+                    onClick={() => this.handleBackButton()}
+                    className="button btn btn-primary m-2 float-left "
+                  >
+                    ⏎ Back
+                  </button>
+                  <button
+                    onClick={() => this.handleAsync()}
+                    className="button btn btn-success m-2 float-center"
+                  >
+                    Start New
+                  </button>
+                </div>
               ) : null}
               {saved ? (
                 <button
                   onClick={() => this.handleAsync()}
-                  className="btn btn-success m-3 mx-auto"
+                  className="button btn btn-success m-3 mx-auto"
                 >
                   Continue Saved Workorder
                 </button>
@@ -981,7 +1026,7 @@ class Rooms extends Component {
                   {this.state.buttons.map(button => (
                     <button
                       key={button}
-                      className="btn  btn-primary  m-1"
+                      className="button btn  btn-primary  m-1"
                       onClick={() => this.handleShow(button)}
                     >
                       {button}
