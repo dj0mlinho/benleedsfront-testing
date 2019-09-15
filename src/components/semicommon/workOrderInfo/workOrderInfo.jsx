@@ -90,6 +90,16 @@ export default class workOrderInfo extends PureComponent {
          <span>Re-glaze : { this.checkAnswer( workorder.questions ? workorder.questions["re-glazed"] : "")} </span>
            </div>
         </div>
+        
+        <div className="row">
+         <div className="col-sm-6">
+             <span>Pest Control : {this.checkAnswer(workorder.questions ? workorder.questions["pest cont"] : "")} </span>
+         </div>
+         <div className="col-sm-6">
+      
+         </div>
+        </div>
+
 
         <div className="row">
           <div className="col-sm"><span className={styles.appliance}>Appliances</span></div>
