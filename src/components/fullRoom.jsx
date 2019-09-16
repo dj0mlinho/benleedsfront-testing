@@ -66,7 +66,7 @@ class FullRoom extends Form {
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const finalData = JSON.parse(localStorage.getItem("workorder"));
-      if (this.state.renderedItems[0]) {
+      if (this.state.renderedItems[0] && this.state.status != "extra") {
         const data = await axios.post(
           process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
           JSON.stringify(finalData)
@@ -148,7 +148,7 @@ class FullRoom extends Form {
 
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
-    if (this.state.renderedItems[0]) {
+    if (this.state.renderedItems[0] && this.state.status != "extra") {
       const data = await axios.post(
         process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
         JSON.stringify(finalData)
@@ -172,7 +172,7 @@ class FullRoom extends Form {
     }
   };
   handleBackButton = async () => {
-    console.log(this.state.renderedItems, "react-datepicker");
+    console.log(this.state.status, "react-datepicker");
     let start = true;
     let isLoadingFullRoom = true;
 
@@ -193,7 +193,7 @@ class FullRoom extends Form {
 
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
-    if (this.state.renderedItems[0]) {
+    if (this.state.renderedItems[0] && this.state.status != "extra") {
       const data = await axios.post(
         process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
         JSON.stringify(finalData)
