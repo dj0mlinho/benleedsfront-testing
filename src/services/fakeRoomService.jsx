@@ -56,7 +56,7 @@ const rooms = [
   {
     id: "5b21ca3eeb7f6fbccd47181590",
     image: Img5,
-    name: "12 Bathroom",
+    name: "1 2 Bathroom",
 
     itemId: [1, 4]
   },
