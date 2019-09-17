@@ -66,7 +66,10 @@ class FullRoom extends Form {
 
       localStorage.setItem("workorder", JSON.stringify(work));
       const finalData = JSON.parse(localStorage.getItem("workorder"));
+
+      console.log(this.state.status);
       if (this.state.renderedItems[0] && this.state.status != "extra") {
+        console.log("NEW TEMP");
         const data = await axios.post(
           process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
           JSON.stringify(finalData)
@@ -99,33 +102,33 @@ class FullRoom extends Form {
           this.props.history.push(`/rooms/${region}`);
           document.location.reload();
         }
+      } else {
+        let work = JSON.parse(localStorage.getItem("workorder"));
+
+        localStorage.removeItem("jobs");
+
+        localStorage.removeItem("startBtn");
+        localStorage.removeItem("building");
+        localStorage.removeItem("chosenOpt");
+        work.jobs = {};
+        work.buildingNumber = "";
+        work.apartmentNumber = "";
+        work.adress = "";
+        work.squareFeet = "";
+        work.level = "";
+        work.checkedQuestions = "";
+
+        localStorage.removeItem("checkedQuestions");
+        localStorage.removeItem("makeReady");
+        delete work._id;
+        delete work.questions;
+
+        localStorage.setItem("workorder", JSON.stringify(work));
+        const region = JSON.parse(localStorage.getItem("currentUser")).region;
+        // this.setState({ buildingState: false });
+        this.props.history.push(`/rooms/${region}`);
+        document.location.reload();
       }
-    } else {
-      let work = JSON.parse(localStorage.getItem("workorder"));
-
-      localStorage.removeItem("jobs");
-
-      localStorage.removeItem("startBtn");
-      localStorage.removeItem("building");
-      localStorage.removeItem("chosenOpt");
-      work.jobs = {};
-      work.buildingNumber = "";
-      work.apartmentNumber = "";
-      work.adress = "";
-      work.squareFeet = "";
-      work.level = "";
-      work.checkedQuestions = "";
-
-      localStorage.removeItem("checkedQuestions");
-      localStorage.removeItem("makeReady");
-      delete work._id;
-      delete work.questions;
-
-      localStorage.setItem("workorder", JSON.stringify(work));
-      const region = JSON.parse(localStorage.getItem("currentUser")).region;
-      // this.setState({ buildingState: false });
-      this.props.history.push(`/rooms/${region}`);
-      document.location.reload();
     }
   }
   getCurrentRoom = () => {
