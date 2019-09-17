@@ -68,41 +68,14 @@ class FullRoom extends Form {
       const finalData = JSON.parse(localStorage.getItem("workorder"));
 
       console.log(this.state.status);
-      if (this.state.renderedItems[0] && this.state.status != "extra") {
-        console.log("NEW TEMP");
-        const data = await axios.post(
-          process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-          JSON.stringify(finalData)
-        );
-        console.log(data, "handle home full room newTemp");
-        if (data.statusText === "OK") {
-          let work = JSON.parse(localStorage.getItem("workorder"));
 
-          localStorage.removeItem("jobs");
-
-          localStorage.removeItem("startBtn");
-          localStorage.removeItem("building");
-          localStorage.removeItem("chosenOpt");
-          work.jobs = {};
-          work.buildingNumber = "";
-          work.apartmentNumber = "";
-          work.adress = "";
-          work.squareFeet = "";
-          work.level = "";
-          work.checkedQuestions = "";
-
-          localStorage.removeItem("checkedQuestions");
-          localStorage.removeItem("makeReady");
-          delete work._id;
-          delete work.questions;
-
-          localStorage.setItem("workorder", JSON.stringify(work));
-          const region = JSON.parse(localStorage.getItem("currentUser")).region;
-          // this.setState({ buildingState: false });
-          this.props.history.push(`/rooms/${region}`);
-          document.location.reload();
-        }
-      } else {
+      console.log("NEW TEMP");
+      const data = await axios.post(
+        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+        JSON.stringify(finalData)
+      );
+      console.log(data, "handle home full room newTemp");
+      if (data.statusText === "OK") {
         let work = JSON.parse(localStorage.getItem("workorder"));
 
         localStorage.removeItem("jobs");
@@ -151,24 +124,19 @@ class FullRoom extends Form {
 
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
-    if (this.state.renderedItems[0] && this.state.status != "extra") {
-      const data = await axios.post(
-        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-        JSON.stringify(finalData)
-      );
-      console.log(data, "handle finished full room newTemp");
 
-      if (data.statusText === "OK") {
-        // const work = JSON.parse(localStorage.getItem("workorder"));
-        const date = new Date();
-        work.completedTime = date;
-        localStorage.setItem("workorder", JSON.stringify(work));
+    const data = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+      JSON.stringify(finalData)
+    );
+    console.log(data, "handle finished full room newTemp");
 
-        this.props.history.push(
-          "/rooms/" + this.props.match.params.id + "/work-order"
-        );
-      }
-    } else {
+    if (data.statusText === "OK") {
+      // const work = JSON.parse(localStorage.getItem("workorder"));
+      const date = new Date();
+      work.completedTime = date;
+      localStorage.setItem("workorder", JSON.stringify(work));
+
       this.props.history.push(
         "/rooms/" + this.props.match.params.id + "/work-order"
       );
@@ -196,16 +164,13 @@ class FullRoom extends Form {
 
     localStorage.setItem("workorder", JSON.stringify(work));
     const finalData = JSON.parse(localStorage.getItem("workorder"));
-    if (this.state.renderedItems[0] && this.state.status != "extra") {
-      const data = await axios.post(
-        process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
-        JSON.stringify(finalData)
-      );
-      console.log(data, "handle back full room newTemp");
-      if (data.statusText === "OK") {
-        this.props.history.push("/rooms/" + this.props.match.params.m);
-      }
-    } else {
+
+    const data = await axios.post(
+      process.env.REACT_APP_API_URL + "/user/newTempWorkorder",
+      JSON.stringify(finalData)
+    );
+    console.log(data, "handle back full room newTemp");
+    if (data.statusText === "OK") {
       this.props.history.push("/rooms/" + this.props.match.params.m);
     }
   };
