@@ -1,0 +1,11 @@
+.Main {
+  margin: 5.5rem auto;
+  width: 80%;
+  border: .2rem solid #ffff74 ;
+  background-color: #eee;
+}
+
+.PageName {
+  height: 2rem;
+  font-weight: 700;
+}

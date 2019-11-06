@@ -1,0 +1,10 @@
+export const LOGIN_START = "LOGIN_START" ;
+export const LOGIN_FAIL = "LOGIN_FAIL" ;
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS" ;
+export const LOGOUT = "LOGOUT" ;
+
+export const LOADING_END = "LOADING_END";
+
+export const APK_REFRESH_START = "APK_REFRESH_START" ;
+export const APK_REFRESH_SUCCESS = "APK_REFRESH_SUCCESS"
+export const APK_REFRESH_FAIL = "APK_REFRESH_FAIL"

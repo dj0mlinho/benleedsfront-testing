@@ -1,0 +1,33 @@
+.Options {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 1rem auto;
+  align-items: center;
+}
+
+.Options span {
+  display: block;
+  margin-bottom: .4rem;
+  font-weight: 700;
+}
+
+.btnDiv {
+  margin-top: 1rem;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ErrorMsgDiv {
+  height: 1rem;
+  margin-top: 0.5rem;
+  color: transparent;
+  transition: color 1.5s ease-in ;
+}
+
+
+.errorMsg {
+  color: red;
+}

@@ -1,0 +1,60 @@
+.Login {
+  width: 60%;
+  height: 60% ;
+  margin: 5rem auto;
+  border: .2rem solid #ffff74 ;
+  border-radius: .7rem ; 
+  animation: loginAnimation 1.5s ease-in ;
+  background-color: #eee ;
+  padding-bottom: 1rem;
+  
+}
+
+.errorDiv {
+  margin-bottom: 0.5rem;
+  color: transparent;
+  transition: color 1.5s ease-in ;
+}
+
+.errorMsg {
+  color: red;
+}
+
+.Logo {
+  margin: 2rem 0.5rem ;
+}
+
+/* .BtnLogin {
+  width: 8rem;
+  background-color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  transition: all 0.5s ease-in;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.25);
+  border: none  ;
+}
+
+.BtnLogin:hover {
+  background-color: #ffff74 ;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.25);
+}
+
+.BtnLogin:active {
+  transform: translateY(5px);
+  
+  }
+
+ .BtnLogin:focus {
+    outline:0;
+  } */
+
+@keyframes loginAnimation {
+  0%   {
+    opacity: 0;
+    
+  } 
+  100% {
+    opacity: 1;
+    
+  }
+}

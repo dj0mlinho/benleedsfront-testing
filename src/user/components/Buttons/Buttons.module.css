@@ -1,0 +1,8 @@
+.Buttons {
+  display: inline-block;
+}
+.Button {
+  display: block;
+  width: 100%;
+  text-align: center;
+}

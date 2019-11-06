@@ -1,0 +1,43 @@
+.LogoColor { 
+  color: #ffff74;
+}
+
+
+.Header {
+  width: 100% ;
+  height: 5rem ;
+  position: fixed ;
+  top: 0 ;
+  left: 0 ;
+  display: flex ;
+  background: #5c6bc0 ;
+  justify-content: space-between ;
+  align-items: center ;
+  padding:  0  1.25rem ;
+  box-sizing: border-box;
+  font-weight: 700;
+  box-shadow: 0 .3rem .6rem black;
+  /* z-index: 90; */
+}
+
+.Header a {
+  text-decoration: none;
+}
+
+.Header a:hover {
+  color: #ffff74;
+}
+
+.Nav {
+  display: flex;
+  width: 30%;
+  justify-content: space-between ;
+  align-items: center;
+  
+  
+}
+
+.Nav a {
+  color: white ;
+}
+

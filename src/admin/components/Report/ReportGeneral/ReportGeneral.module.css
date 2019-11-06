@@ -1,0 +1,87 @@
+h6{
+  margin: 0;
+}
+
+.GeneralInfo {
+  /* height: 40vh; */
+  display: flex;
+  /* justify-content: space-around; */
+  align-items: center;
+  flex-direction: column;
+  padding: 0 1rem;
+
+}
+
+
+.DivBlock {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.DivBlock span {
+  text-align: left;
+  width: 20%;
+}
+
+.DivBlock span span {
+  font-weight: 600;
+}
+
+.LargeWidth {
+  width: 40% !important;
+ 
+}
+
+.DateAndComment {
+  height: 20vh;
+  margin: 1rem 0 ;
+  padding: 0 1rem;
+  display: flex;
+  align-items: flex-start ;
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.DateAndComment_date {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  align-items: flex-start;
+  
+}
+
+
+
+.DateAndComment_comment {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 50%;
+  height: 100%;
+  
+ 
+}
+
+.DateAndComment_comment__first {
+  height: 100%;
+  padding-right: 1rem;
+ 
+}
+
+
+
+.DateAndComment_comment__last {
+  /* height: 100%; */
+  width: 100%;
+  border-bottom: 1px dotted black;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.DateAndComment_comment__last p {
+  display: inline-block;
+  margin-bottom: 0;
+}

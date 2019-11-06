@@ -1,0 +1,24 @@
+.MainDiv {
+  box-sizing: border-box;
+  margin: 20px auto;
+  padding: 50px;
+  width: 90%;
+  background-color: #8d98f287;
+}
+
+.Inputs {
+  width: 4em !important;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 1px !important;
+}
+
+.InputAddress {
+  min-width: 13.5em;
+  max-width: 15em;
+  background-color: white;
+  /* width: 13.5em; */
+  /* width: initial; */
+  border-radius: 15px;
+  text-align: center;
+}
