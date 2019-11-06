@@ -105,12 +105,14 @@ class ProfilePage extends Component {
             ))}
           </div>
         </div>
+        {/* {this.state.reports ? ( */}
         <Route
           render={props => (
             <ReportsPage reports={this.state.reports} {...props} />
           )}
           path="/:id/reports/:r"
         />
+        {/* ) : null} */}
       </div>
     );
   }

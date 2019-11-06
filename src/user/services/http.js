@@ -1,4 +1,4 @@
-import { apiUrl } from "../configure.json";
+// import { apiUrl } from "../configure.json";
 
 import http from "../../admin/services/http";
 export function login(user) {
@@ -11,6 +11,7 @@ export function getReport(buildingInfo) {
 export function updateQuestion(question, id) {
   return http.put(`api/v1/reports/${id}`, question);
 }
+const apiUrl = process.env.REACT_APP_API_URL;
 // §
 // import { currentUserEndpoint, buildingsEndpoint } from "./http";
 
