@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { Route } from "react-router-dom";
 import axios from "axios";
 import styles from "./ProfilePage.module.css";
 import logo from "../../img/ben-leeds-logo.png";
-import { currentUserEndpoint } from "../../services/http";
+import { currentUserEndpoint, reportsEndpoint } from "../../services/http";
 import Button from "../../components/Buttons/Buttons.jsx";
 
 import ImageProfile from "../../components/UI/ImageProfile/ImageProfile";
+import ReportsPage from "../../components/ReportsPage/ReportsPage";
 class ProfilePage extends Component {
   state = {
     buttons: ["New", "To Do Units", "Pending Reports", "Sent Reports"]
@@ -21,19 +23,53 @@ class ProfilePage extends Component {
     });
     localStorage.setItem("loginTime", new Date().getTime());
     console.log("jebenidata", data);
+    const id = data.data._id;
+    const { data: resReports } = await axios.get(
+      reportsEndpoint + `?user=${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }
+    );
+    const allReports = resReports.data;
+    console.log(allReports);
 
-    this.setState({ data: data.data });
+    this.setState({ data: data.data, allReports });
   };
   // handleSignOut() {
   //   console.log("clear");
   //   localStorage.clear();
   // }
-  handleButtonClick = button => {
+  handleReportOptions = button => {
+    const data = this.state.data;
+    const id = data._id;
+    const allReports = [...this.state.allReports];
+    let reports = [];
     if (button == "New") {
       this.props.history.push("/new");
     }
+    if (button == "Sent Reports") {
+      button = "sent";
+
+      reports = allReports.filter(report => report.adminStatus == "sent");
+
+      this.props.history.push(`/${id}/reports/${button}`);
+    }
+    if (button == "Pending Reports") {
+      button = "pending";
+
+      reports = allReports.filter(report => report.adminStatus == "pending");
+
+      this.props.history.push(`/${id}/reports/${button}`);
+    }
+    if (button == "To Do Units") {
+      this.props.history.push("/new");
+    }
+    this.setState({ reports });
   };
   render() {
+    console.log(this.state.reports);
     const data = this.state.data;
     const buttons = this.state.buttons;
 
@@ -44,7 +80,7 @@ class ProfilePage extends Component {
           <div className="col-sm-4 offset-sm-4 mt-3">
             {data ? (
               <ImageProfile
-                imageUrl={data.imageUrl}
+                imageUrl={"uploads/" + data.photo}
                 name={data.name}
                 region={data.region}
               ></ImageProfile>
@@ -61,7 +97,7 @@ class ProfilePage extends Component {
             {buttons.map(button => (
               <Button
                 key={button}
-                click={() => this.handleButtonClick(button)}
+                click={() => this.handleReportOptions(button)}
                 style={styles.Buttons}
               >
                 {button}
@@ -69,6 +105,12 @@ class ProfilePage extends Component {
             ))}
           </div>
         </div>
+        <Route
+          render={props => (
+            <ReportsPage reports={this.state.reports} {...props} />
+          )}
+          path="/:id/reports/:r"
+        />
       </div>
     );
   }

@@ -7,7 +7,7 @@ import Button from "../../Ui/Button/Button"
 export default function UsersTable({ users, onSelectUser, onNewUser }) {
   return (
     <table className={"table table-hover table-responsive-sm " + styles.Table}>
-      <thead>
+      <thead className="thead-light">
         <tr className="">
           <th className="" scope="col">
             User name

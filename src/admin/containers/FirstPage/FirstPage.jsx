@@ -42,12 +42,19 @@ export class FirstPage extends Component {
   //// show correct order status
   handleStatusChange = () => {
     
-    if (this.state.adminStatus === "pending")
-    return this.setState({ adminStatus: "sent" });
-    if (this.state.adminStatus === "sent")
-      return this.setState({ adminStatus: "pending" });
-      // if (this.state.btnStatus === "saved")
-      // return this.setState({ btnStatus: "pending" });
+    if (this.state.adminStatus === "pending") {
+      return this.setState({ adminStatus: "sent" });
+    }
+    
+    if (this.state.adminStatus === "sent") {
+      return this.setState({ adminStatus: "finished" });
+    }
+    
+    
+    if (this.state.adminStatus === "finished") {
+       return this.setState({ adminStatus: "pending" });
+    }
+    
   };
 
    //// sorting the table

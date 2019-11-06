@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getOneReport, sendVendorsToReport } from "../../services/reports";
+import { getOneReport, sendVendorsToReport, finishReport } from "../../services/reports";
 import { getAllVendors } from "../../services/vendors" ;
 
 import styles from "./Report.module.css";
@@ -11,26 +11,31 @@ import ReportJobs from "../../components/Report/ReportJobs/ReportJobs";
 import ReportVendors from "../../components/Report/ReportVendors/ReportVendors"
 import { toast } from "react-toastify";
 
+
 export class Report extends Component {
   state = {
-    startDate : "" ,
-    endDate : "" ,
+    startDate : null ,
+    endDate : null ,
     report: null,
+    reportId : null ,
+    reportStatusFinished : false,
     load: false,
     roomsWhitJobs : null ,
     vedorsByProffesion : null ,
     allVendors : null ,
+    enableSubmitButton : false ,
     reportVendors : null,
     allVendorsMinusSelected : null ,
     vendorsSelectedArrey : null ,
     vendorsProfessions : null ,
     selectedVendorId : null ,
     selectedVendor : null ,
+    selectBlockShow : true , 
     inputDisable : {
        vendor : true ,
        startTime : true ,
        endTime : true ,
-       btn : true
+       btn : true,     
     },
     initialQuestions: [],
     appliances: []
@@ -51,7 +56,7 @@ export class Report extends Component {
       })
      
 
-      ///// putting  questions in arrey
+      ///// putting  questions in arrey --- refactor for dinamic change in database !!!! 
       let propNames = [
         "blinds",
         "cleaning",
@@ -68,7 +73,7 @@ export class Report extends Component {
         }
       }
   
-      ///// putting appliances in arrey
+      ///// putting appliances in arrey ----- refactor for dinamic change in database !!!!
       let aplNames = ["A/C", "dishwasher", "microwave", "refrigerator", "stove"];
       let appliances = [];
       for (const key in report) {
@@ -99,17 +104,24 @@ export class Report extends Component {
       const roomsWhitJobs = this.makeReportJobsArrey(modJobs, roomComments);
 
       //// making report vendors easy to work whit
-      const reportVendors = report.vendors ;
+      const reportVendors = report.vendors ; 
       let modReportVendors = reportVendors.map(report => ({
          ...report ,
          startDate : report.reports.find(rep=> reportId === rep.report ).startDate ,
          endDate : report.reports.find(rep=> reportId === rep.report  ).endDate
       }))
 
-      
+      //// seting report status for disabling input fileds!
+      let stat = false 
+      if (report.adminStatus === "finished") {
+        stat = true
+      }
 
       this.setState({
         load: true,
+        reportId : report._id ,
+        reportStatusFinished : stat ,
+        selectBlockShow : !stat,
         report: report,
         reportVendors : modReportVendors,
         allVendorsMinusSelected : allVendorsMinusSelected ,
@@ -129,9 +141,21 @@ export class Report extends Component {
        
      }
 
+} 
+
+///// Helper methods !!! /////
+
+showHideSubmitButton = (showHide) => {
+  if (!showHide) {
+    this.setState({
+      enableSubmitButton : true 
+    })
+  } else {
+    return ;
+  }
 }
   
-  makeReportJobsArrey = (jobs, roomComments) => {   
+makeReportJobsArrey = (jobs, roomComments) => {   
      const roomNames = [] ;
      roomComments.forEach(room => {
        if (room.roomName) {
@@ -160,16 +184,16 @@ export class Report extends Component {
      return roomsWhitJobsAndComments ;
   }
 
-  handleCapitalizeFirst = string => {
+handleCapitalizeFirst = string => {
     if (typeof string !== "string") return "";
     return string.charAt(0).toUpperCase() + string.slice(1) + ":";
   };
 
-  handleFormatDate = date => {
+handleFormatDate = date => {
     return new Date(date).toLocaleString();
   };
 
-  handleAppliancesInfoToString = objInfo => {
+handleAppliancesInfoToString = objInfo => {
     const stringArr = [];
     for (const key in objInfo) {
       if (objInfo[key]) {
@@ -183,10 +207,14 @@ export class Report extends Component {
       return stringArr.join(" ");
     }
   };
- 
+  
+createDateObj = (date) => {
+     return date ;
+  }
   
   /////   VENDORS   /////
-  hadnleProffesionChange = (e) => {
+
+hadnleProffesionChange = (e) => {
     if (e.target.value === "Select") {
       return ;
     }
@@ -197,15 +225,15 @@ export class Report extends Component {
       inputDisable : {...this.state.inputDisable}                        
     } 
     const vedorsByProffesion = stateCopy.allVendorsMinusSelected.filter(vendor => vendor.function === selectedProff)
-    stateCopy.inputDisable.vendor = false ;
-    stateCopy.vedorsByProffesion = vedorsByProffesion ;
-
+   
    this.setState(
-       stateCopy
+    { vedorsByProffesion : vedorsByProffesion ,
+      inputDisable : {...this.state.inputDisable , vendor : false} 
+    }
    )
   }
 
-  handleVendorChange =(e) => {
+handleVendorChange =(e) => {
     if (e.target.value === "Select") {
       return ;
     }
@@ -231,22 +259,21 @@ export class Report extends Component {
 
   }
 
-  handleDateChange = (e, type) => {
+handleDateChange = (date, type) => {
      if (type === "start") {
-      const startDate = e.target.value ; 
       this.setState({
-       startDate : startDate
+       startDate : date
       })
  
      } else {
-      const endDate = e.target.value ; 
+     
       this.setState({
-       endDate : endDate
+       endDate : date 
       })
      }
   } 
 
-  handleAddVendor = () => {
+handleAddVendor = () => {
     const stateCopy = {...this.state, 
       inputDisable : {...this.state.inputDisable }     
     }
@@ -255,6 +282,8 @@ export class Report extends Component {
     let allVendorsMinusSelected = stateCopy.allVendorsMinusSelected ;
     const vendorSel = allVendorsMinusSelected.find(vendor => selectedVendorId === vendor._id )
     allVendorsMinusSelected = allVendorsMinusSelected.filter(vendor => selectedVendorId !== vendor._id )
+    // let startDate =   this.createDateObj(stateCopy.startDate) ;
+    // let endDate =   this.createDateObj(stateCopy.endDate) ;
     const vendorToAdd = {...vendorSel, startDate : stateCopy.startDate, endDate : stateCopy.endDate }
     reportVendors.push(vendorToAdd)
     // console.log("vendor to add" , vendorToAdd)
@@ -265,7 +294,8 @@ export class Report extends Component {
         inputDisable[name]  = true ; 
       }
 
-   this.setState((state, props) => ({
+    this.setState((state, props) => ({
+       enableSubmitButton : true , 
        allVendorsMinusSelected : allVendorsMinusSelected,
        selectedVendor : null ,
        inputDisable : inputDisable, 
@@ -277,12 +307,13 @@ export class Report extends Component {
   
   
   /// reset selected vendor and deisable inputs
-  hadnleProffesionClick = (vendor) => {
-    const stateCopy = {...this.state, 
-      inputDisable : {...this.state.inputDisable }     
-    }
-
+hadnleProffesionClick = (vendor) => {
+    
     if (vendor !== null) {
+      const stateCopy = {...this.state, 
+        inputDisable : {...this.state.inputDisable }     
+      }
+
       const inputDisable = stateCopy.inputDisable ;
       for (const name in inputDisable) {
         inputDisable[name]  = true ; 
@@ -293,6 +324,117 @@ export class Report extends Component {
       ))
    }
   }
+
+  ///// deleting a vendor 
+handleDeleteVendor = (id) => {
+    let vendorId = id ;
+    let yesOrNo = window.confirm("Are you u want to delete this vendor from report? Don't forget to submit changes after this!")
+    if (!yesOrNo) {
+       return ;
+    }
+    let allVendorsMinusSelectedCopy = [...this.state.allVendorsMinusSelected]
+    let allVendorsCopy = [...this.state.allVendors]
+    let vendorDeleted = allVendorsCopy.find(vendor => vendorId === vendor._id) ;
+    allVendorsMinusSelectedCopy.push(vendorDeleted)
+
+    let reportVendorsCopy = [...this.state.reportVendors]
+    let newReportVendors = reportVendorsCopy.filter(vendor => vendor._id !== vendorId)
+    this.setState((state, props) => ({
+      enableSubmitButton : true ,
+      reportVendors : newReportVendors,
+      allVendorsMinusSelected : allVendorsMinusSelectedCopy
+    }))
+
+  }
+
+ 
+
+handleDateEdit = (date, id, type) => {
+    const reportVendorsCopy = [...this.state.reportVendors] ;
+
+     if (type === "start") {
+       let vendorsSelected = reportVendorsCopy.find(vendor => vendor._id === id );
+       vendorsSelected.startDate = date ;
+       this.setState({
+        reportVendors : reportVendorsCopy 
+       }, () => {
+        this.showHideSubmitButton(this.state.enableSubmitButton)
+       })
+
+     } else {
+      let vendorsSelected = reportVendorsCopy.find(vendor => vendor._id === id );
+      vendorsSelected.endDate = date ;
+      this.setState({
+       reportVendors : reportVendorsCopy 
+      }, () => {
+       this.showHideSubmitButton(this.state.enableSubmitButton)
+      })
+     }
+ }
+
+
+  /////// submiting all changes made to vendors to bakcend 
+hadnleSubmitChangeClick = async () => {
+    try {
+      const reportVendors = this.state.reportVendors
+      const { data } = await sendVendorsToReport(this.state.report._id ,  reportVendors) ; 
+      if (data.success) {
+         this.setState((state, props) => ({
+          enableSubmitButton : false 
+         }))
+         toast.success("Changes successfully saved");
+      } 
+    } catch (error) {
+      if (error.response.data.error) {
+        toast.error(error.response.data.error + " !")
+       } else {
+        toast.error(error.response.statusText + " !")
+       }
+    }
+}
+
+//// changing status of report to finished
+handleFinishReportClick = async (id) => {
+  let yesOrNo = window.confirm("Finish this report? After selecting ok you will no longer be able to edit this report!");
+
+  if (yesOrNo) {
+    try { 
+      await finishReport(id);
+      toast.success("Report successfully finished!");
+      this.setState({
+       reportStatusFinished : true ,
+       selectBlockShow : false,
+   })
+    } catch (error) {
+     if (error.response.data.error) {
+       toast.error(error.response.data.error + " Login again!")
+      } else {
+       toast.error(error.response.statusText + " Login again!")
+      }
+   }  
+  } else {
+    return ;
+  }
+  
+}
+
+//// handle print btn click
+handlePrint = () => {
+  this.setState({
+    selectBlockShow : false,
+    
+  })
+   
+  setTimeout(() => {
+    window.print()
+  }, 500);
+
+  // window.onafterprint = ()=> {
+    
+  // }
+}
+
+
 
 
   render() {
@@ -306,6 +448,7 @@ export class Report extends Component {
       report = (
         <React.Fragment>
           {console.log("report", userReport)}
+          {console.log("state", this.state)}
           <ReportGeneral
             formatDate={this.handleFormatDate}
             report={this.state.report}
@@ -321,11 +464,16 @@ export class Report extends Component {
           
           />
           <ReportVendors 
+          onFinished={this.handleFinishReportClick}
+          onPrint={this.handlePrint}
+          onDateEdit={this.handleDateEdit}
+          onSubmitChanges={this.hadnleSubmitChangeClick}
           onProffesionChange={this.hadnleProffesionChange}
           onVendorChange={this.handleVendorChange}
           onDateChange={this.handleDateChange}
           onProffesionClick={this.hadnleProffesionClick}
           addVendor={this.handleAddVendor}
+          deleteVendor ={this.handleDeleteVendor}
           selectedVendor={this.state.selectedVendor}
           vedorsByProffesion={this.state.vedorsByProffesion}
           vendorsProfessions={this.state.vendorsProfessions}
@@ -333,6 +481,10 @@ export class Report extends Component {
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           reportVendors={this.state.reportVendors}
+          enableSubmitButton={this.state.enableSubmitButton}
+          selectBlockShow={this.state.selectBlockShow}
+          reportId={this.state.reportId}
+          reportStatusFinished={this.state.reportStatusFinished}
           />
         </React.Fragment>
       );

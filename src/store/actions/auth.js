@@ -1,11 +1,12 @@
 import * as actionTypes from "./actionTypes";
 import { login, getUserAuthCheck } from "../../admin/services/login";
+// import { HashRouter } from "react-router-dom"
 
-const loginStart = () => {
-  return {
-    type: actionTypes.LOGIN_START
-  };
-};
+// const loginStart = () => {
+//   return {
+//     type: actionTypes.LOGIN_START
+//   };
+// };
 
 const loginSuccess = (token, role) => {
   return {
@@ -26,7 +27,6 @@ export const loginInit = (email, password, loginProps) => {
     // dispatch(loginStart()) ;
 
     let loginObj = { email: email, password: password };
-
     login(loginObj)
       .then(res => {
         // console.log("res", res);
@@ -34,25 +34,33 @@ export const loginInit = (email, password, loginProps) => {
 
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("loginTime", new Date().getTime());
-
+       
+        //// push to every rout that you want !!!
         loginProps.history.replace("/");
 
         const { token, role } = res.data;
         dispatch(loginSuccess(token, role));
       })
       .catch(err => {
+          let errorMsg = null ;
+           if (err.response.data.error) {
+           errorMsg = (err.response.data.error + " Login again!")
+          } else {
+           errorMsg =(err.response.statusText + " Login again!")
+           }
+
         dispatch(
-          loginFail(err.response.data.error + " " + "Please login again!")
+          loginFail(errorMsg)
         );
       });
   };
 };
 
-const apkRefreshStart = () => {
-  return {
-    type: actionTypes.APK_REFRESH_START
-  };
-};
+// const apkRefreshStart = () => {
+//   return {
+//     type: actionTypes.APK_REFRESH_START
+//   };
+// };
 
 const apkRefreshSuccess = userType => {
   return {
@@ -69,9 +77,16 @@ export const refreshInit = token => {
         dispatch(loadingEnd());
       })
       .catch(err => {
-        console.log("errrr", err.response);
+        // console.log("errrr", err.response);
+        let errorMsg = null ;
+        if (err.response.data.error) {
+        errorMsg = (err.response.data.error + " Login again!")
+       } else {
+        errorMsg =(err.response.statusText + " Login again!")
+        }
+
         dispatch(
-          loginFail(err.response.data.error + " " + "Please login again!")
+          loginFail(errorMsg)
         );
         localStorage.removeItem("token");
 
@@ -91,21 +106,14 @@ export const loadingEnd = () => {
 export const logout = () => {
   localStorage.removeItem("token");
 
-  window.location.reload();
-
-  return dispatch =>
+  return dispatch => {
     dispatch({
       type: actionTypes.LOGOUT
     });
+    window.location.reload(); 
+  }
+    
 };
 
-// data:
-// expiresIn: "3600"
-// message: "Login success."
-// token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDdlNTI5NDQ5YTk3N2Q0OGU1ZjU4ZGMiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE1NzA3OTk3NzZ9.jRBvfiYRs0IwIEEBxR96Qwv8mE_I1AQWzfzZNME6tk4"
-// type: "admin"
-// userId: "5d7e529449a977d48e5f58dc"
 
-// err.response.data
-// data:
-// message: ""email" must be a valid email"
+

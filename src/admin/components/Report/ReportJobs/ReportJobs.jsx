@@ -48,7 +48,7 @@ export default function ReportJobs({ roomsWhitJobs }) {
   return (
     <div className={styles.JobsDiv}>
       {console.log("report jobs jobs", roomsWhitJobs)}
-      <h4>Room List</h4>
+      {roomsWhitJobs.length !== 0 ? <h4>Room List And Comments</h4> : null}
       {roomsWhitJobs.map(room => {
         return (
           <div key={room.name}>

@@ -15,7 +15,9 @@ export class Login extends Component {
   
   }
 
-  
+  componentDidMount(){
+    // this.history.push("/mamuTI");
+  }
 
   handleInputChange = e => {
     const newState = { ...this.state };
@@ -28,9 +30,7 @@ export class Login extends Component {
     
   }
 
-  
-
-  render() {
+ render() {
     
   //   let redirect = null ;
   //   if (this.props.token) {

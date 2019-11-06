@@ -1,83 +1,113 @@
 .VendorsBlock {
   display: flex;
-  padding: 0 1rem;
   flex-direction: column;
-  background-color:  rgb(226, 225, 225);
 }
 
 /*  vendors selection block  */
 
-.SelectBlockFirst{
-  display: flex; 
+.SelectBlock {
+  background-color: rgb(209, 207, 207);
+  padding: 0 1rem;
+}
+
+.SelectBlockHide {
+  background-color: rgb(209, 207, 207);
+  padding: 0 1rem;
+  display: none;
+}
+
+.SelectBlock h4 {
+  margin-top: 0.5rem;
+}
+
+.SelectBlockFirst {
+  display: flex;
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
   margin-top: 1.5rem;
+  text-align: left;
   /* width: 100%; */
 }
 
 .SelectBlockSecond {
   margin-top: 1rem;
-  display: flex; 
+  display: flex;
   text-align: left;
 }
 
 .SelectBlockSecond_opa {
- width: 25%;
- opacity: 0;
- transition: all 1s ease-in;
+  width: 25%;
+  opacity: 0;
+  transition: all 1s ease-in;
 }
 
 .SelectBlockSecond_opa span {
- font-weight: 600;
- }
+  font-weight: 600;
+}
 
 .SelectBlockSecond_ani {
   opacity: 1;
 }
 
- /* already selected vendors block  */
+.SelectBlockThird {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
 
- .reportVendors_wrap {
-   margin-top: .5rem;
-    box-shadow: 0 2px 0 black;
- }
+/* already selected vendors block  */
+
+.reportVendors_wrap {
+  margin-top: 0.5rem;
+  border-bottom: 0.1rem solid black;
+  position: relative;
+}
+
+.deleteVendor {
+  position: absolute;
+  left: 95%;
+  top: 15%;
+  cursor: pointer;
+}
 
 .reportVendors {
   display: flex;
   flex-direction: column;
   text-align: left;
+  padding: 0 1rem;
 }
 
 .reportVendors_div {
- display: flex;
- flex-direction: row;
- /* border-bottom: 1px dotted black; */
- 
+  display: flex;
+  flex-direction: row;
 }
 
 .reportVendors_div div {
-  margin-right: 2rem;
-  
- }
+  margin-right: 1rem;
+}
 
- .reportVendors_div div span {
+.reportVendors_div div span {
   font-weight: 700;
-  
- }
+}
 
- .reportVendors_div2 {
+.reportVendors_div2 {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 4rem;
- }
+}
 
- .reportVendors_div2 div{
-  margin-right: 2rem;
- }
+.reportVendors_div2 div {
+  margin-right: 1rem;
+}
 
- .reportVendors_div2 div span {
+.reportVendors_div2 div span {
   font-weight: 700;
-  
- }
+}
+
+/* Submit Button  */
+
+.SubmitButton {
+}

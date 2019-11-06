@@ -1,0 +1,17 @@
+.BtnAndErrorDiv_err {
+  /* height: 1rem; */
+  margin-top: 0.5rem;
+  color: transparent;
+  transition: color 1.5s ease-in ;
+}
+
+
+.errorMsg {
+  color: red;
+}
+
+.BtnAndErrorDiv_btn {
+  display: flex;
+  justify-content: space-around ;
+}
+

@@ -36,8 +36,10 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
 
 
   const btnStatusText = status => {
+    console.log("satussss" , status)
     if (status === "pending") return "sent";
-    if (status === "sent") return "pending";
+    if (status === "sent") return "finished";
+    if (status === "finished") return "pending";
     
   };
   
@@ -45,7 +47,7 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
 
   return (
     <table className="table table-hover table-responsive-sm">
-        <thead>
+        <thead className="thead-light">
           <tr className="">
              
             <th

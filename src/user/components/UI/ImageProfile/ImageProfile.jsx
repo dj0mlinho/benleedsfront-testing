@@ -4,7 +4,7 @@ const ImageProfile = props => {
   return (
     <div className="card">
       <img
-        src={"http://localhost:8080/" + props.imageUrl}
+        src={process.env.REACT_APP_API_URL + '/' + props.imageUrl}
         className="card-img-top"
         alt="..."
       ></img>

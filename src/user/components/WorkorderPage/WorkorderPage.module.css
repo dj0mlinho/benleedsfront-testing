@@ -1,0 +1,35 @@
+.Profile {
+  box-sizing: border-box;
+  margin: 20px auto;
+  width: 80%;
+  background-color: #8d98f287;
+  padding: 1rem;
+}
+
+.Table {
+  text-align: left;
+  background-color: #e9ecee;
+  border: 1px solid #8d98f2;
+  box-shadow: 0 0 8px;
+}
+
+.TextArea {
+  border-bottom: 1px solid black;
+}
+
+.Table th {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  /* border: 1px solid #8d98f2; */
+  box-shadow: 0 0 3px;
+}
+.Table td {
+  padding-bottom: 0.8rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.Buttons {
+  display: flex;
+  justify-content: space-between;
+  background-color: #333;
+}

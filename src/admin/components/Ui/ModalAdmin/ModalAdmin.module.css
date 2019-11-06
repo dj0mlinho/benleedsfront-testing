@@ -1,0 +1,9 @@
+.ModalBodyDiv {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.ModalBodyDiv span {
+   font-weight: 700;
+}

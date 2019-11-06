@@ -2,24 +2,24 @@ import http from "../services/http" ;
 
 
 export function getUser(id) {
-  return http.get("http://localhost:8080/api/v1/users/" + id )
+  return http.get("api/v1/users/" + id )
 
 }
 
 export function deleteUser(id) {
   // console.log("delete id" , id);
   
-  return http.delete("http://localhost:8080/api/v1/users/" + id )
+  return http.delete("api/v1/users/" + id )
 
 }
 
 export function editUser(user, id) {
-  return http.put("http://localhost:8080/api/v1/users/" + id , user)
+  return http.put("api/v1/users/" + id , user)
 
 }
 
 export function getAllUsers() {
-  return http.get("http://localhost:8080/api/v1/users?role=user&status=active" )
+  return http.get("api/v1/users?role=user&status=active" )
 }
 
 //  user = {
@@ -31,5 +31,5 @@ export function getAllUsers() {
 
 export function createUser(user) {
   //  console.log("user obj" , user)
-  return http.post("http://localhost:8080/api/v1/users/" ,  user)
+  return http.post("api/v1/users/" ,  user)
 }

@@ -10,10 +10,10 @@ import styles from "./Button.module.css";
   
 
   return (
-    <button
+    <button 
       type={props.btntype ? props.btntype : "submit" }
       disabled={props.disabled}
-      className={styles.Button + " " + btnColorFun(props.btncolor)}
+      className={styles.Button + " " + btnColorFun(props.btncolor) +" " + props.customclass}
       onClick={props.clicked}
       
     >

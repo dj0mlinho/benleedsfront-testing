@@ -1,7 +1,9 @@
 import React from "react";
+import DatePicker from "react-datepicker";
 
 import styles from "./ReportVendors.module.css";
 import Button from "../../Ui/Button/Button";
+import ModalAdmin from "../../Ui/ModalAdmin/ModalAdmin"
 
 export default function ReportVendors({
   vedorsByProffesion,
@@ -16,8 +18,15 @@ export default function ReportVendors({
   endDate,
   onProffesionClick,
   reportVendors,
-  onStartDateEdit,
-  onEndDateEdit
+  onDateEdit,
+  deleteVendor,
+  onSubmitChanges, 
+  enableSubmitButton,
+  selectBlockShow, 
+  onPrint,
+  onFinished,
+  reportId,
+  reportStatusFinished
 }) {
   const dinamicClassRender = selectedVendor => {
     return (
@@ -29,20 +38,29 @@ export default function ReportVendors({
   
   const formatDate = (date) => {
     if (date) {
-      return date.substring(0, 10);
+       return new Date(date) ;
      } else {
-      return "";
+      return null ;
+    }
+  }
+  
+  const deleteIcon = (repotStatus, vendorId) => {
+    if (repotStatus) {
+       return null ;
+    } else {
+      return (<i onClick={() => deleteVendor(vendorId)} className={"fa fa-window-close" + " " + styles.deleteVendor}></i>)
     }
   }
 
   return (
     <div className={styles.VendorsBlock}>
-      <h4 className="mt-2">Selected Vendors</h4>
+      {reportVendors.length !== 0 ? <h4 className="mt-2">Selected Vendors</h4> : null }
       {console.log("selected vendor", selectedVendor)}
       {console.log("report vendors", reportVendors)}
       <div className={styles.reportVendors}>
         {reportVendors.map(vendor => (
           <div key={vendor._id} className={styles.reportVendors_wrap}>
+            {deleteIcon(reportStatusFinished, vendor._id)}
             <div className={styles.reportVendors_div}>
               <div>
                 <span>Company: </span>
@@ -70,28 +88,31 @@ export default function ReportVendors({
                 <span>Start Date:</span>
               </div>
               <div>
-                <input
-                  type="date"
-                  value={formatDate(vendor.startDate)}
-                  onChange={e => onStartDateEdit(e, vendor._id)}
-                  className="form-control form-control-sm "
+              <DatePicker
+                 selected={formatDate(vendor.startDate)}
+                 onChange={(date) => onDateEdit( date,  vendor._id, "start")}
+                 placeholderText="Date isn't selected"
+                 disabled={reportStatusFinished}
                 />
+
               </div>
               <div>
                 <span>End Date:</span>
               </div>
               <div>
-                <input
-                  type="date"
-                  value={formatDate(vendor.endDate)}
-                  onChange={e => onEndDateEdit(e, vendor._id)}
-                  className="form-control form-control-sm "
+              <DatePicker
+                 selected={formatDate(vendor.endDate)}
+                 onChange={(date) => onDateEdit( date,  vendor._id, "end")}
+                 placeholderText="Date isn't selected"
+                 disabled={reportStatusFinished}
                 />
               </div>
             </div>
           </div>
         ))}
       </div>
+      <div className={selectBlockShow ?  styles.SelectBlock : styles.SelectBlockHide}>
+        <h4>Add New Vendor</h4>
       <div className={styles.SelectBlockFirst}>
         <div>
           <div>Proffesion: </div>
@@ -127,27 +148,23 @@ export default function ReportVendors({
         </div>
         <div className={styles.TimeSelectDiv}>
           <div>Start Date: </div>
-          <input
-            disabled={inputDisable.startTime}
-            type="date"
-            value={startDate}
-            onChange={e =>
-              onDateChange(e, "start")  
-            }
-            className="form-control form-control-sm "
-          />
+          <DatePicker
+             selected={startDate}
+             onChange={(date) => onDateChange( date,  "start")}
+             placeholderText="Click to select a date"
+             disabled={inputDisable.startTime}
+           />
         </div>
         <div className={styles.TimeSelectDiv}>
+          
           <div>End Date: </div>
-          <input
-            disabled={inputDisable.startTime}
-            type="date"
-            value={endDate}
-            onChange={e =>
-              onDateChange(e, "end")  
-            }
-            className="form-control form-control-sm "
-          />
+          <DatePicker
+             selected={endDate}
+             onChange={(date) => onDateChange( date,  "end")}
+             placeholderText="Click to select a date"
+             disabled={inputDisable.startTime}
+           />
+
         </div>
         <div>
           <Button
@@ -160,6 +177,7 @@ export default function ReportVendors({
           </Button>
         </div>
       </div>
+
       <div className={styles.SelectBlockSecond}>
         <div className={dinamicClassRender(selectedVendor)}>
           <span>Company:</span>
@@ -177,7 +195,36 @@ export default function ReportVendors({
           <span>Email:</span>
           <div> {selectedVendor ? selectedVendor[0].email : ""}</div>
         </div>
+        <div className={dinamicClassRender(selectedVendor)}>
+           <ModalAdmin selectedVendor={selectedVendor ? selectedVendor[0] : {}} customclass="float-right" btncolor="ButtonGrey" />
+        </div>
       </div>
+      <div className={styles.SelectBlockThird}>
+      <div>
+        <Button 
+            clicked={onPrint}
+            btntype="button"
+            btncolor="ButtonYellow" >PRINT REPORT</Button>
+      </div>
+      <div>
+        <Button 
+            clicked={()=>onFinished(reportId)}
+            btntype="button"
+            btncolor="ButtonGreen">FINISH REPORT</Button>
+      </div>
+      <div className={styles.SubmitButton}>
+         <Button 
+            disabled={!enableSubmitButton}
+            clicked={onSubmitChanges}
+            btntype="button"
+            btncolor="ButtonBlue" >SAVE CHANGES</Button>
+      </div>
+      
+
+      </div>
+      </div>
+      
+      
     </div>
   );
 }
