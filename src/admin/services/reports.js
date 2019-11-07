@@ -3,7 +3,7 @@ import http from "../services/http" ;
 
 
 export function getAllReports() {
-  console.log("usaooooooo 2222")
+ 
   return http.get("api/v1/reports"  )
 }
 

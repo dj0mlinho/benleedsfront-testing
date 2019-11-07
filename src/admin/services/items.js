@@ -2,6 +2,10 @@ import http from "../services/http" ;
 
 /// get all items GET {{URL}}/api/v1/items
 
+export function getAllRooms() {
+    return http.get("api/v1/rooms")
+}
+
 /// get single item GET {{URL}}/api/v1/items/ + id
 
 /// create item POST {{URL}}/api/v1/items 
