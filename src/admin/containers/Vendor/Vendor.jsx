@@ -8,6 +8,8 @@ import styles from "./Vendor.module.css"
 import Spinner from "../../components/Ui/Spinner/Spinner";
 import PageNameAdmin from "../../hoc/PageNameAdmin/PageNameAdmin";
 import VendorForm from "../../components/Vendors/Vendor/VendorForm" ;
+import VendorReportsTable from "../../components/Vendors/Vendor/VendorReportsTable" ;
+
 
 
 export class Vendor extends Component {
@@ -15,12 +17,12 @@ export class Vendor extends Component {
     load : false ,
     newVendor : false ,
     errorMsgs : [],
-    vendorReports : null , 
+    vendorReports : [] , 
     btnDisable : false ,
     vendor : {
       company : "" ,
       contact : "" ,
-      function : "" ,
+      function : this.props.location.state.selectedProffesion ,
       phoneNumber : "" ,
       phoneNumber2 : "" ,
       email : ""
@@ -39,13 +41,33 @@ async componentDidMount() {
     return ;
   }
 
+  // "buildingCode": 3,
+  // //                   "address": "Green aveny",
+  // //                   "unit": "14-02",
+
   try {
    const  { data } = await getVendor(vendorId)
    const vendor = data.data ;  
+
+   //// modify vendor reports arrey
+   let vendorReports = []
+   if (vendor.reports.length !== 0) {
+    vendor.reports.forEach(oneReport => {
+       let rep = {...oneReport ,
+          reportId : oneReport.report._id,
+          adminStatus : oneReport.report.adminStatus,
+          buildingCode : oneReport.report.buildingCode,
+          address : oneReport.report.address,
+          unit : oneReport.report.unit  
+      }
+      vendorReports.push(rep)
+    })
+   } 
+
    this.setState((state, props) => ({
     load : true ,
     vendor : vendor, 
-    vendorReports : vendor.reports 
+    vendorReports : vendorReports 
   })) 
 
   } catch (error) {
@@ -77,6 +99,10 @@ vaidate = (vendor) => {
   if (!vendor.email.trim()) {
     errorMsgs.push("Email can't be empty");
   }
+
+  if (!vendor.function.trim()) {
+    errorMsgs.push("Function can't be empty");
+  }
    
   ////// reg expresion for email check Svarc 
   if (vendor.email) {
@@ -105,7 +131,7 @@ vaidate = (vendor) => {
 handleSubmit = async (e, vendorId) => {
   e.preventDefault();
   const vendor = {...this.state.vendor}
-  vendor.function = this.firstLetherToUperCase(vendor.function)
+  // vendor.function = this.firstLetherToUperCase(vendor.function)
   let validate = this.vaidate(vendor) ;
   
   if (validate) {
@@ -176,15 +202,19 @@ handleBack =() => {
   this.props.history.goBack();
 }
 
+handleClickReport = (id) => {
+   this.props.history.push("/report/" +id )
+}
+
  
 ///// helper methods 
- firstLetherToUperCase = (str) => {
-  if (str) {
-    const strToLoverCase = str.toLowerCase()
-    const strCapitalized = strToLoverCase.charAt(0).toUpperCase() + strToLoverCase.slice(1)
-    return strCapitalized ;
-  } 
-}
+//  firstLetherToUperCase = (str) => {
+//   if (str) {
+//     const strToLoverCase = str.toLowerCase()
+//     const strCapitalized = strToLoverCase.charAt(0).toUpperCase() + strToLoverCase.slice(1)
+//     return strCapitalized ;
+//   } 
+// }
 
   render() {
      let vendor = null ;
@@ -193,6 +223,7 @@ handleBack =() => {
      } else {
 
        vendor = (
+         <>
         <VendorForm 
          onDeleteVendor={this.handleDelete}
          onBack={this.handleBack}
@@ -204,6 +235,11 @@ handleBack =() => {
          btnDisable={this.state.btnDisable}
          
         />
+        <VendorReportsTable 
+        onClickReport={this.handleClickReport}
+        reports={this.state.vendorReports}
+        />
+        </>
        )
 
      }
@@ -213,13 +249,16 @@ handleBack =() => {
 
     return (
     <PageNameAdmin pageName={this.props.location.state.name}>
+      { console.log("vendor reports" , this.state.vendorReports) }
       {vendor}
     </PageNameAdmin>
     )
   }
 }
 
-export default Vendor
+export default Vendor ;
+
+
 
 
 

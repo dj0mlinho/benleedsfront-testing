@@ -41,6 +41,10 @@ class ProfilePage extends Component {
   //   console.log("clear");
   //   localStorage.clear();
   // }
+  handleReports = id => {
+    this.props.history.push(`/${id}`);
+    console.log("radi");
+  };
   handleReportOptions = button => {
     const data = this.state.data;
     const id = data._id;
@@ -72,7 +76,9 @@ class ProfilePage extends Component {
     console.log(this.state.reports);
     const data = this.state.data;
     const buttons = this.state.buttons;
-
+    // const click = r => {
+    //   return <button onClick={this.handleapp}>radi</button>;
+    // };
     return (
       <div className={styles.Profile}>
         <img src={logo}></img>
@@ -105,14 +111,18 @@ class ProfilePage extends Component {
             ))}
           </div>
         </div>
-        {/* {this.state.reports ? ( */}
-        <Route
-          render={props => (
-            <ReportsPage reports={this.state.reports} {...props} />
-          )}
-          path="/:id/reports/:r"
-        />
-        {/* ) : null} */}
+        {this.state.reports ? (
+          <Route
+            render={props => (
+              <ReportsPage
+                reports={this.state.reports}
+                click={id => this.handleReports(id)}
+                {...props}
+              />
+            )}
+            path="/:id/reports/:r"
+          />
+        ) : null}
       </div>
     );
   }

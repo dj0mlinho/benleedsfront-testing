@@ -5,19 +5,25 @@ import styles from "./ModalAdmin.module.css"
 import { Modal } from "react-bootstrap"
 import Button from "../Button/Button" 
 
-export default function ModalAdmin({customclass, btncolor, selectedVendor}) {
+export default function ModalAdmin({customclass, btncolor, selectedVendor, goVendor}) {
    
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   
   const lightSchedule = (reportsArrey) => {
+   
      if (reportsArrey.length === 0) {
        return <p>There is no report assigned to this vendor</p>
      }
+     
+     ////display only reports that are still active
+     let reportsArreyFiltered = reportsArrey.filter(rep => rep.reportStatus === "sent")
+
      let num = 1 ;
-     let newArr =  reportsArrey.map(report =>  ( 
+     let newArr =  reportsArreyFiltered.map(report =>  ( 
           <p key={report._id}><span>{num++ +"."}</span><span>Report </span>
           <span >Start date : </span> {report.startDate ? report.startDate.slice(0,10) + "  " : "-/-" } 
           <span>End date : </span> {report.endDate ? report.endDate.slice(0,10) : "-/-" } 
@@ -35,8 +41,9 @@ export default function ModalAdmin({customclass, btncolor, selectedVendor}) {
     </Button>
 
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header  closeButton>
         <Modal.Title>{selectedVendor.company}</Modal.Title>
+        
       </Modal.Header>
       <Modal.Body>
          <div className={styles.ModalBodyDiv}>
@@ -44,6 +51,9 @@ export default function ModalAdmin({customclass, btncolor, selectedVendor}) {
          </div>
       </Modal.Body>
       <Modal.Footer>
+        <div className={styles.BtnDiv} btncolor={btncolor}  onClick={()=>goVendor(selectedVendor._id, selectedVendor.function, selectedVendor.company)}>
+         VENDOR PAGE
+        </div>
         <Button btncolor={btncolor}  clicked={handleClose}>
           Close
         </Button>

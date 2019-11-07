@@ -17,7 +17,7 @@
   box-sizing: border-box;
   font-weight: 700;
   box-shadow: 0 .3rem .6rem black;
-  /* z-index: 90; */
+  z-index: 110;
 }
 
 .Header a {

@@ -19,6 +19,7 @@ export default function VendorForm({
     <div className="">
       {console.log("vendor for form", vendor)}
       <form onSubmit={e => onSubmit(e, vendor._id)} className="">
+        <div className={styles.InputDivs}>
         <Input
           type="text"
           label="Company:"
@@ -33,7 +34,10 @@ export default function VendorForm({
           value={vendor.contact}
           changed={inputChange}
         />
-        <Input
+        </div>
+        
+        <div className={styles.InputDivs}>
+         <Input
           type="text"
           label="Function:"
           name="function"
@@ -47,6 +51,8 @@ export default function VendorForm({
           value={vendor.phoneNumber}
           changed={inputChange}
         />
+        </div>
+        <div className={styles.InputDivs}>
         <Input
           type="text"
           label="Phone Number 2:"
@@ -61,6 +67,8 @@ export default function VendorForm({
           value={vendor.email}
           changed={inputChange}
         />
+        </div>
+        
 
         <div className={styles.BtnAndErrorDiv}>
           <div

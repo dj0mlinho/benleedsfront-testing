@@ -55,7 +55,9 @@ export class Vendors extends Component {
     );
 
     this.setState((state, props) => ({
-      vendorsByProffesion: vendorsByProffesion
+      vendorsByProffesion: vendorsByProffesion, 
+      selectedProffesion : selectedProffesion
+
     }));
   };
 
@@ -68,14 +70,16 @@ export class Vendors extends Component {
       this.props.history.push({
         pathname: "/vendors/new",
         state: {
-          name: "Create New Vendor"
+          name: "Create New Vendor", 
+          selectedProffesion : this.state.selectedProffesion
         }
       });
     } else {
       this.props.history.push({
         pathname: "/vendors/" + id,
         state: {
-          name: company
+          name: company, 
+          selectedProffesion : this.state.selectedProffesion
         }
       });
     }

@@ -102,9 +102,10 @@ class FullRoomPage extends Component {
     const it = items.find(i => i._id == id);
     it.checked = !it.checked;
     // items = [...items, items.map(m=>m._id==it._id)];
-    this.setState({ items });
+    // this.setState({ items });
     console.log(items, "itemsi u state");
     console.log(it, "checkbox");
+
     if (!it.item) {
       console.log(it.checked, "checked");
       const totalPrice = it.quantity * it.price;
@@ -122,14 +123,21 @@ class FullRoomPage extends Component {
       };
 
       const token = localStorage.getItem("token");
-
+      console.log(jobs, "radi jobs");
       const { data: resItems } = await axios.post(jobsEndpoint, jobs, {
         headers: {
           Authorization: "Bearer " + token
         }
       });
+
+      if (resItems.success) {
+        const bla = resItems.data;
+        const kurac = items.map(m => (m._id == id ? bla : m));
+        console.log("uslo u update state", kurac, id);
+        this.setState({ items: kurac });
+      }
+      console.log(this.state);
       console.log(resItems, "cekirano");
-      // this.setState({ items });
     } else {
       const totalPrice = it.quantity * it.item.price;
       const jobs = {
@@ -137,18 +145,20 @@ class FullRoomPage extends Component {
         checked: it.checked
       };
 
-      const token = localStorage.getItem("token");
+      console.log("UPDAAATEEE,", it.item);
 
-      const { data: resItems } = await axios.put(
-        jobsEndpoint + "/" + it._id,
-        jobs,
-        {
-          headers: {
-            Authorization: "Bearer " + token
-          }
-        }
-      );
-      console.log(resItems, "update jobs");
+      //   const token = localStorage.getItem("token");
+
+      //   const { data: resItems } = await axios.put(
+      //     jobsEndpoint + "/" + it.item,
+      //     jobs,
+      //     {
+      //       headers: {
+      //         Authorization: "Bearer " + token
+      //       }
+      //     }
+      //   );
+      //   console.log(resItems, "update jobs");
     }
     //   this.setState({ items });
     // }

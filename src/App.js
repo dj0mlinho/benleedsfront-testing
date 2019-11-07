@@ -98,8 +98,9 @@ export class App extends Component {
           <Switch>
             {/* <Route path="/:id/reports/:r" component={ReportsPage} /> */}
             <Route path="/:id/workorder" component={WorkorderPage} />
+            <Route path="/room/:id/:m" component={FullRoomPage} />
             <Route path="/:id/rooms" component={MakeReadyPage} />
-            <Route path="room/:id/:m" component={FullRoomPage} />
+
             <Route path="/new" component={NewWorkorderForm} />
             <Route path="/:id" exact component={NewWorkorderForm} />
 

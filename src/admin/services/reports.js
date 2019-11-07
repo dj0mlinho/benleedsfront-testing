@@ -11,13 +11,23 @@ export function getOneReport(id) {
   return http.get( "api/v1/reports/" + id + "?user=true&building=true&jobs=true" )
 }
 
-export function finishReport(reportId) {
+export function finishReport(reportId, vendors) {
    
-  const obj = {
-    adminStatus : "finished"
+  // const obj = {
+  //   adminStatus : "finished"
+  // }
+
+  const vendorsArrey = vendors.map(vendor => ({
+    vendor : vendor._id ,
+    startDate : vendor.startDate,
+    endDate : vendor.endDate
+  })) ;
+  const vednorObjAndStatus = {
+     vendors : vendorsArrey ,
+     adminStatus : "finished"
   }
 
-  return http.put( "api/v1/reports/" + reportId, obj )
+  return http.put( "api/v1/reports/" + reportId, vednorObjAndStatus)
 }
 
 export function sendVendorsToReport(reportId, vendors) {

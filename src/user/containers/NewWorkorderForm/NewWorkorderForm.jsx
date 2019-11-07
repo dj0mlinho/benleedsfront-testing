@@ -21,7 +21,7 @@ class NewWorkorderForm extends Component {
     userInfo: [],
     levels: [1, 2, 3, 4, 5],
     appliancesSelected: "",
-    
+    valueBuild:"",
     allQuestions: [
      "Floor",
      "Paint",
@@ -503,7 +503,7 @@ name=name
                       <Input
                         type="text"
                         change={this.handleChange}
-                        value={this.state.valueBuild}
+                        valueProp={this.state.valueBuild}
                        
                         style={styles.Inputs}
                       />

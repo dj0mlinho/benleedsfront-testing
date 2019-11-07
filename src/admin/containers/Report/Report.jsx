@@ -194,9 +194,11 @@ handleFormatDate = date => {
   };
 
 handleAppliancesInfoToString = objInfo => {
+    console.log("apliances to modif obj" , objInfo )
+    
     const stringArr = [];
     for (const key in objInfo) {
-      if (objInfo[key]) {
+      if (objInfo[key].checked === true) {
         stringArr.push(key);
       }
     }
@@ -399,7 +401,8 @@ handleFinishReportClick = async (id) => {
 
   if (yesOrNo) {
     try { 
-      await finishReport(id);
+      const reportVendors = this.state.reportVendors ;
+      await finishReport(id, reportVendors);
       toast.success("Report successfully finished!");
       this.setState({
        reportStatusFinished : true ,
@@ -434,6 +437,23 @@ handlePrint = () => {
   // }
 }
 
+//// handle go back click
+handleBackClikc =() => {
+  this.props.history.goBack()
+}
+
+/// handle go to vendor page form modal
+hadnleGoVendor = (id , vednorProffesion, company) => {
+  this.props.history.push({
+    pathname: "/vendors/" + id,
+        state: {
+          name: company, 
+          selectedProffesion : vednorProffesion
+        }
+
+  })
+}
+
 
 
 
@@ -449,6 +469,7 @@ handlePrint = () => {
         <React.Fragment>
           {console.log("report", userReport)}
           {console.log("state", this.state)}
+          {console.log("apliences", this.state.appliances)}
           <ReportGeneral
             formatDate={this.handleFormatDate}
             report={this.state.report}
@@ -464,6 +485,8 @@ handlePrint = () => {
           
           />
           <ReportVendors 
+          goVendor={this.hadnleGoVendor}
+          onBack={this.handleBackClikc}
           onFinished={this.handleFinishReportClick}
           onPrint={this.handlePrint}
           onDateEdit={this.handleDateEdit}

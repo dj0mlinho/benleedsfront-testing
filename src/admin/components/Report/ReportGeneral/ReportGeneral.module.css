@@ -75,7 +75,7 @@ h6{
 .DateAndComment_comment__last {
   /* height: 100%; */
   width: 100%;
-  border-bottom: 1px dotted black;
+  /* border-bottom: 1px dotted black; */
   display: flex;
   /* align-items: center; */
   justify-content: center;

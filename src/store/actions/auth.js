@@ -104,12 +104,13 @@ export const loadingEnd = () => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("token");
+  
 
   return dispatch => {
     dispatch({
       type: actionTypes.LOGOUT
     });
+    localStorage.removeItem("token");
     window.location.reload(); 
   }
     

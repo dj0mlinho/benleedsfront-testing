@@ -26,7 +26,9 @@ export default function ReportVendors({
   onPrint,
   onFinished,
   reportId,
-  reportStatusFinished
+  reportStatusFinished,
+  onBack,
+  goVendor
 }) {
   const dinamicClassRender = selectedVendor => {
     return (
@@ -196,10 +198,16 @@ export default function ReportVendors({
           <div> {selectedVendor ? selectedVendor[0].email : ""}</div>
         </div>
         <div className={dinamicClassRender(selectedVendor)}>
-           <ModalAdmin selectedVendor={selectedVendor ? selectedVendor[0] : {}} customclass="float-right" btncolor="ButtonGrey" />
+           <ModalAdmin selectedVendor={selectedVendor ? selectedVendor[0] : {}}    customclass="float-right" btncolor="ButtonGrey" goVendor={goVendor} />
         </div>
       </div>
       <div className={styles.SelectBlockThird}>
+      <div>
+        <Button 
+            clicked={onBack}
+            btntype="button"
+           >GO BACK</Button>
+      </div>
       <div>
         <Button 
             clicked={onPrint}

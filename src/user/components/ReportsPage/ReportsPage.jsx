@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./ReportsPage.module.css";
 import logo from "../../img/ben-leeds-logo.png";
+
+// import { Link } from "react-router-dom";
 // import axios from "axios";
 // import { reportsEndpoint } from "../../services/http";
 
@@ -12,7 +14,7 @@ const ReportsPage = props => {
         <table className={"table " + styles.Table}>
           <thead>
             <tr>
-              <th className="item">Starting/Send Date</th>
+              <th className="item">Starting Date</th>
               <th className="item">Building Code</th>
               <th className="item">Unit#</th>
               <th className="item quantity">Address</th>
@@ -25,12 +27,21 @@ const ReportsPage = props => {
           {props.reports.map(report => (
             <tbody key={report._id}>
               <tr>
-                <td className="itemTd">{report.date}</td>
+                <td className="itemTd">{report.startedTime}</td>
                 <td className="itemTd">{report.buildingCode}</td>
                 <td className="itemTd">{report.unit}</td>
 
                 <td className="itemTd">{report.address}</td>
-                <td className="itemTd"></td>
+                <td className="itemTd">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => props.click(report._id)}
+                  >
+                    Resume
+                  </button>
+                  {/* <div>{props.click}</div> */}
+                  {/* <a href={`/${report._id}`}>Resume</a> */}
+                </td>
                 <td className="itemTd"></td>
               </tr>
 

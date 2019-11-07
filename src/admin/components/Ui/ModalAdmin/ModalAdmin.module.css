@@ -7,3 +7,18 @@
 .ModalBodyDiv span {
    font-weight: 700;
 }
+
+/* .ModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+
+.BtnDiv {
+  cursor: pointer;
+  color: #5c6bc0;
+}
+
+.BtnDiv:hover {
+   color: #12acc4;
+}

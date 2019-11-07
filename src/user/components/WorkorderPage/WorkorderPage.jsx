@@ -32,7 +32,8 @@ class WorkorderPage extends Component {
       }
     );
     console.log(resJobs);
-    this.setState({ jobs: resJobs.data, reports: resReport.data });
+    const checkedJobs = resJobs.data.filter(m => m.checked == true);
+    this.setState({ jobs: checkedJobs, reports: resReport.data });
   }
 
   render() {
