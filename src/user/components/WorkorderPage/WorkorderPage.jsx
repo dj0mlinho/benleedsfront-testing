@@ -7,7 +7,8 @@ import {
   roomsEndpoint,
   itemsEndpoint,
   jobsEndpoint,
-  reportsEndpoint
+  reportsEndpoint,
+  updateQuestion
 } from "../../services/http";
 class WorkorderPage extends Component {
   state = {};
@@ -32,10 +33,50 @@ class WorkorderPage extends Component {
       }
     );
     console.log(resJobs);
-    const checkedJobs = resJobs.data.filter(m => m.checked == true);
-    this.setState({ jobs: checkedJobs, reports: resReport.data });
-  }
+    const arr = [];
+    const prices = resJobs.data.filter(m =>
+      m.totalPrice ? arr.push(m.totalPrice) : null
+    );
+    console.log(arr, "pppp");
+    const totalPrices = arr.map(m => m);
 
+    let total = 0;
+    for (let i = 0; i < arr.length; i++) {
+      total += parseInt(arr[i]);
+    }
+    // const pa = arr.map(k => k + arr[0]);
+    // console.log(pa);
+    const checkedJobs = resJobs.data.filter(m => m.checked == true);
+
+    this.setState({
+      jobs: checkedJobs,
+      reports: resReport.data,
+      totalPrice: total
+    });
+  }
+  handleWorkorderComment = e => {
+    const value = e.target.value;
+
+    const workorderComment = value;
+    this.setState({ workorderComment });
+  };
+  handleCancelButton = () => {
+    const id = this.props.match.params.id;
+    this.props.history.push(`/${id}/rooms`);
+  };
+  handlePrintButton = () => {
+    window.print();
+  };
+  handleSendButtton = async () => {
+    if (window.confirm("Are you sure you want to send report?")) {
+      const id = this.props.match.params.id;
+      const workorderComment = this.state.workorderComment;
+      const report = { reportComment: workorderComment, userStatus: "sent" };
+      console.log(report);
+      const { data: resReport } = await updateQuestion(report, id);
+    } else {
+    }
+  };
   render() {
     console.log(this.state.reports);
     const reports = this.state.reports;
@@ -117,11 +158,57 @@ class WorkorderPage extends Component {
                   </tr>
                 </tbody>
               ))}
+              <tfoot>
+                <tr>
+                  <td colSpan="3"></td>
+                  <td colSpan="2">
+                    <span>Total Price: </span>
+                  </td>
+                  <td>
+                    <span colSpan="">{this.state.totalPrice}$</span>
+                  </td>
+                </tr>
+              </tfoot>
+
+              {/* <tr>
+                <td className={styles.TextArea} colSpan="6">
+                  <textarea
+                    // cols="38"
+                    // rows="2"
+                    placeholder="Comment"
+                    // disabled={item.checked}
+                    onPaste={this.handleChangeArea}
+                    // onChange={e => this.handleChangeArea(e, item._id)}
+                    // name={item.name}
+                    // value={item.comment}
+                    // id={item._id}
+                    className="textarea-rooms form-control placeholder-input"
+                  />
+                </td>
+              </tr> */}
             </table>
             <div className={styles.Buttons}>
-              <Button color="warning m-3">Cancel</Button>
-              <Button color="primary m-3">Print</Button>
-              <Button color="success m-3">Send</Button>
+              <textarea
+                // cols="38"
+                // rows="2"
+                placeholder="Comment"
+                // disabled={item.checked}
+                onPaste={this.handleWorkorderComment}
+                onChange={e => this.handleWorkorderComment(e)}
+                // name={item.name}
+                // value={item.comment}
+                // id={item._id}
+                className="textarea-rooms form-control placeholder-input"
+              />
+              <Button color="warning m-3" click={this.handleCancelButton}>
+                Cancel
+              </Button>
+              <Button color="primary m-3" click={this.handlePrintButton}>
+                Print
+              </Button>
+              <Button color="success m-3" click={this.handleSendButtton}>
+                Send
+              </Button>
             </div>
           </div>
         ) : null}

@@ -4,7 +4,9 @@ import axios from "axios";
 import {
   roomsEndpoint,
   itemsEndpoint,
-  jobsEndpoint
+  jobsEndpoint,
+  updateQuestion,
+  reportsEndpoint
 } from "../../services/http";
 // import Joi from "joi-browser";
 // import Form from "./common/form";
@@ -17,9 +19,11 @@ class FullRoomPage extends Component {
     datas: [],
     comment: false,
     job: [],
-    checked: {}
+    checked: {},
+    roomCommentsState: []
   };
   async componentDidMount() {
+    const roomName = this.props.match.params.m;
     const token = localStorage.getItem("token");
 
     const { data: resRooms } = await axios.get(
@@ -30,7 +34,20 @@ class FullRoomPage extends Component {
         }
       }
     );
-    this.setState({ room: resRooms.data[0].subcategories });
+    const { data: resReport } = await axios.get(
+      reportsEndpoint + "/" + this.props.match.params.id,
+      {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }
+    );
+    console.log("data");
+    this.setState({
+      room: resRooms.data[0].subcategories,
+      roomName,
+      roomCommentsFromBase: resReport.data.roomComments
+    });
   }
 
   handleSubcategories = async sub => {
@@ -75,9 +92,10 @@ class FullRoomPage extends Component {
       }
     }
   };
-  handleCommentInput = () => {
+  handleCommentInput = (e, id) => {
     const comment = this.state.comment;
-    this.setState({ comment: !comment });
+
+    this.setState({ comment: true, id });
   };
 
   handleQuantityInput = (e, id) => {
@@ -106,7 +124,7 @@ class FullRoomPage extends Component {
     console.log(items, "itemsi u state");
     console.log(it, "checkbox");
 
-    if (!it.item) {
+    if (!it.item && it.checked) {
       console.log(it.checked, "checked");
       const totalPrice = it.quantity * it.price;
       const jobs = {
@@ -142,29 +160,71 @@ class FullRoomPage extends Component {
       const totalPrice = it.quantity * it.item.price;
       const jobs = {
         quantity: it.quantity,
-        checked: it.checked
+        checked: it.checked,
+        totalPrice: totalPrice
       };
 
       console.log("UPDAAATEEE,", it.item);
 
-      //   const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-      //   const { data: resItems } = await axios.put(
-      //     jobsEndpoint + "/" + it.item,
-      //     jobs,
-      //     {
-      //       headers: {
-      //         Authorization: "Bearer " + token
-      //       }
-      //     }
-      //   );
-      //   console.log(resItems, "update jobs");
+      const { data: resItem } = await axios.put(jobsEndpoint + "/" + id, jobs, {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      });
+      if (resItem.success) {
+        const item = resItem.data;
+        const newItemsArray = items.map(m => (m._id == id ? item : m));
+        console.log("uslo u update state", newItemsArray, id);
+        this.setState({ items: newItemsArray });
+      }
+      console.log(resItem, "update jobs");
     }
     //   this.setState({ items });
     // }
   };
-  handleBackButton = () => {
+  handleRoomComment = (e, name) => {
+    const roomCommentsState = this.state.roomCommentsState;
+    const value = e.target.value;
+    const roomComment = {
+      roomName: name,
+      comment: value
+    };
+
+    this.setState({ roomComment });
+  };
+  handleBackButton = async () => {
     const id = this.props.match.params.id;
+    const roomCommentsFromBase = { ...this.state.roomCommentsFromBase };
+    const roomComment = this.state.roomComment;
+    if (roomCommentsFromBase[0] && roomComment) {
+      var roomCommentsArray = Object.keys(roomCommentsFromBase).map(function(
+        key
+      ) {
+        return roomCommentsFromBase[key];
+      });
+
+      const newCommentsArray = [roomComment].map(f =>
+        roomCommentsArray.find(m => m.roomName == f.roomName)
+          ? roomCommentsArray.map(k =>
+              k.roomName == roomComment.roomName ? (k = roomComment) : k
+            )
+          : [...roomCommentsArray, roomComment]
+      );
+
+      const report = { roomComments: newCommentsArray[0] };
+
+      const { data: resReport } = await updateQuestion(report, id);
+      console.log(resReport);
+    } else {
+      const id = this.props.match.params.id;
+      const roomComment = this.state.roomComment;
+      const report = { roomComments: [roomComment] };
+
+      const { data: resReport } = await updateQuestion(report, id);
+      console.log(resReport.data);
+    }
     this.props.history.push(`/${id}/rooms`);
   };
   handleForwardButton = () => {
@@ -173,14 +233,18 @@ class FullRoomPage extends Component {
   };
 
   render() {
+    const id = this.state.id;
+    console.log(this.state.roomCommentsFromBase, "comments from base");
     const items = this.state.items;
     const subcategories = this.state.room;
+    const roomName = this.state.roomName;
+    console.log(roomName);
     return (
       <div className={styles.Profile}>
         <img src={logo}></img>
 
         <div
-          className="rooms  text-center"
+          className="rooms  text-center m-3"
           // ref="iScroll"
           // style={{ height: "600px", overflow: "auto" }}
         >
@@ -208,6 +272,19 @@ class FullRoomPage extends Component {
                 ))
               : null}
           </div>
+          <textarea
+            // cols="38"
+            // rows="2"
+            placeholder="Comment"
+            // disabled={item.checked}
+            onPaste={this.handleRoomComment}
+            onChange={e => this.handleRoomComment(e, roomName)}
+            name={this.state.roomName}
+            // name={item.name}
+            // value={item.comment}
+            // id={item._id}
+            className="textarea-rooms form-control placeholder-input"
+          />
           {/* <h1 className="lead m-3">naslov</h1> */}
           {/* <button
             className="button btn btn-primary"
@@ -258,7 +335,9 @@ class FullRoomPage extends Component {
                     </td>
 
                     <td className="itemTd">
-                      {(item.price * item.quantity).toFixed(2)}
+                      {item.price * item.quantity
+                        ? (item.price * item.quantity).toFixed(2)
+                        : "/"}
                       {/* <Link
                           target={this.state.target}
                           onClick={e => this.handleLinks(e, item.link)}
@@ -267,12 +346,13 @@ class FullRoomPage extends Component {
                         </Link> */}
                     </td>
                     <td className="itemTd">
-                      <Button
-                        color="outline-danger m-1"
-                        click={this.handleCommentInput}
+                      <button
+                        cbnolor="outline-danger m-1"
+                        className="btn btn-secondary"
+                        onClick={e => this.handleCommentInput(e, item._id)}
                       >
                         Comment
-                      </Button>
+                      </button>
                       {/* <Link
                           target={this.state.target}
                           onClick={e => this.handleLinks(e, item.link)}
@@ -300,14 +380,14 @@ class FullRoomPage extends Component {
                   </tr>
                   <tr>
                     <td colSpan="6">
-                      {this.state.comment ? (
+                      {this.state.comment && id == item._id ? (
                         <textarea
                           // cols="38"
                           // rows="2"
                           placeholder="Comment"
                           disabled={item.checked}
                           onPaste={this.handleChangeArea}
-                          onChange={e => this.handleChangeArea(e, item._id)}
+                          onChange={e => this.handleChangeArea(e, id)}
                           name={item.name}
                           value={item.comment}
                           id={item._id}

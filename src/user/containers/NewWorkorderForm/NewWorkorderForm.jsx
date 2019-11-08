@@ -21,16 +21,16 @@ class NewWorkorderForm extends Component {
     userInfo: [],
     levels: [1, 2, 3, 4, 5],
     appliancesSelected: "",
-    valueBuild:"",
+    valueBuild: "",
     allQuestions: [
-     "Floor",
-     "Paint",
-     "Appliances",
-"Windows",
- "Blinds",
-"Cleaning",
+      "Floor",
+      "Paint",
+      "Appliances",
+      "Windows",
+      "Blinds",
+      "Cleaning",
       "Re-glazed",
-      "Pest Cont",
+      "Pest Cont"
     ]
   };
   componentDidMount = async () => {
@@ -41,7 +41,6 @@ class NewWorkorderForm extends Component {
         Authorization: "Bearer " + token
       }
     });
-  
 
     console.log(resUser, "radi USer");
     localStorage.setItem("loginTime", new Date().getTime());
@@ -54,7 +53,6 @@ class NewWorkorderForm extends Component {
         }
       }
     );
-
 
     if (this.props.match.params.id) {
       const { data: report } = await axios.get(
@@ -87,20 +85,11 @@ class NewWorkorderForm extends Component {
         return [key, newApp[key]];
       });
 
-    
       var rep = Object.keys(appliances111).map(function(key) {
         return [key, appliances111[key]];
       });
       const kurac = rep.map(m => m[1][1]);
 
-      
-      console.log(
-        kurac,
-        rep,
-        appliances111,
-        "aaaaaaaaaaaa",
-        "picka ti materina"
-      );
       this.setState({
         appliancesSelected1: kurac,
         squareFootage,
@@ -131,22 +120,27 @@ class NewWorkorderForm extends Component {
   };
 
   handleChange = async e => {
-    console.log(e.target.value);
+    console.log(e.target.value, "radi value");
 
-    const chosenObject = this.state.buildings.map(m =>
+    const chosenObject = this.state.buildings.find(m =>
       m.code == e.target.value ? m : null
     );
+    console.log(chosenObject);
     let address = "";
     let units = [];
-    console.log(chosenObject);
-    if (chosenObject[0]) {
-      address = chosenObject[0].address;
-      units = chosenObject[0].units;
-    }
-    console.log(this.state.value, "radi");
-    const valueBuild = e.target.value;
 
-    this.setState({ address, units, valueBuild });
+    if (chosenObject) {
+      console.log(chosenObject, "objekat");
+      if (chosenObject) {
+        address = chosenObject.address;
+        units = chosenObject.units;
+        console.log(this.state.value, "addresa");
+
+        this.setState({ address, units });
+      }
+    }
+    const valueBuild = e.target.value;
+    this.setState({ valueBuild });
     // if(k===true){}
   };
 
@@ -157,6 +151,9 @@ class NewWorkorderForm extends Component {
       squareFootage1 = this.state.units.find(m =>
         m.number == e.target.value ? m.squareFootage : null
       );
+    }
+    if (!squareFootage1) {
+      squareFootage1 = { squareFootage: "/" };
     }
     console.log(squareFootage1, "square");
     this.setState({ valueUnit: e.target.value });
@@ -180,7 +177,6 @@ class NewWorkorderForm extends Component {
         address: this.state.address,
         squareFootage: squareFootage1.squareFootage
       };
-     
 
       const { data: resReport1 } = await getReport(report);
       console.log(resReport1, "report");
@@ -301,7 +297,6 @@ class NewWorkorderForm extends Component {
     } else {
       chosenQuestion = chosenQuestion[1];
     }
-  
 
     this.setState({ setShow: true, name, chosenQuestion });
   };
@@ -324,22 +319,21 @@ class NewWorkorderForm extends Component {
     const { data: resReport } = await updateQuestion(question, id);
     const zaMlinja = { ...this.state.zaMlinja };
     console.log(zaMlinja, "zzzzz");
-   
+
     if (zaMlinja[0]) {
-      const za = zaMlinja[0][0]
+      const za = zaMlinja[0][0];
       const z = { [za]: zaMlinja[0][1] };
       console.log("zz", zaMlinja, z);
 
       const { data: resReport } = await updateQuestion(z, id);
-      console.log(resReport,"zzzzzzzzz");
-
+      console.log(resReport, "zzzzzzzzz");
     }
-
-
 
     this.setState({ setShow: false });
   };
-
+  handleBackButton = () => {
+    this.props.history.push("/");
+  };
   handleOption = e => {
     const chosenQuestion = this.state.chosenQuestion;
     // questions.toArray();
@@ -365,36 +359,30 @@ class NewWorkorderForm extends Component {
   };
   handleAppliances = async name => {
     if (name == "A/C") {
-     name=name
-    }else{
-      name=name.toLowerCase()
+      name = name;
+    } else {
+      name = name.toLowerCase();
     }
     const id = this.props.match.params.id;
-  
+
     const appliancesSelected1 = [...this.state.appliancesSelected1];
-   
-   
-    let chosenQuestion = appliancesSelected1.find(
-      d => d[0] == name
-    );
-   
+
+    let chosenQuestion = appliancesSelected1.find(d => d[0] == name);
+
     var report = Object.keys(chosenQuestion[1]).map(function(key) {
       return [key, chosenQuestion[1][key]];
     });
-   
+
     const zaMlinja = { ...this.state.zaMlinja };
-if(zaMlinja[0]){
-  const za = zaMlinja[0][0]
-  const z = {[za]:zaMlinja[0][1]};
-  console.log("zz",zaMlinja,z);
+    if (zaMlinja[0]) {
+      const za = zaMlinja[0][0];
+      const z = { [za]: zaMlinja[0][1] };
+      console.log("zz", zaMlinja, z);
 
-  const { data: resReport } = await updateQuestion(z, id);
-  console.log(resReport);
+      const { data: resReport } = await updateQuestion(z, id);
+      console.log(resReport);
+    }
 
-}
-   
-
-   
     this.setState({
       appliancesSelected: report,
       nameApp: name
@@ -402,11 +390,11 @@ if(zaMlinja[0]){
   };
 
   handleAppliancesOption = async (e, name) => {
-   if (name=="A/C"){
-name=name
-   }else {
-    name= name.toLowerCase()
-   }
+    if (name == "A/C") {
+      name = name;
+    } else {
+      name = name.toLowerCase();
+    }
     // const chosenQuestion = { ...this.state.chosenQuestion };
     let appliancesSelected = [...this.state.appliancesSelected];
     let appliancesSelected1 = [...this.state.appliancesSelected1];
@@ -431,9 +419,7 @@ name=name
     const finalKurac = kurac1;
     const checked = { checked: answer };
     const appp = this.state.appliancesSelected1;
-  
 
- 
     this.setState({ appliancesSelected, zaMlinja: finalKurac });
   };
   render() {
@@ -443,13 +429,11 @@ name=name
       this.state.appliancesSelected,
       "stae app"
     );
-   const nameApp = this.state.nameApp;
+    const nameApp = this.state.nameApp;
     const questions = { ...this.state.questions };
     let answer1 = "";
 
     const appliancesSelected = this.state.appliancesSelected;
-
-    
 
     const chosenQuestion = this.state.chosenQuestion;
     let comment = "";
@@ -484,12 +468,20 @@ name=name
               <img className="m-3" src={logo} alt="Logo"></img>
 
               <div className="row">
+                <div className={styles.NavigationButtons}>
+                  <ButtonCustom
+                    click={this.handleBackButton}
+                    color="warning m-1"
+                  >
+                    Back
+                  </ButtonCustom>
+                </div>
+
                 <div className="col-12 m-3">
                   <button
                     type="text"
                     value={region}
                     className="btn btn-light m-1"
-                 
                   >
                     {region}
                   </button>
@@ -504,12 +496,10 @@ name=name
                         type="text"
                         change={this.handleChange}
                         valueProp={this.state.valueBuild}
-                       
                         style={styles.Inputs}
                       />
                       <span
                         className="btn btn-secondary"
-                     
                         className={styles.InputAddress}
                       >
                         {this.state.address ? this.state.address : "Address"}
@@ -536,18 +526,12 @@ name=name
                               </option>
                             ))
                           : null}
-
-
                       </select>
-                      <span
-                        className={styles.Inputs}
-
-                      >
+                      <span className={styles.Inputs}>
                         {this.state.squareFootage
                           ? this.state.squareFootage
                           : "Sq Ft"}
                       </span>
-                    
                     </div>
                   </div>
                 </div>
@@ -634,17 +618,16 @@ name=name
             </div>
 
             <div className="col-12">
-              <div className="p-3" >
+              <div className="p-3">
                 {this.state.allQuestions.map(q => (
-                  <div  className={styles.Buttons} key={q}>
-                  <ButtonCustom
-                  
-                    click={() => this.handleQuestions(q)}
-                    // key={question}
-                    color="secondary m-1"
-                  >
-                    {q}
-                  </ButtonCustom>
+                  <div className={styles.Buttons} key={q}>
+                    <ButtonCustom
+                      click={() => this.handleQuestions(q)}
+                      // key={question}
+                      color="secondary m-1"
+                    >
+                      {q}
+                    </ButtonCustom>
                   </div>
                 ))}
                 {/* {this.state.name == "Appliances"
@@ -669,12 +652,12 @@ name=name
                         <div>
                           {this.state.chosenQuestion1.map(q => (
                             <div key={q} className={styles.Buttons}>
-                            <ButtonCustom
-                              click={() => this.handleAppliances(q)}
-                              color="danger m-1"
-                            >
-                              {q}
-                            </ButtonCustom>
+                              <ButtonCustom
+                                click={() => this.handleAppliances(q)}
+                                color="danger m-1"
+                              >
+                                {q}
+                              </ButtonCustom>
                             </div>
                           ))}
 

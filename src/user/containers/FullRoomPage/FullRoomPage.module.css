@@ -2,12 +2,12 @@
   box-sizing: border-box;
   margin: 20px auto;
   width: 80%;
-  background-color: #8d98f287;
+  background-color: #8d98f269;
   padding: 1rem;
 }
 
 .QuantityInput {
-  width: 40px;
+  width: 50px;
 }
 
 /* .Checkbox {
@@ -16,7 +16,7 @@
 
 .NavigationButtons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .Table {
   text-align: left;

@@ -41,11 +41,17 @@ class ProfilePage extends Component {
   //   console.log("clear");
   //   localStorage.clear();
   // }
+  scrollToBottom = () => {
+    this.el.scrollIntoView({ behavior: "smooth" });
+  };
+
   handleReports = id => {
     this.props.history.push(`/${id}`);
     console.log("radi");
   };
   handleReportOptions = button => {
+    this.scrollToBottom();
+    // this.scrollBottom.scrollIntoView({ behavior: "smooth" });
     const data = this.state.data;
     const id = data._id;
     const allReports = [...this.state.allReports];
@@ -70,7 +76,9 @@ class ProfilePage extends Component {
     if (button == "To Do Units") {
       this.props.history.push("/new");
     }
+
     this.setState({ reports });
+    // this.scrollToBottom();
   };
   render() {
     console.log(this.state.reports);
@@ -104,6 +112,7 @@ class ProfilePage extends Component {
               <Button
                 key={button}
                 click={() => this.handleReportOptions(button)}
+                // onclick="selected(this)"
                 style={styles.Buttons}
               >
                 {button}
@@ -111,18 +120,33 @@ class ProfilePage extends Component {
             ))}
           </div>
         </div>
-        {this.state.reports ? (
-          <Route
-            render={props => (
-              <ReportsPage
-                reports={this.state.reports}
-                click={id => this.handleReports(id)}
-                {...props}
-              />
-            )}
-            path="/:id/reports/:r"
-          />
-        ) : null}
+        {/* <div
+          ref={el => {
+            this.el = el;
+          }}
+          style={{ float: "left", clear: "both" }}
+        >
+       
+        </div> */}
+        <div>
+          {this.state.reports ? (
+            <Route
+              render={props => (
+                <ReportsPage
+                  reports={this.state.reports}
+                  click={id => this.handleReports(id)}
+                  {...props}
+                />
+              )}
+              path="/:id/reports/:r"
+            />
+          ) : null}
+        </div>
+        <div
+          ref={el => {
+            this.el = el;
+          }}
+        ></div>
       </div>
     );
   }
