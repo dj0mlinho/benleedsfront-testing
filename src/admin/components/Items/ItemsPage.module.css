@@ -26,3 +26,27 @@
   width: 30%;
   /* flex-direction: row; */
 }
+
+.ItemsPageCreate_block__btn {
+  /* width: 30%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 6rem;
+}
+
+.ErrorSpan {
+  animation: colorAnimation 2s ease-out;
+  color: red;
+}
+
+@keyframes colorAnimation {
+  0%   {
+    color: transparent;
+    
+  } 
+  100% {
+    color: red;
+    
+  }
+}

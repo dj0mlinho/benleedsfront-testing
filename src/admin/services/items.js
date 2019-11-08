@@ -11,7 +11,7 @@ export function getRoomSubItems(roomName, subCat) {
 }
 
 export function createItem(item) {
-  
+  // console.log("item for create" , item)
   return http.post(`api/v1/items/`, item);
 }
 

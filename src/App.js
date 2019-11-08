@@ -77,7 +77,7 @@ export class App extends Component {
               <Route
                 path="/items"
                 render={props => (
-                  <Items pageName="Under construction :)" {...props} />
+                  <Items pageName="Create, Delete and Edit Items" {...props} />
                 )}
               />
               <Route
