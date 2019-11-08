@@ -1,0 +1,28 @@
+.ItemsPageCreate {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.ItemsPageCreate_block {
+
+  display: flex; 
+  /* flex: 1; */
+  align-items: center;
+  padding: 0 1rem;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.ItemsPageCreate_block__first {
+  width: 30%;
+  /* display:  flex ;
+  flex-direction: row; */
+  /* justify-content: space-between; */
+}
+
+.ItemsPageCreate_block__second {
+  /* display:  flex ; */
+  width: 30%;
+  /* flex-direction: row; */
+}

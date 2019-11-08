@@ -1,28 +1,79 @@
-import React, { Component } from 'react' ;
+import React, { Component } from "react";
 
-import styles from "./Items.module.css"
+import { getAllRooms, rooms_fixed } from "../../services/items";
 
-import PageNameAdmin from "../../hoc/PageNameAdmin/PageNameAdmin" ;
+import styles from "./Items.module.css";
+
+import Spinner from "../../components/Ui/Spinner/Spinner";
+import ItemsPage from "../../components/Items/ItemsPage";
+
+import PageNameAdmin from "../../hoc/PageNameAdmin/PageNameAdmin";
 
 export class Items extends Component {
-   state = {
-     load : false ,
-     items : null 
-   }
+  constructor(props) {
+    super(props);
 
+    let roomsArrey = [];
+    rooms_fixed.forEach(room => {
+      roomsArrey.push(room.properName);
+    });
+    let roomsArreySort = roomsArrey.sort()
+
+    this.state = {
+      roomsArrey: roomsArreySort,
+      rooms: rooms_fixed,
+      load: false,
+      selectedRoom: null,
+      selectedSubCat: null,
+      selectedRoomSubArrey: [], 
+      name : "",
+      price : "",
+      disabled : {
+        firstSubCat : true ,
+        firstPrice : true ,
+        firstName : true 
+      } 
+    };
+  }
+  
+  
+  //// handle select input for create Items 
+  handleSelectChange = (e, type) => {
+    if (type === "room") {
+       if (e.target.value === "Select") {
+          return ;
+       }
+      const selectedRoom = e.target.value ;
+      const selectedRoomSubArrey = this.state.rooms.find(room => room.properName === selectedRoom).subcategories ;
+      const diabledCopy = {...this.state.disabled} 
+      diabledCopy.firstSubCat = false 
+      
+      this.setState((state, props) => ({
+        selectedRoom : selectedRoom ,
+        selectedRoomSubArrey : selectedRoomSubArrey ,
+        disabled : diabledCopy
+      }))
+    }
+  }
 
   render() {
     return (
-      <PageNameAdmin pageName={this.props.pageName} >
-       
+      <PageNameAdmin pageName={this.props.pageName}>
+        {console.log("rooms", this.state.rooms)}
+        {console.log("state", this.state)}
+        <ItemsPage
+        onSelectChange={this.handleSelectChange} 
+        selectedRoomSubArrey ={this.state.selectedRoomSubArrey}
+        roomsArrey={this.state.roomsArrey}
+        rooms={this.state.rooms}
+        disabled={this.state.disabled} 
+        />
       </PageNameAdmin>
-    )
+    );
   }
 }
 
-export default Items
-
-
+export default Items;
 
 // {
 //   "success": true,

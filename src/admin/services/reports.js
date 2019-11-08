@@ -44,17 +44,6 @@ export function sendVendorsToReport(reportId, vendors) {
    
 } 
 
-// {
-//   "vendors": [
-//       {
-//           "vendor": "5db4e3e57f48fb3f881a1107",
-//           "startDate": "",
-//           "endDate": ""
-//       }
-//   ]
-// }
-
-
 
 // (3) [{…}, {…}, {…}]
 // 0:
