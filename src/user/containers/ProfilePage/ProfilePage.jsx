@@ -34,8 +34,13 @@ class ProfilePage extends Component {
     );
     const allReports = resReports.data;
     console.log(allReports);
-
-    this.setState({ data: data.data, allReports });
+    const sent = allReports.filter(report => report.adminStatus == "sent")
+      .length;
+    console.log(sent);
+    const pending = allReports.filter(report => report.adminStatus == "pending")
+      .length;
+    const toDo = allReports.filter(report => report.adminStatus == "sent");
+    this.setState({ data: data.data, allReports, sent, pending });
   };
   // handleSignOut() {
   //   console.log("clear");
@@ -110,6 +115,13 @@ class ProfilePage extends Component {
           <div>
             {buttons.map(button => (
               <Button
+                number={
+                  button == "Sent Reports"
+                    ? this.state.sent
+                    : null || button == "Pending Reports"
+                    ? this.state.pending
+                    : 0
+                }
                 key={button}
                 click={() => this.handleReportOptions(button)}
                 // onclick="selected(this)"

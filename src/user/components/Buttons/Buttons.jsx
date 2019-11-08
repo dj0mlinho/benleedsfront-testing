@@ -12,6 +12,9 @@ function button(props) {
   }
   return (
     <div className={style}>
+      {props.children != "New" ? (
+        <span className={styles.ButtonSummary}> {props.number}</span>
+      ) : null}
       <button onClick={props.click} className={`btn btn-${styleBcc} m-3`}>
         {props.children}
       </button>
