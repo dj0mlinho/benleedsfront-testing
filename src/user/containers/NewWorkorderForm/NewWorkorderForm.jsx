@@ -18,6 +18,7 @@ import Modal from "react-bootstrap/Modal";
 
 class NewWorkorderForm extends Component {
   state = {
+    chosenButton: [],
     spinner: true,
     userInfo: [],
     levels: [1, 2, 3, 4, 5],
@@ -256,6 +257,10 @@ class NewWorkorderForm extends Component {
   };
 
   handleQuestions = async name => {
+    const color = "danger m-1";
+    const chosenButton = this.state.chosenButton;
+    chosenButton.push(name);
+    // console.log(cho);
     const token = localStorage.getItem("token");
     console.log(this.props.match.params.id, "this");
     const id = this.props.match.params.id;
@@ -300,7 +305,7 @@ class NewWorkorderForm extends Component {
       chosenQuestion = chosenQuestion[1];
     }
 
-    this.setState({ setShow: true, name, chosenQuestion });
+    this.setState({ setShow: true, name, chosenQuestion, chosenButton });
   };
 
   // handleToDoModal = () => {
@@ -315,7 +320,8 @@ class NewWorkorderForm extends Component {
     const chosenQuestion = this.state.chosenQuestion;
     const name = this.state.name;
     const question = { [name.toLowerCase()]: chosenQuestion };
-
+    // const chosenButton = this.state.chosenButton;
+    // chosenButton.push(name);
     console.log(question, "CLOSE");
     const id = this.props.match.params.id;
     const { data: resReport } = await updateQuestion(question, id);
@@ -460,7 +466,6 @@ class NewWorkorderForm extends Component {
         m.number == value ? m.squareFootage : null
       );
     }
-    console.log(this.state, "state");
 
     return (
       <div className={styles.MainDiv}>
@@ -626,7 +631,10 @@ class NewWorkorderForm extends Component {
                     <ButtonCustom
                       click={() => this.handleQuestions(q)}
                       // key={question}
-                      color="secondary m-1"
+
+                      color={this.state.chosenButton.map(m =>
+                        m == q ? "warning m-1" : "secondary m-1"
+                      )}
                     >
                       {q}
                     </ButtonCustom>
