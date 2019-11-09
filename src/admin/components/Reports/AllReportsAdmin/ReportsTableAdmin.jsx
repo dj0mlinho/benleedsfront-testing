@@ -4,7 +4,9 @@ import styles from "./ReportsTableAdmin.module.css"
 import Spinner from '../../Ui/Spinner/Spinner'
 import _ from "lodash";
 
-export default function ReportsTableAdmin({reports, load, status, onChangeStatus, onSelectReport , onSort, sortColumn }) {
+import AdminPagination from "../../AdminPagination/AdminPagination" ;
+
+export default function ReportsTableAdmin({reports, status, onChangeStatus, onSelectReport , onSort, sortColumn, currentPage, reportsPerPage, paginate }) {
   
   if (!reports) {
       return(
@@ -20,8 +22,11 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
   let sorted = _.orderBy(filteredReports, [sortColumn.path], [sortColumn.order]);
 
   
-  ///// pagination here
-
+  
+  //// pagination to show correct number of items/wo in table
+  const indexOfLast = currentPage * reportsPerPage ;
+  const indexOfFirst = indexOfLast - reportsPerPage ;
+  let reportsPaginated = sorted.slice(indexOfFirst, indexOfLast)
 
   //// changing asc/desc arrow depending on the user interaction
   let arrowIcon = path => {
@@ -92,7 +97,7 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
         </thead>
         <tbody>
           
-          {sorted.length === 0 ? (
+          {reportsPaginated.length === 0 ? (
             <tr>
               <td className="mt-3" colSpan="4">
                 <p className="h6">There is 0 reports whit {status.toUpperCase()} status</p>
@@ -100,7 +105,7 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
             </tr>
           ) : null}
 
-          {sorted.map(report => (
+          {reportsPaginated.map(report => (
             <tr onClick={() => onSelectReport(report._id)} className={styles.ReportClick} key={report._id}>
               <td>{report.buildingCode}</td>
               <td>{report.unitNumber}</td>
@@ -110,16 +115,16 @@ export default function ReportsTableAdmin({reports, load, status, onChangeStatus
             </tr>
           ))}
 
-          {/* <tr>
+          <tr>
             <td colSpan="6">
-              <Pagination
+              <AdminPagination
                 currentPage={currentPage}
                 total={sorted.length}
-                somethingPerPage={woPerPage}
+                somethingPerPage={reportsPerPage}
                 paginate={paginate}
               />
             </td>
-          </tr> */}
+          </tr>
         </tbody>
       </table>
   )

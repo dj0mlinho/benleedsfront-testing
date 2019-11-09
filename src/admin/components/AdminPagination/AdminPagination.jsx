@@ -1,5 +1,7 @@
 import React from "react";
 
+import styles from "./AdminPagination.module.css"
+
 export default function AdminPagination({ somethingPerPage, total , paginate, currentPage }) {
   const pageNumber = [];
   for (let index = 1; index <= Math.ceil(total / somethingPerPage); index++) {
@@ -8,9 +10,9 @@ export default function AdminPagination({ somethingPerPage, total , paginate, cu
 
  const hadnleActivePage = (number) => {
    if (number === currentPage) {
-     return "page-link clicableA paginationActive"
+     return ("page-link" + " " + styles.CursorPinter + " " + styles.PaginationActive ) 
    } else {
-     return "page-link clicableA"
+     return ("page-link" + " " + styles.CursorPinter )
    }
  }
   
@@ -20,8 +22,8 @@ export default function AdminPagination({ somethingPerPage, total , paginate, cu
   
   return (
     
-        <nav className="float-right padding-bottom-1rem">
-          <ul className="pagination pagination-custom">
+        <nav className="float-right">
+          <ul className={"pagination" + " " + styles.Pagination}>
             {pageNumber.map(number => (
               <li key={number} className="page-item">
                 <a onClick={() => paginate(number)}  className={hadnleActivePage(number)}>

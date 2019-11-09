@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styles from "./NewWorkorderForm.module.css";
 import axios from "axios";
-
+import SpinnerCustom from "../../components/UI/Spinner/Spinner";
 import {
   buildingsEndpoint,
   currentUserEndpoint,
@@ -18,6 +18,7 @@ import Modal from "react-bootstrap/Modal";
 
 class NewWorkorderForm extends Component {
   state = {
+    spinner: true,
     userInfo: [],
     levels: [1, 2, 3, 4, 5],
     appliancesSelected: "",
@@ -112,6 +113,7 @@ class NewWorkorderForm extends Component {
     const userInfo = [user.name, user.email];
 
     this.setState({
+      spinner: false,
       region: user.region,
       userInfo,
       managerInfo,
@@ -462,11 +464,11 @@ class NewWorkorderForm extends Component {
 
     return (
       <div className={styles.MainDiv}>
+        <img className="m-3" src={logo} alt="Logo"></img>
+        {this.state.spinner ? <SpinnerCustom></SpinnerCustom> : null}
         {userInfo[0] ? (
           <div>
             <div>
-              <img className="m-3" src={logo} alt="Logo"></img>
-
               <div className="row">
                 <div className={styles.NavigationButtons}>
                   <ButtonCustom

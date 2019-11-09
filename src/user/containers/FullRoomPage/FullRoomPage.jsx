@@ -12,10 +12,12 @@ import {
 // import Form from "./common/form";
 // import Checkbox from "./checkbox.jsx";
 import Button from "../../components/UI/ButtonCustom/Button";
+import SpinnerCustom from "../../components/UI/Spinner/Spinner";
 import styles from "./FullRoomPage.module.css";
 import logo from "../../img/ben-leeds-logo.png";
 class FullRoomPage extends Component {
   state = {
+    spinner: true,
     datas: [],
     comment: false,
     job: [],
@@ -44,6 +46,7 @@ class FullRoomPage extends Component {
     );
     console.log("data");
     this.setState({
+      spinner: false,
       room: resRooms.data[0].subcategories,
       roomName,
       roomCommentsFromBase: resReport.data.roomComments
@@ -242,7 +245,7 @@ class FullRoomPage extends Component {
     return (
       <div className={styles.Profile}>
         <img src={logo}></img>
-
+        {this.state.spinner ? <SpinnerCustom></SpinnerCustom> : null}
         <div
           className="rooms  text-center m-3"
           // ref="iScroll"

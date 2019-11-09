@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Button from "../../components/UI/ButtonCustom/Button";
 import styles from "./WorkorderPage.module.css";
 import logo from "../../img/ben-leeds-logo.png";
+import SpinnerCustom from "../UI/Spinner/Spinner";
 import axios from "axios";
 import {
   roomsEndpoint,
@@ -11,7 +12,9 @@ import {
   updateQuestion
 } from "../../services/http";
 class WorkorderPage extends Component {
-  state = {};
+  state = {
+    spinner: true
+  };
 
   async componentDidMount() {
     const token = localStorage.getItem("token");
@@ -49,6 +52,7 @@ class WorkorderPage extends Component {
     const checkedJobs = resJobs.data.filter(m => m.checked == true);
 
     this.setState({
+      spinner: false,
       jobs: checkedJobs,
       reports: resReport.data,
       totalPrice: total
@@ -84,6 +88,7 @@ class WorkorderPage extends Component {
     return (
       <div className={styles.Profile}>
         <img src={logo}></img>
+        {this.state.spinner ? <SpinnerCustom></SpinnerCustom> : null}
 
         {reports ? (
           <div className="row m-3 font-weight-bold">
@@ -169,23 +174,6 @@ class WorkorderPage extends Component {
                   </td>
                 </tr>
               </tfoot>
-
-              {/* <tr>
-                <td className={styles.TextArea} colSpan="6">
-                  <textarea
-                    // cols="38"
-                    // rows="2"
-                    placeholder="Comment"
-                    // disabled={item.checked}
-                    onPaste={this.handleChangeArea}
-                    // onChange={e => this.handleChangeArea(e, item._id)}
-                    // name={item.name}
-                    // value={item.comment}
-                    // id={item._id}
-                    className="textarea-rooms form-control placeholder-input"
-                  />
-                </td>
-              </tr> */}
             </table>
             <div className={styles.Buttons}>
               <textarea

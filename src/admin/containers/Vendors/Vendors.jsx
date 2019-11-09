@@ -43,6 +43,8 @@ export class Vendors extends Component {
       }
     }
   }
+ 
+  
 
   handleProffesionChange = e => {
     if (e.target.value === "Select") {

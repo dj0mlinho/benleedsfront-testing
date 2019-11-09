@@ -1,11 +1,11 @@
 import React from "react";
-
+import styles from "./ImageProfile";
 const ImageProfile = props => {
   return (
     <div className="card">
       <img
-        src={process.env.REACT_APP_API_URL + '/' + props.imageUrl}
-        className="card-img-top"
+        src={process.env.REACT_APP_API_URL + "/" + props.imageUrl}
+        className="img-fluid"
         alt="..."
       ></img>
       <div className="card-body">

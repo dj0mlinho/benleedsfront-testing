@@ -6,3 +6,13 @@
   width: 100%;
   text-align: center;
 }
+
+.ButtonSummary {
+  width: 30px;
+  position: absolute;
+  padding: 0.3rem;
+  background: red;
+
+  border-radius: 100%;
+  color: white;
+}

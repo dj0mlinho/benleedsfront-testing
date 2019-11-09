@@ -30,7 +30,7 @@
 
 .Nav {
   display: flex;
-  width: 30%;
+  width: 25vw ;
   justify-content: space-between ;
   align-items: center;
   

@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import logo from '../../img/ben-leeds-logo.png';
-import styles from './MakeReadyPage.module.css';
-import Button from '../../components/UI/ButtonCustom/Button';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import logo from "../../img/ben-leeds-logo.png";
+import styles from "./MakeReadyPage.module.css";
+import Button from "../../components/UI/ButtonCustom/Button";
+import SpinnerCustom from "../../components/UI/Spinner/Spinner";
 import {
   buildingsEndpoint,
   currentUserEndpoint,
@@ -11,19 +12,21 @@ import {
   getReport,
   updateQuestion,
   roomsEndpoint
-} from '../../services/http';
+} from "../../services/http";
 
 class MakeReadyPage extends Component {
-  state = {};
+  state = {
+    spinner: true
+  };
   async componentDidMount() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
-    const { data: resRooms } = await axios.get(roomsEndpoint + '?sort=name', {
+    const { data: resRooms } = await axios.get(roomsEndpoint + "?sort=name", {
       headers: {
-        Authorization: 'Bearer ' + token
+        Authorization: "Bearer " + token
       }
     });
-    this.setState({ rooms: resRooms.data });
+    this.setState({ rooms: resRooms.data, spinner: false });
     console.log(resRooms);
   }
   handleLinks = name => {
@@ -42,22 +45,24 @@ class MakeReadyPage extends Component {
     return (
       <div className={styles.Profile}>
         <img src={logo}></img>
+        {this.state.spinner ? <SpinnerCustom></SpinnerCustom> : null}
+
         <div className={styles.NavigationButtons}>
-          {' '}
-          <Button click={this.handleBackButton} color='warning m-1'>
+          {" "}
+          <Button click={this.handleBackButton} color="warning m-1">
             Back
-          </Button>{' '}
-          <Button click={this.handleForwardButton} color='primary m-1'>
+          </Button>{" "}
+          <Button click={this.handleForwardButton} color="primary m-1">
             Forward
-          </Button>{' '}
+          </Button>{" "}
         </div>
-        <div className='row'>
+        <div className="row">
           {this.state.rooms
             ? this.state.rooms.map(room => (
-                <div key={room._id} className='col-4 p-3'>
-                  <div className='card mb-3 text-center'>
+                <div key={room._id} className="col-4 p-3">
+                  <div className="card mb-3 text-center">
                     <Link
-                      className='links'
+                      className="links"
                       onClick={() => this.handleLinks(room.name)}
                       // to="null"
                     >
@@ -65,12 +70,12 @@ class MakeReadyPage extends Component {
                         className={styles.Card}
                         src={
                           process.env.REACT_APP_API_URL +
-                          '/uploads/' +
+                          "/uploads/" +
                           room.photo
                         }
-                        alt='Card image cap'
+                        alt="Card image cap"
                       />
-                      <div className='card-footer text-center'>
+                      <div className="card-footer text-center">
                         {room.properName}
                       </div>
                     </Link>

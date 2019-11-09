@@ -1,0 +1,13 @@
+.CursorPinter {
+  cursor: pointer;
+}
+
+.PaginationActive {
+  background-color: #5c6bc0;
+  color: white !important ;
+}
+
+.Pagination {
+  margin-bottom: 0;
+  box-shadow: 0 3px 3px black;
+}
