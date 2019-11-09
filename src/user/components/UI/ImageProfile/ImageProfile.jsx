@@ -5,7 +5,7 @@ const ImageProfile = props => {
     <div className="card">
       <img
         src={process.env.REACT_APP_API_URL + "/" + props.imageUrl}
-        className="img-fluid"
+        className="card-img-top"
         alt="..."
       ></img>
       <div className="card-body">
